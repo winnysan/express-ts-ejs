@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts",
     "tsc": "tsc",
     "build": "npm-run-all clean lint tsc copy",
-    "dev:start": "npm-run-all build start",
+    "dev:start": "npm-run-all clean tsc copy start",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "start": "node ."
   },

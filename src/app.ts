@@ -3,6 +3,7 @@ import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import path from 'path'
 import connectDB from './lib/connectDB'
+import { errorHandler, notFound } from './middleware/errorMiddleware'
 
 dotenv.config()
 
@@ -25,6 +26,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.get('/', (req: express.Request, res: express.Response) => {
   res.render('index')
 })
+
+// Errors
+app.use(notFound)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`App running on http://localhost:${PORT}`)
