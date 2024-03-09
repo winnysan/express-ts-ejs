@@ -1,9 +1,7 @@
-import dotenv from 'dotenv'
 import express from 'express'
 import getErrorMessage from '../lib/getErrorMessage'
+import logToFile from '../lib/logToFile'
 import { NodeEnv } from '../types/enums'
-
-dotenv.config()
 
 /**
  * Not found handler
@@ -13,8 +11,7 @@ const notFound = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`)
-  res.status(404)
+  const error = new Error(`${req.originalUrl} not found`)
   next(error)
 }
 
@@ -27,13 +24,18 @@ const errorHandler = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode
   const message = getErrorMessage(err)
 
-  res.status(statusCode).json({
+  console.log(process.env.NODE_ENV)
+
+  const error = {
     message,
-    stack: process.env.NODE_ENV === NodeEnv.PROD ? null : err.stack,
-  })
+    name: err.name,
+    stack: process.env.NODE_ENV === NodeEnv.PROD ? undefined : err.stack,
+  }
+
+  logToFile(error)
+  res.render('error', { error })
 }
 
 export { errorHandler, notFound }

@@ -1,14 +1,10 @@
 import bcrypt from 'bcryptjs'
-import dotenv from 'dotenv'
 import express from 'express'
 import generateAuthToken from '../lib/generateAuthToken'
 import getErrorMessage from '../lib/getErrorMessage'
-import logToFile from '../lib/logToFile'
 import asyncHandler from '../middleware/asyncHandler'
 import User from '../models/userModel'
 import { Role } from '../types/enums'
-
-dotenv.config()
 
 type RegisterReqBody = {
   email: string
@@ -39,9 +35,11 @@ const register = asyncHandler(
         role: isAdmin ? Role.ADMIN : undefined,
       })
 
-      res.send(user)
+      generateAuthToken(res, user._id.toString())
+
+      delete user.password
+      res.redirect('/admin/dashboard')
     } catch (err: unknown) {
-      logToFile(err)
       throw new Error(getErrorMessage(err))
     }
   }
@@ -64,11 +62,9 @@ const auth = asyncHandler(
         delete user.password
         res.redirect('/admin/dashboard')
       } else {
-        logToFile('Invalid credentials')
-        throw new Error(getErrorMessage('Invalid credentials'))
+        throw new Error('Invalid credentials')
       }
     } catch (err: unknown) {
-      logToFile(err)
       throw new Error(getErrorMessage(err))
     }
   }

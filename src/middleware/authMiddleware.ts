@@ -1,7 +1,5 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import getErrorMessage from '../lib/getErrorMessage'
-import logToFile from '../lib/logToFile'
 import User, { IUser } from '../models/userModel'
 import { Role } from '../types/enums'
 import asyncHandler from './asyncHandler'
@@ -32,11 +30,9 @@ const protect = asyncHandler(
 
         next()
       } catch (err: unknown) {
-        logToFile(`Unauthorized, ${err}`)
         throw new Error(`Unauthorized, ${err}`)
       }
     } else {
-      logToFile('Unauthorized, user')
       throw new Error('Unauthorized, user')
     }
   }
@@ -53,7 +49,6 @@ const admin = (
   if (req.user && req.user.role === Role.ADMIN) {
     next()
   } else {
-    logToFile('Unauthorized, admin')
     throw new Error('Unauthorized, admin')
   }
 }
