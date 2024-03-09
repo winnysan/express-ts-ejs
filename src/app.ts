@@ -1,9 +1,12 @@
+import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import path from 'path'
 import connectDB from './lib/connectDB'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
+import adminRouter from './routes/adminRoute'
+import pageRouter from './routes/pageRoute'
 
 dotenv.config()
 
@@ -14,6 +17,11 @@ connectDB(MONGO_URI)
 
 const app = express()
 
+// Body parser middleware
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// Public folder
 app.use(express.static(path.join(__dirname, 'public')))
 
 // View engine
@@ -23,9 +31,8 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 // Routes
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.render('index')
-})
+app.use('/', pageRouter)
+app.use('/admin', adminRouter)
 
 // Errors
 app.use(notFound)

@@ -1,0 +1,32 @@
+<h1>Admin</h1>
+
+<div>
+  <h2>Login</h2>
+
+  <form action="/admin/auth" method="post">
+    <label for="email">
+      <input type="email" name="email" value="admin@example.com" required />
+    </label>
+    <label for="password">
+      <input type="password" name="password" value="password" required />
+    </label>
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+
+<div>
+  <h2>Register</h2>
+
+  <form action="/admin/register" method="post">
+    <label for="email">
+      <input type="email" name="email" value="admin@example.com" required />
+    </label>
+    <label for="name">
+      <input type="text" name="name" value="Admin" required />
+    </label>
+    <label for="password">
+      <input type="password" name="password" value="password" required />
+    </label>
+    <input type="submit" value="Submit" />
+  </form>
+</div>
