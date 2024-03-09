@@ -8,4 +8,8 @@ const adminPage = async (req: express.Request, res: express.Response) => {
   res.render('admin')
 }
 
-export { adminPage, homePage }
+const dashboardPage = async (req: express.Request, res: express.Response) => {
+  res.render('admin/dashboard', { user: req.user })
+}
+
+export { adminPage, dashboardPage, homePage }

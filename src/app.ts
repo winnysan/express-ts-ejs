@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
@@ -20,6 +21,9 @@ const app = express()
 // Body parser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Cookie parser middleware
+app.use(cookieParser())
 
 // Public folder
 app.use(express.static(path.join(__dirname, 'public')))

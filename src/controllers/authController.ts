@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 import express from 'express'
+import generateAuthToken from '../lib/generateAuthToken'
 import getErrorMessage from '../lib/getErrorMessage'
 import logToFile from '../lib/logToFile'
 import asyncHandler from '../middleware/asyncHandler'
@@ -57,10 +58,14 @@ const auth = asyncHandler(
 
       const user = await User.findOne({ email })
 
-      if (user && (await bcrypt.compare(password, user.password))) {
-        res.render('admin/dashboard', { user })
+      if (user && (await bcrypt.compare(password, user.password!))) {
+        generateAuthToken(res, user._id.toString())
+
+        delete user.password
+        res.redirect('/admin/dashboard')
       } else {
-        res.send('Invalid credentials')
+        logToFile('Invalid credentials')
+        throw new Error(getErrorMessage('Invalid credentials'))
       }
     } catch (err: unknown) {
       logToFile(err)
