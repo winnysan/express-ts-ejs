@@ -1,32 +1,17 @@
 <h1>Admin</h1>
 
-<div>
+<section>
   <h2>Login</h2>
 
   <form action="/admin/auth" method="post">
-    <label for="email">
-      <input type="email" name="email" value="admin@example.com" required />
-    </label>
-    <label for="password">
-      <input type="password" name="password" value="password" required />
-    </label>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" name="email" />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" name="password" />
+    </div>
     <input type="submit" value="Submit" />
   </form>
-</div>
-
-<div>
-  <h2>Register</h2>
-
-  <form action="/admin/register" method="post">
-    <label for="email">
-      <input type="email" name="email" value="admin@example.com" required />
-    </label>
-    <label for="name">
-      <input type="text" name="name" value="Admin" required />
-    </label>
-    <label for="password">
-      <input type="password" name="password" value="password" required />
-    </label>
-    <input type="submit" value="Submit" />
-  </form>
-</div>
+</section>

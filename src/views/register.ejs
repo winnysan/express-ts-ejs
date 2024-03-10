@@ -1,0 +1,29 @@
+<section>
+  <h2>Register</h2>
+
+  <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
+  <div style="color: red"><%= error.msg %></div>
+  <% }) %> <% } %>
+
+  <form action="/register" method="post">
+    <div>
+      <label for="email">Email</label>
+      <input type="email" name="email" <% if (typeof fill !== 'undefined') { %>
+      value="<%= fill.email %>" <% } %> />
+    </div>
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" <% if (typeof fill !== 'undefined') { %>
+      value="<%= fill.name %>" <% } %> />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" name="password" />
+    </div>
+    <div>
+      <label for="confirmPassword">Confirm password</label>
+      <input type="password" name="confirmPassword" />
+    </div>
+    <button type="submit">Register</button>
+  </form>
+</section>

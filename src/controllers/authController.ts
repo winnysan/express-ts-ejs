@@ -6,26 +6,13 @@ import asyncHandler from '../middleware/asyncHandler'
 import User from '../models/userModel'
 import { Role } from '../types/enums'
 
-type RegisterReqBody = {
-  email: string
-  name: string
-  password: string
-}
-
-type AuthReqBody = {
-  email: string
-  password: string
-}
-
 /**
  * Register user
  */
-const register = asyncHandler(
+const registerUser = asyncHandler(
   async (req: express.Request, res: express.Response) => {
     try {
-      const { email, name, password }: RegisterReqBody = req.body
-      // validation
-
+      const { email, name, password } = req.body
       const isAdmin: boolean = process.env.ADMIN_USER === email
 
       const user = await User.create({
@@ -34,11 +21,10 @@ const register = asyncHandler(
         password: await bcrypt.hash(password, await bcrypt.genSalt(10)),
         role: isAdmin ? Role.ADMIN : undefined,
       })
-
+      user.password = ''
       generateAuthToken(res, user._id.toString())
 
-      delete user.password
-      res.redirect('/admin/dashboard')
+      res.redirect('/')
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
     }
@@ -48,19 +34,18 @@ const register = asyncHandler(
 /**
  * Auth user
  */
-const auth = asyncHandler(
+const authUser = asyncHandler(
   async (req: express.Request, res: express.Response) => {
     try {
-      const { email, password }: AuthReqBody = req.body
-      // validation
+      const { email, password } = req.body
 
       const user = await User.findOne({ email })
 
       if (user && (await bcrypt.compare(password, user.password!))) {
+        user.password = ''
         generateAuthToken(res, user._id.toString())
 
-        delete user.password
-        res.redirect('/admin/dashboard')
+        res.redirect('/')
       } else {
         throw new Error('Invalid credentials')
       }
@@ -70,4 +55,4 @@ const auth = asyncHandler(
   }
 )
 
-export { auth, register }
+export { authUser, registerUser }
