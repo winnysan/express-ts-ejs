@@ -3,7 +3,10 @@ import { body, validationResult } from 'express-validator'
 import User from '../../models/userModel'
 
 const registerSchema = [
-  body('name').trim().notEmpty().withMessage('Meno sa vyžaduje'),
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage(() => global.locale.validation.isRequired),
   body('email')
     .trim()
     .notEmpty()
@@ -14,7 +17,6 @@ const registerSchema = [
     .custom(async value => {
       const user = await User.findOne({ email: value })
       if (user) {
-        // throw new Error(global.locale.hello)
         throw new Error('Email už existuje')
       }
       return true

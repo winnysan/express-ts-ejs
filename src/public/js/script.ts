@@ -1,6 +1,6 @@
-const greetingEl: HTMLElement | null = document.querySelector('#greeting')
+const dateEl: HTMLElement | null = document.querySelector('#date')
 
-if (greetingEl) greetingEl.innerText = 'Hello'
+if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
 
 const one: number = 1
 const two: number = 2

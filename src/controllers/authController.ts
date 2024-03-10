@@ -47,7 +47,10 @@ const authUser = asyncHandler(
 
         res.redirect('/')
       } else {
-        throw new Error('Invalid credentials')
+        res.render('login', {
+          alert: [{ msg: global.locale.validation.invalidCredentials }],
+          fill: { email: req.body.email },
+        })
       }
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))

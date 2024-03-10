@@ -8,7 +8,8 @@ import connectDB from './lib/connectDB'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
 import localizationMiddleware from './middleware/localizationMiddleware'
 import adminRouter from './routes/adminRoute'
-import pageRouter from './routes/pageRoute'
+import dashboardRouter from './routes/dashboardRoute'
+import publicRouter from './routes/publicRoute'
 
 dotenv.config()
 
@@ -39,7 +40,8 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 // Routes
-app.use('/', pageRouter)
+app.use('/', publicRouter)
+app.use('/dashboard', dashboardRouter)
 app.use('/admin', adminRouter)
 
 // Errors
