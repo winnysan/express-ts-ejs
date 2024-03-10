@@ -26,8 +26,6 @@ const errorHandler = (
 ) => {
   const message = getErrorMessage(err)
 
-  console.log(process.env.NODE_ENV)
-
   const error = {
     message,
     name: err.name,

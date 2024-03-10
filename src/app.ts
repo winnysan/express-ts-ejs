@@ -6,6 +6,7 @@ import expressLayouts from 'express-ejs-layouts'
 import path from 'path'
 import connectDB from './lib/connectDB'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
+import localizationMiddleware from './middleware/localizationMiddleware'
 import adminRouter from './routes/adminRoute'
 import pageRouter from './routes/pageRoute'
 
@@ -24,6 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Cookie parser middleware
 app.use(cookieParser())
+
+// Localization
+app.use(localizationMiddleware)
 
 // Public folder
 app.use(express.static(path.join(__dirname, 'public')))
