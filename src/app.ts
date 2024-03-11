@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
+import flash from 'express-flash'
 import session from 'express-session'
 import path from 'path'
 import connectDB from './lib/connectDB'
@@ -29,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Cookie parser middleware
 app.use(cookieParser())
 
-// Session
+// Session middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -38,6 +39,9 @@ app.use(
     cookie: { secure: process.env.NODE_ENV !== NodeEnv.DEV },
   })
 )
+
+// Flash messages
+app.use(flash())
 
 // Localization
 app.use(localizationMiddleware)

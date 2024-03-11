@@ -1,10 +1,15 @@
 import express from 'express'
-import { authUser, registerUser } from '../controllers/authController'
+import {
+  authUser,
+  logoutUser,
+  registerUser,
+} from '../controllers/authController'
 import {
   homePage,
   loginPage,
   registerPage,
 } from '../controllers/pageController'
+import { onlyPublic } from '../middleware/authMiddleware'
 import {
   registerSchema,
   validateRegisterSchema,
@@ -13,9 +18,16 @@ import {
 const router = express.Router()
 
 router.get('/', homePage)
-router.get('/register', registerPage)
-router.post('/register', registerSchema, validateRegisterSchema, registerUser)
-router.get('/login', loginPage)
-router.post('/login', authUser)
+router.get('/register', onlyPublic, registerPage)
+router.post(
+  '/register',
+  onlyPublic,
+  registerSchema,
+  validateRegisterSchema,
+  registerUser
+)
+router.get('/login', onlyPublic, loginPage)
+router.post('/login', onlyPublic, authUser)
+router.post('/logout', logoutUser)
 
 export default router

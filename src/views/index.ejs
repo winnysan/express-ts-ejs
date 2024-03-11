@@ -1,2 +1,12 @@
+<% if (messages.length > 0) { %>
+<div>
+  <% messages.forEach(message => { %>
+  <p style="color: green"><%= message %></p>
+  <% }); %>
+</div>
+<% } %>
 <h1><%= locale.hello %></h1>
 <p id="date"></p>
+<% if (user) { %>
+<h2><%= user.name %></h2>
+<% } %>

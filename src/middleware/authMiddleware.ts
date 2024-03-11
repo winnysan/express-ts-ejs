@@ -30,11 +30,9 @@ const protect = asyncHandler(
 
         next()
       } catch (err: unknown) {
-        req.session.user = undefined
         throw new Error(`Unauthorized, ${err}`)
       }
     } else {
-      req.session.user = undefined
       throw new Error('Unauthorized, user')
     }
   }
@@ -55,4 +53,19 @@ const admin = (
   }
 }
 
-export { admin, protect }
+/**
+ * Only public
+ */
+const onlyPublic = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  if (req.cookies.authToken || req.session.user) {
+    res.redirect('/')
+  } else {
+    next()
+  }
+}
+
+export { admin, onlyPublic, protect }

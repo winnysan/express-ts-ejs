@@ -1,7 +1,7 @@
 import express from 'express'
 
 const homePage = async (req: express.Request, res: express.Response) => {
-  res.render('index')
+  res.render('index', { user: req.session.user, messages: req.flash('info') })
 }
 
 const registerPage = async (req: express.Request, res: express.Response) => {

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import express from 'express'
+import destroyUserSession from '../lib/destroyUserSession'
 import generateAuthToken from '../lib/generateAuthToken'
 import getErrorMessage from '../lib/getErrorMessage'
 import asyncHandler from '../middleware/asyncHandler'
@@ -58,4 +59,11 @@ const authUser = asyncHandler(
   }
 )
 
-export { authUser, registerUser }
+/**
+ * Logout user
+ */
+const logoutUser = (req: express.Request, res: express.Response) => {
+  destroyUserSession(req, res)
+}
+
+export { authUser, logoutUser, registerUser }
