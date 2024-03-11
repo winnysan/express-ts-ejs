@@ -11,9 +11,9 @@ type Decoded = {
 }
 
 /**
- * Protect route
+ * Auth check
  */
-const protect = asyncHandler(
+const authCheck = asyncHandler(
   async (
     req: express.Request,
     res: express.Response,
@@ -33,7 +33,26 @@ const protect = asyncHandler(
         throw new Error(`Unauthorized, ${err}`)
       }
     } else {
-      throw new Error('Unauthorized, user')
+      next()
+    }
+  }
+)
+
+/**
+ * Protect route
+ */
+const protect = asyncHandler(
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    const user: IUser | undefined = req.session.user
+
+    if (!user) {
+      res.redirect('/')
+    } else {
+      next()
     }
   }
 )
@@ -49,7 +68,7 @@ const admin = (
   if (req.session.user && req.session.user.role === Role.ADMIN) {
     next()
   } else {
-    throw new Error('Unauthorized, admin')
+    res.redirect('/')
   }
 }
 
@@ -68,4 +87,4 @@ const onlyPublic = (
   }
 }
 
-export { admin, onlyPublic, protect }
+export { admin, authCheck, onlyPublic, protect }

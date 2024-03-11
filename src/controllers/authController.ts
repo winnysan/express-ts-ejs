@@ -25,6 +25,7 @@ const registerUser = asyncHandler(
       user.password = ''
       generateAuthToken(res, user._id.toString())
 
+      req.flash('info', 'You are registered and logged in')
       res.redirect('/')
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
@@ -46,6 +47,7 @@ const authUser = asyncHandler(
         user.password = ''
         generateAuthToken(res, user._id.toString())
 
+        req.flash('info', 'You are logged in')
         res.redirect('/')
       } else {
         res.render('login', {

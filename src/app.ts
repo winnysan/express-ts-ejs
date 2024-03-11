@@ -7,6 +7,7 @@ import flash from 'express-flash'
 import session from 'express-session'
 import path from 'path'
 import connectDB from './lib/connectDB'
+import { authCheck } from './middleware/authMiddleware'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
 import localizationMiddleware from './middleware/localizationMiddleware'
 import adminRouter from './routes/adminRoute'
@@ -56,9 +57,9 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 // Routes
-app.use('/', publicRouter)
-app.use('/dashboard', dashboardRouter)
-app.use('/admin', adminRouter)
+app.use('/', authCheck, publicRouter)
+app.use('/dashboard', authCheck, dashboardRouter)
+app.use('/admin', authCheck, adminRouter)
 
 // Errors
 app.use(notFound)
