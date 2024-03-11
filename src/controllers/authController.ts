@@ -53,6 +53,7 @@ const authUser = asyncHandler(
         res.render('login', {
           alert: [{ msg: global.locale.validation.invalidCredentials }],
           fill: { email: req.body.email },
+          title: 'Login page',
         })
       }
     } catch (err: unknown) {

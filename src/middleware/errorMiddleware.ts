@@ -33,7 +33,7 @@ const errorHandler = (
   }
 
   logToFile(error)
-  res.render('error', { error })
+  res.render('error', { error, title: 'Error page' })
 }
 
 export { errorHandler, notFound }
