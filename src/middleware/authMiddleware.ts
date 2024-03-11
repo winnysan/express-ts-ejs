@@ -24,15 +24,17 @@ const protect = asyncHandler(
     if (token) {
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as Decoded
-        req.user = (await User.findById(decoded.userId).select(
+        req.session.user = (await User.findById(decoded.userId).select(
           '-password'
         )) as IUser
 
         next()
       } catch (err: unknown) {
+        req.session.user = undefined
         throw new Error(`Unauthorized, ${err}`)
       }
     } else {
+      req.session.user = undefined
       throw new Error('Unauthorized, user')
     }
   }
@@ -46,7 +48,7 @@ const admin = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  if (req.user && req.user.role === Role.ADMIN) {
+  if (req.session.user && req.session.user.role === Role.ADMIN) {
     next()
   } else {
     throw new Error('Unauthorized, admin')

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
+import session from 'express-session'
 import path from 'path'
 import connectDB from './lib/connectDB'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
@@ -10,6 +11,7 @@ import localizationMiddleware from './middleware/localizationMiddleware'
 import adminRouter from './routes/adminRoute'
 import dashboardRouter from './routes/dashboardRoute'
 import publicRouter from './routes/publicRoute'
+import { NodeEnv } from './types/enums'
 
 dotenv.config()
 
@@ -26,6 +28,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Cookie parser middleware
 app.use(cookieParser())
+
+// Session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV !== NodeEnv.DEV },
+  })
+)
 
 // Localization
 app.use(localizationMiddleware)

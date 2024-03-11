@@ -13,11 +13,11 @@ const loginPage = async (req: express.Request, res: express.Response) => {
 }
 
 const adminPage = async (req: express.Request, res: express.Response) => {
-  res.render('admin', { user: req.user })
+  res.render('admin', { user: req.session.user })
 }
 
 const dashboardPage = async (req: express.Request, res: express.Response) => {
-  res.render('dashboard', { user: req.user })
+  res.render('dashboard', { user: req.session.user })
 }
 
 export { adminPage, dashboardPage, homePage, loginPage, registerPage }

@@ -3,11 +3,15 @@ import { Dictionary } from '../dictionary'
 
 declare global {
   namespace Express {
-    export interface Request {
-      user?: IUser
-    }
+    export interface Request {}
   }
   var locale: Dictionary
+}
+
+declare module 'express-session' {
+  export interface SessionData {
+    user?: IUser
+  }
 }
 
 export {}
