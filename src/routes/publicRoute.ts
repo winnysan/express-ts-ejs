@@ -4,11 +4,8 @@ import {
   logoutUser,
   registerUser,
 } from '../controllers/authController'
-import {
-  homePage,
-  loginPage,
-  registerPage,
-} from '../controllers/pageController'
+import { loginPage, registerPage } from '../controllers/pageController'
+import { getPosts } from '../controllers/postController'
 import { onlyPublic } from '../middleware/authMiddleware'
 import {
   registerSchema,
@@ -17,7 +14,7 @@ import {
 
 const router = express.Router()
 
-router.get('/', homePage)
+router.get('/', getPosts)
 router.get('/register', onlyPublic, registerPage)
 router.post(
   '/register',

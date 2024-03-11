@@ -4,9 +4,24 @@
   <p style="color: green"><%= message %></p>
   <% }); %>
 </div>
-<% } %>
-<h1><%= locale.hello %></h1>
-<% if (user) { %>
+<% } %> <% if (user) { %>
 <p><%= user.name %></p>
 <% } %>
-<p id="date"></p>
+
+<h1><%= locale.hello %></h1>
+
+<section>
+  <ul>
+    <% posts.forEach(post => { %>
+    <li>
+      <a href="/post/<%= post.slug %>"><%= post.title %></a>
+      <span><%= post.author.name %></span>
+      <span><%= new Date(post.createdAt).toLocaleDateString() %></span>
+    </li>
+    <% }) %>
+  </ul>
+
+  <% if (nextPage !== null) { %>
+  <a href="/?page=<%= nextPage %>">View older posts</a>
+  <% } %>
+</section>

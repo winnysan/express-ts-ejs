@@ -2,7 +2,37 @@ import express from 'express'
 import getErrorMessage from '../lib/getErrorMessage'
 import slugify from '../lib/slugify'
 import asyncHandler from '../middleware/asyncHandler'
-import Post from '../models/postModel'
+import Post, { IPost } from '../models/postModel'
+
+const getPosts = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const limit: number = parseInt(process.env.PER_PAGE!) || 10
+      const page: number = Number(req.query.page) || 1
+
+      const posts: IPost[] = await Post.find()
+        .populate('author', 'name')
+        .sort({ updatedAt: -1 })
+        .skip(page * limit - limit)
+        .limit(limit)
+
+      const total: number = await Post.countDocuments()
+      const nextPage = page + 1
+      const hasNextPage = nextPage <= Math.ceil(total / limit)
+
+      res.render('index', {
+        user: req.session.user,
+        messages: req.flash('info'),
+        title: 'Home page',
+        posts,
+        current: page,
+        nextPage: hasNextPage ? nextPage : null,
+      })
+    } catch (err: unknown) {
+      throw new Error(getErrorMessage(err))
+    }
+  }
+)
 
 /**
  * New post page
@@ -36,4 +66,4 @@ const newPost = asyncHandler(
   }
 )
 
-export { newPost, newPostPage }
+export { getPosts, newPost, newPostPage }
