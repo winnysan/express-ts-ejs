@@ -1,10 +1,12 @@
 <header>
   <nav>
-    <figure>LOGO</figure>
+    <figure><%= global.locale.hello %></figure>
     <ul>
       <li><a href="/">Home</a></li>
+      <% if (typeof user === 'undefined') { %>
       <li><a href="/login">Login</a></li>
       <li><a href="/register">Register</a></li>
+      <% } else { %>
       <li><a href="/dashboard">Dashboard</a></li>
       <li><a href="/admin">Admin</a></li>
       <li>
@@ -12,6 +14,7 @@
           <button type="submit">Logout</button>
         </form>
       </li>
+      <% } %>
     </ul>
   </nav>
 </header>

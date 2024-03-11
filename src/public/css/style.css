@@ -38,8 +38,16 @@ header {
 header nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   max-width: 998px;
   margin: 0 auto;
+}
+
+header nav figure {
+  color: var(--sky);
+  text-transform: uppercase;
+  border: 1px dashed var(--sky);
+  padding: 0.1rem 0.3rem;
 }
 
 header nav ul {
