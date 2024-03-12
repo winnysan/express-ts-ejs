@@ -91,4 +91,24 @@ const newPost = asyncHandler(
   }
 )
 
-export { getPosts, newPost, newPostPage, searchInPosts }
+/**
+ * Get post by slug
+ */
+const getPostBySlug = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const slug = req.params.slug
+
+      const post = await Post.findOne({ slug })
+
+      if (!post) {
+        throw new Error(getErrorMessage(`${slug} - not found`))
+      }
+      res.json(post)
+    } catch (err: unknown) {
+      throw new Error(getErrorMessage(err))
+    }
+  }
+)
+
+export { getPostBySlug, getPosts, newPost, newPostPage, searchInPosts }

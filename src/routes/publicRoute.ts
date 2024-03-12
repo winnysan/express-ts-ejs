@@ -5,7 +5,11 @@ import {
   registerUser,
 } from '../controllers/authController'
 import { loginPage, registerPage } from '../controllers/pageController'
-import { getPosts, searchInPosts } from '../controllers/postController'
+import {
+  getPostBySlug,
+  getPosts,
+  searchInPosts,
+} from '../controllers/postController'
 import { onlyPublic } from '../middleware/authMiddleware'
 import {
   registerSchema,
@@ -17,6 +21,8 @@ const router = express.Router()
 router.get('/', getPosts)
 
 router.post('/search', searchInPosts)
+
+router.get('/post/:slug', getPostBySlug)
 
 router.get('/register', onlyPublic, registerPage)
 router.post(
