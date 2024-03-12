@@ -4,6 +4,9 @@ import slugify from '../lib/slugify'
 import asyncHandler from '../middleware/asyncHandler'
 import Post, { IPost } from '../models/postModel'
 
+/**
+ * Get posts
+ */
 const getPosts = asyncHandler(
   async (req: express.Request, res: express.Response) => {
     try {
@@ -28,6 +31,28 @@ const getPosts = asyncHandler(
         current: page,
         nextPage: hasNextPage ? nextPage : null,
       })
+    } catch (err: unknown) {
+      throw new Error(getErrorMessage(err))
+    }
+  }
+)
+
+/**
+ * Search in posts
+ */
+const searchInPosts = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const searchTerm = req.body.searchTerm
+
+      const posts: IPost[] = await Post.find({
+        $or: [
+          { title: { $regex: searchTerm } },
+          { body: { $regex: searchTerm } },
+        ],
+      }).sort({ updatedAt: -1 })
+
+      res.json({ searchTerm, posts })
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
     }
@@ -66,4 +91,4 @@ const newPost = asyncHandler(
   }
 )
 
-export { getPosts, newPost, newPostPage }
+export { getPosts, newPost, newPostPage, searchInPosts }

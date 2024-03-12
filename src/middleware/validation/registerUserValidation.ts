@@ -49,6 +49,7 @@ const validateRegisterSchema = (
     res.render('register', {
       alert: errors.array(),
       fill: { email: req.body.email, name: req.body.name },
+      title: 'Register page',
     })
   } else {
     next()

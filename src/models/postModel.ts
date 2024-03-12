@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema<IPost>(
       required: true,
       ref: 'User',
     },
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
     body: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
   },

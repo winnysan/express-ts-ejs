@@ -1,6 +1,10 @@
 <header>
   <nav>
     <figure><%= global.locale.hello %></figure>
+    <form action="/search" method="post">
+      <input type="text" name="searchTerm" placeholder="Search" />
+      <button>Search</button>
+    </form>
     <ul>
       <li><a href="/">Home</a></li>
       <% if (typeof user === 'undefined') { %>
