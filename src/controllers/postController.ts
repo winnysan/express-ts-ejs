@@ -1,4 +1,5 @@
 import express from 'express'
+import diacriticsInsensitiveRegex from '../lib/diacriticsInsensitiveRegex'
 import getErrorMessage from '../lib/getErrorMessage'
 import slugify from '../lib/slugify'
 import asyncHandler from '../middleware/asyncHandler'
@@ -47,8 +48,18 @@ const searchInPosts = asyncHandler(
 
       const posts: IPost[] = await Post.find({
         $or: [
-          { title: { $regex: searchTerm } },
-          { body: { $regex: searchTerm } },
+          {
+            title: {
+              $regex: diacriticsInsensitiveRegex(searchTerm),
+              $options: 'i',
+            },
+          },
+          {
+            body: {
+              $regex: diacriticsInsensitiveRegex(searchTerm),
+              $options: 'i',
+            },
+          },
         ],
       }).sort({ updatedAt: -1 })
 
