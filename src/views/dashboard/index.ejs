@@ -1,10 +1,7 @@
-<h1>Dashboard</h1>
+<h1><%= global.dictionary.navigation.dashboard %></h1>
 
-<p><%= global.hello %> <%= user.name %></p>
-
-<div>
-  <a href="/dashboard/new-post">New post</a>
-</div>
+<section>
+  <a href="/dashboard/new-post"><%= global.dictionary.navigation.newPost %></a>
 
 <ul>
   <% posts.forEach(post => { %>
@@ -15,4 +12,4 @@
     >
   </li>
   <% }) %>
-</ul>
+</section>

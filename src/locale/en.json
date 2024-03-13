@@ -1,7 +1,54 @@
 {
-  "hello": "Hello",
+  "navigation": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "newPost": "New post",
+    "viewOlderPosts": "View older posts"
+  },
+  "title": {
+    "homePage": "",
+    "loginPage": "",
+    "registerPage": "",
+    "dashboardPage": "",
+    "adminPage": "",
+    "newPostPage": "",
+    "errorPage": ""
+  },
+  "form": {
+    "search": "Search",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "title": "Title",
+    "body": "Body",
+    "login": "Login",
+    "register": "Register",
+    "addNewPost": "Add new post"
+  },
   "validation": {
-    "isRequired": "*",
-    "invalidCredentials": "Invalid credentials"
-  }
+    "isRequired": "Is required",
+    "emailIsRequired": "Email is required",
+    "emailIsInvalid": "Email is invalid",
+    "emailAlreadyExists": "Email already exists",
+    "passwordIsRequired": "Password is required",
+    "passwordMustHaveAtLeast6Characters": "Password must have at least 6 characters",
+    "confirmPasswordIsRequired": "Confirm password is required",
+    "passwordsMustMatch": "Passwords must match"
+  },
+  "messages": {
+    "invalidCredentials": "Invalid credentials",
+    "youAreLoggedIn": "You are logged in",
+    "youAreRegisteredAndLoggedIn": "You are registered and logged in",
+    "youAreLoggedOut": "You are logged out",
+    "notFound": "Not found",
+    "somethingWentWrong": "Something went wrong",
+    "unauthorized": "Unauthorized",
+    "error": "Error"
+  },
+  "logo": "Hello"
 }

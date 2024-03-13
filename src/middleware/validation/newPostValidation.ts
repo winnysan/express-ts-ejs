@@ -19,11 +19,10 @@ const validatePostSchema = (
 ) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    console.log('first')
     res.render('dashboard/new-post', {
       alert: errors.array(),
       fill: { postTitle: req.body.title, postBody: req.body.body },
-      title: 'New post page',
+      title: global.dictionary.title.newPostPage,
     })
   } else {
     next()

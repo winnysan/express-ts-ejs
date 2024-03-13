@@ -11,7 +11,9 @@ const notFound = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const error = new Error(`${req.originalUrl} not found`)
+  const error = new Error(
+    `${req.originalUrl} ${global.dictionary.messages.notFound}`
+  )
   next(error)
 }
 
@@ -33,7 +35,7 @@ const errorHandler = (
   }
 
   logToFile(error)
-  res.render('error', { error, title: 'Error page' })
+  res.render('error', { error, title: global.dictionary.title.errorPage })
 }
 
 export { errorHandler, notFound }

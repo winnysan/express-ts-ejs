@@ -10,30 +10,32 @@ const registerSchema = [
   body('email')
     .trim()
     .notEmpty()
-    .withMessage('Email sa vyžaduje')
+    .withMessage(() => global.dictionary.validation.emailIsRequired)
     .isEmail()
     .normalizeEmail()
-    .withMessage('Email je neplatný')
+    .withMessage(() => global.dictionary.validation.emailIsInvalid)
     .custom(async value => {
       const user = await User.findOne({ email: value })
       if (user) {
-        throw new Error('Email už existuje')
+        throw new Error(global.dictionary.validation.emailAlreadyExists)
       }
       return true
     }),
   body('password')
     .trim()
     .notEmpty()
-    .withMessage('Heslo sa vyžaduje')
+    .withMessage(() => global.dictionary.validation.passwordIsRequired)
     .isLength({ min: 6 })
-    .withMessage('Heslo musí mať aspoň 6 znakov'),
+    .withMessage(
+      () => global.dictionary.validation.passwordMustHaveAtLeast6Characters
+    ),
   body('confirmPassword')
     .trim()
     .notEmpty()
-    .withMessage('Potvrdenie hesla sa vyžaduje')
+    .withMessage(() => global.dictionary.validation.confirmPasswordIsRequired)
     .custom((value, { req }) => {
       if (value !== req.body.password) {
-        throw new Error('Heslá sa musia zhodovať')
+        throw new Error(global.dictionary.validation.passwordsMustMatch)
       }
       return true
     }),
@@ -49,7 +51,7 @@ const validateRegisterSchema = (
     res.render('register', {
       alert: errors.array(),
       fill: { email: req.body.email, name: req.body.name },
-      title: 'Register page',
+      title: global.dictionary.title.registerPage,
     })
   } else {
     next()

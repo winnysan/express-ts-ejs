@@ -1,7 +1,54 @@
 {
-  "hello": "Ahoj",
+  "navigation": {
+    "home": "Domov",
+    "login": "Prihlásenie",
+    "register": "Registrácia",
+    "logout": "Odhlásiť sa",
+    "dashboard": "Panel",
+    "admin": "Admin",
+    "newPost": "Nový príspevok",
+    "viewOlderPosts": "Zobraziť staršie príspevky"
+  },
+  "title": {
+    "homePage": "",
+    "loginPage": "",
+    "registerPage": "",
+    "dashboardPage": "",
+    "adminPage": "",
+    "newPostPage": "",
+    "errorPage": ""
+  },
+  "form": {
+    "search": "Hľadať",
+    "name": "Meno",
+    "email": "Email",
+    "password": "Heslo",
+    "confirmPassword": "Potvrdiť heslo",
+    "title": "Nadpis",
+    "body": "Text",
+    "login": "Prihlásenie",
+    "register": "Registrácia",
+    "addNewPost": "Pridať nový príspevok"
+  },
   "validation": {
-    "isRequired": "*",
-    "invalidCredentials": "Zlé prihlasovacie údaje"
-  }
+    "isRequired": "Vyžaduje sa",
+    "emailIsRequired": "Email sa vyžaduje",
+    "emailIsInvalid": "Email je neplatný",
+    "emailAlreadyExists": "Email already exists",
+    "passwordIsRequired": "Heslo sa vyžaduje",
+    "passwordMustHaveAtLeast6Characters": "Heslo musí mať aspoň 6 znakov",
+    "confirmPasswordIsRequired": "Potvrdenie hesla sa vyžaduje",
+    "passwordsMustMatch": "Heslá sa musia zhodovať"
+  },
+  "messages": {
+    "invalidCredentials": "Zlé prihlasovacie údaje",
+    "youAreLoggedIn": "Bol ste prihlásený",
+    "youAreRegisteredAndLoggedIn": "Bol ste prihlásený",
+    "youAreLoggedOut": "Bol ste odhlásený",
+    "notFound": "Nenašlo sa",
+    "somethingWentWrong": "Niečo sa pokazilo",
+    "unauthorized": "Neoverené",
+    "error": "Chyba"
+  },
+  "logo": "Ahoj"
 }

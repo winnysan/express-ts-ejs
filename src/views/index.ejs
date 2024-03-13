@@ -1,16 +1,14 @@
-<% if (messages.length > 0) { %>
-<div>
-  <% messages.forEach(message => { %>
-  <p style="color: green"><%= message %></p>
-  <% }); %>
-</div>
-<% } %> <% if (user) { %>
-<p><%= user.name %></p>
-<% } %>
-
-<h1><%= locale.hello %></h1>
+<h1><%= global.dictionary.navigation.home %></h1>
 
 <section>
+  <% if (messages.length > 0) { %>
+  <div>
+    <% messages.forEach(message => { %>
+    <p style="color: green"><%= message %></p>
+    <% }); %>
+  </div>
+  <% } %>
+
   <ul>
     <% posts.forEach(post => { %>
     <li>
@@ -24,6 +22,8 @@
   </ul>
 
   <% if (nextPage !== null) { %>
-  <a href="/?page=<%= nextPage %>">View older posts</a>
+  <a href="/?page=<%= nextPage %>"
+    ><%= global.dictionary.navigation.viewOlderPosts %></a
+  >
   <% } %>
 </section>

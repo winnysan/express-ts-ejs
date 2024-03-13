@@ -1,20 +1,20 @@
-<section>
-  <h1>Login</h1>
+<h1><%= global.dictionary.navigation.login %></h1>
 
+<section>
   <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
   <div style="color: red"><%= error.msg %></div>
   <% }) %> <% } %>
 
   <form action="/login" method="post">
     <div>
-      <label for="email">Email</label>
+      <label for="email"><%= global.dictionary.form.email %></label>
       <input type="email" name="email" <% if (typeof fill !== 'undefined') { %>
       value="<%= fill.email %>" <% } %> />
     </div>
     <div>
-      <label for="password">Password</label>
+      <label for="password"><%= global.dictionary.form.password %></label>
       <input type="password" name="password" />
     </div>
-    <button type="submit">Login</button>
+    <button type="submit"><%= global.dictionary.form.login %></button>
   </form>
 </section>

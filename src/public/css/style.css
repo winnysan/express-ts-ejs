@@ -47,7 +47,7 @@ header nav {
 header nav figure {
   color: var(--sky);
   text-transform: uppercase;
-  border: 1px dashed var(--sky);
+  border: 1px dashed var(--black);
   padding: 0.1rem 0.3rem;
 }
 

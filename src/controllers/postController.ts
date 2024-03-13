@@ -27,7 +27,7 @@ const getPosts = asyncHandler(
       res.render('index', {
         user: req.session.user,
         messages: req.flash('info'),
-        title: 'Home page',
+        title: global.dictionary.title.homePage,
         posts,
         current: page,
         nextPage: hasNextPage ? nextPage : null,
@@ -51,7 +51,7 @@ const getPostsByUserID = asyncHandler(
       res.render('dashboard', {
         user: req.session.user,
         messages: req.flash('info'),
-        title: 'Dashboard page',
+        title: global.dictionary.title.dashboardPage,
         posts,
       })
     } catch (err: unknown) {
@@ -98,7 +98,7 @@ const searchInPosts = asyncHandler(
 const newPostPage = async (req: express.Request, res: express.Response) => {
   res.render('dashboard/new-post', {
     user: req.session.user,
-    title: 'New post page',
+    title: global.dictionary.title.newPostPage,
   })
 }
 
@@ -135,7 +135,9 @@ const getPostBySlug = asyncHandler(
       const post = await Post.findOne({ slug })
 
       if (!post) {
-        throw new Error(`${req.originalUrl} not found`)
+        throw new Error(
+          `${req.originalUrl} ${global.dictionary.messages.notFound}`
+        )
       } else {
         res.json(post)
       }

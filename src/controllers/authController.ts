@@ -25,7 +25,7 @@ const registerUser = asyncHandler(
       user.password = ''
       generateAuthToken(res, user._id.toString())
 
-      req.flash('info', 'You are registered and logged in')
+      req.flash('info', global.dictionary.messages.youAreRegisteredAndLoggedIn)
       res.redirect('/')
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
@@ -47,13 +47,13 @@ const authUser = asyncHandler(
         user.password = ''
         generateAuthToken(res, user._id.toString())
 
-        req.flash('info', 'You are logged in')
+        req.flash('info', global.dictionary.messages.youAreLoggedIn)
         res.redirect('/')
       } else {
         res.render('login', {
-          alert: [{ msg: global.dictionary.validation.invalidCredentials }],
+          alert: [{ msg: global.dictionary.messages.invalidCredentials }],
           fill: { email: req.body.email },
-          title: 'Login page',
+          title: global.dictionary.title.loginPage,
         })
       }
     } catch (err: unknown) {

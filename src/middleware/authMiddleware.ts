@@ -30,7 +30,7 @@ const authCheck = asyncHandler(
 
         next()
       } catch (err: unknown) {
-        throw new Error(`Unauthorized, ${err}`)
+        throw new Error(`${global.dictionary.messages.unauthorized}, ${err}`)
       }
     } else {
       next()

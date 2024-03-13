@@ -11,7 +11,7 @@ const destroyUserSession = (req: express.Request, res: express.Response) => {
 
   delete req.session.user
 
-  req.flash('info', 'Logout')
+  req.flash('info', global.dictionary.messages.youAreLoggedOut)
   res.redirect('/')
 }
 

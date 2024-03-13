@@ -10,7 +10,8 @@ const logToFile = (message: unknown) => {
     const errorMessage = getErrorMessage(message)
 
     const date = new Date()
-    const time = date.toLocaleTimeString('sk-SK') + '.' + date.getMilliseconds()
+    const time =
+      date.toLocaleTimeString(global.locale) + '.' + date.getMilliseconds()
     const day =
       ('0' + new Date().getDate()).slice(-2) +
       '-' +
@@ -18,7 +19,7 @@ const logToFile = (message: unknown) => {
       '-' +
       date.getFullYear()
 
-    const data = `${time} | ${errorMessage}\n`
+    const data = `${time} | ${global.locale} | ${errorMessage}\n`
 
     fs.writeFileSync(`logs/${day}.txt`, data, { flag: 'a' })
   } catch (err: unknown) {

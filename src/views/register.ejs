@@ -1,29 +1,31 @@
-<section>
-  <h1>Register</h1>
+<h1><%= global.dictionary.navigation.register %></h1>
 
+<section>
   <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
   <div style="color: red"><%= error.msg %></div>
   <% }) %> <% } %>
 
   <form action="/register" method="post">
     <div>
-      <label for="email">Email</label>
+      <label for="email"><%= global.dictionary.form.email %></label>
       <input type="email" name="email" <% if (typeof fill !== 'undefined') { %>
       value="<%= fill.email %>" <% } %> />
     </div>
     <div>
-      <label for="name">Name</label>
+      <label for="name"><%= global.dictionary.form.name %></label>
       <input type="text" name="name" <% if (typeof fill !== 'undefined') { %>
       value="<%= fill.name %>" <% } %> />
     </div>
     <div>
-      <label for="password">Password</label>
+      <label for="password"><%= global.dictionary.form.password %></label>
       <input type="password" name="password" />
     </div>
     <div>
-      <label for="confirmPassword">Confirm password</label>
+      <label for="confirmPassword"
+        ><%= global.dictionary.form.confirmPassword %></label
+      >
       <input type="password" name="confirmPassword" />
     </div>
-    <button type="submit">Register</button>
+    <button type="submit"><%= global.dictionary.form.register %></button>
   </form>
 </section>
