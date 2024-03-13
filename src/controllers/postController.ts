@@ -39,6 +39,28 @@ const getPosts = asyncHandler(
 )
 
 /**
+ * Get posts by user ID
+ */
+const getPostsByUserID = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const posts: IPost[] = await Post.find({
+        author: req.session.user?._id,
+      }).sort({ updatedAt: -1 })
+
+      res.render('dashboard', {
+        user: req.session.user,
+        messages: req.flash('info'),
+        title: 'Dashboard page',
+        posts,
+      })
+    } catch (err: unknown) {
+      throw new Error(getErrorMessage(err))
+    }
+  }
+)
+
+/**
  * Search in posts
  */
 const searchInPosts = asyncHandler(
@@ -95,7 +117,7 @@ const newPost = asyncHandler(
         slug: `${slugify(title)}-${Date.now()}`,
       })
 
-      res.json({ post })
+      res.json(post)
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
     }
@@ -113,13 +135,21 @@ const getPostBySlug = asyncHandler(
       const post = await Post.findOne({ slug })
 
       if (!post) {
-        throw new Error(getErrorMessage(`${slug} - not found`))
+        throw new Error(`${req.originalUrl} not found`)
+      } else {
+        res.json(post)
       }
-      res.json(post)
     } catch (err: unknown) {
       throw new Error(getErrorMessage(err))
     }
   }
 )
 
-export { getPostBySlug, getPosts, newPost, newPostPage, searchInPosts }
+export {
+  getPostBySlug,
+  getPosts,
+  getPostsByUserID,
+  newPost,
+  newPostPage,
+  searchInPosts,
+}

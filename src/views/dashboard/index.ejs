@@ -5,3 +5,12 @@
 <div>
   <a href="/dashboard/new-post">New post</a>
 </div>
+
+<ul>
+  <% posts.forEach(post => { %>
+  <li>
+    <a href="/post/<%= post.slug %>"><%= post.title %></a>
+    <span><%= new Date(post.createdAt).toLocaleDateString() %></span>
+  </li>
+  <% }) %>
+</ul>

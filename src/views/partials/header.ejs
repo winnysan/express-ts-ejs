@@ -12,7 +12,9 @@
       <li><a href="/register">Register</a></li>
       <% } else { %>
       <li><a href="/dashboard">Dashboard</a></li>
+      <% if (user.role === 'admin') { %>
       <li><a href="/admin">Admin</a></li>
+      <% } %>
       <li>
         <form action="/logout" method="post">
           <button type="submit">Logout</button>

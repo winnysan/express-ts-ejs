@@ -1,6 +1,9 @@
 import express from 'express'
-import { dashboardPage } from '../controllers/pageController'
-import { newPost, newPostPage } from '../controllers/postController'
+import {
+  getPostsByUserID,
+  newPost,
+  newPostPage,
+} from '../controllers/postController'
 import { protect } from '../middleware/authMiddleware'
 import {
   postSchema,
@@ -9,7 +12,7 @@ import {
 
 const router = express.Router()
 
-router.get('/', protect, dashboardPage)
+router.get('/', protect, getPostsByUserID)
 router.get('/new-post', protect, newPostPage)
 router.post('/new-post', protect, postSchema, validatePostSchema, newPost)
 
