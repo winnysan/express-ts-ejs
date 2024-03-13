@@ -16,9 +16,11 @@ const localizationMiddleware = (
   switch (domain) {
     case Domain.COM:
       file = `./src/locale/${locale.locales[1]}.json`
+      global.locale = locale.locales[1]
       break
     default:
       file = `./src/locale/${locale.locales[0]}.json`
+      global.locale = locale.locales[0]
       break
   }
 
@@ -26,7 +28,7 @@ const localizationMiddleware = (
     if (err) {
       res.send('Error loading language file')
     } else {
-      global.locale = JSON.parse(data)
+      global.dictionary = JSON.parse(data)
       next()
     }
   })

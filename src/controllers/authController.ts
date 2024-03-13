@@ -51,7 +51,7 @@ const authUser = asyncHandler(
         res.redirect('/')
       } else {
         res.render('login', {
-          alert: [{ msg: global.locale.validation.invalidCredentials }],
+          alert: [{ msg: global.dictionary.validation.invalidCredentials }],
           fill: { email: req.body.email },
           title: 'Login page',
         })

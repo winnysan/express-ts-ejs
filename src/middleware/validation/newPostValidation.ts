@@ -5,11 +5,11 @@ const postSchema = [
   body('title')
     .trim()
     .notEmpty()
-    .withMessage(() => global.locale.validation.isRequired),
+    .withMessage(() => global.dictionary.validation.isRequired),
   body('body')
     .trim()
     .notEmpty()
-    .withMessage(() => global.locale.validation.isRequired),
+    .withMessage(() => global.dictionary.validation.isRequired),
 ]
 
 const validatePostSchema = (

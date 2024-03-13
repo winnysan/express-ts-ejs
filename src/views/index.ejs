@@ -16,7 +16,9 @@
     <li>
       <a href="/post/<%= post.slug %>"><%= post.title %></a>
       <span><%= post.author.name %></span>
-      <span><%= new Date(post.createdAt).toLocaleDateString() %></span>
+      <span
+        ><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span
+      >
     </li>
     <% }) %>
   </ul>

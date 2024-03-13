@@ -6,7 +6,7 @@ const registerSchema = [
   body('name')
     .trim()
     .notEmpty()
-    .withMessage(() => global.locale.validation.isRequired),
+    .withMessage(() => global.dictionary.validation.isRequired),
   body('email')
     .trim()
     .notEmpty()

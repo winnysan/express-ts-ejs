@@ -10,7 +10,9 @@
   <% posts.forEach(post => { %>
   <li>
     <a href="/post/<%= post.slug %>"><%= post.title %></a>
-    <span><%= new Date(post.createdAt).toLocaleDateString() %></span>
+    <span
+      ><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span
+    >
   </li>
   <% }) %>
 </ul>
