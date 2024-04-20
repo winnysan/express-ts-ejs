@@ -13,7 +13,6 @@ import localizationMiddleware from './middleware/localizationMiddleware'
 import adminRouter from './routes/adminRoute'
 import dashboardRouter from './routes/dashboardRoute'
 import publicRouter from './routes/publicRoute'
-import { NodeEnv } from './types/enums'
 
 dotenv.config()
 
@@ -48,7 +47,7 @@ app.use(flash())
 app.use(localizationMiddleware)
 
 // Public folder
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, './public')))
 
 // View engine
 app.use(expressLayouts)

@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/app.js",
-  "scripts": {
-    "clean": "rimraf --glob dist/*",
-    "copy": "ts-node copy.ts",
-    "lint": "eslint . --ext .ts",
-    "tsc": "tsc",
-    "build": "npm-run-all clean lint tsc copy",
-    "dev:start": "npm-run-all tsc copy start",
-    "dev": "nodemon --watch src -e ts,ejs,css --exec npm run dev:start",
-    "start": "node ."
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "start": "node .",
+    "webpack:dev": "webpack --env=development",
+    "webpack:prod": "webpack --env=production",
+    "lint": "eslint . --ext .ts",
+    "gulp": "gulp",
+    "gulp:dev": "npm-run-all gulp webpack:dev start",
+    "dev": "nodemon --watch src -e ts,ejs,css --exec npm run gulp:dev",
+    "build": "npm-run-all lint gulp webpack:prod"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -38,20 +38,21 @@
     "@types/express-ejs-layouts": "^2.5.4",
     "@types/express-flash": "^0.0.5",
     "@types/express-session": "^1.18.0",
-    "@types/fs-extra": "^11.0.4",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.25",
-    "@types/shelljs": "^0.8.15",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
+    "del": "^7.1.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
-    "fs-extra": "^11.2.0",
+    "gulp": "^5.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "nodemon": "^3.1.0",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^5.0.5",
-    "shelljs": "^0.8.5",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }
