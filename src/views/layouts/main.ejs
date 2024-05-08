@@ -9,7 +9,15 @@
   </head>
   <body>
     <%- include('../partials/header.ejs') %>
-    <main><%- body %></main>
+    <main>
+      <%- body %>
+
+      <div>
+        Total: <span id="total">0</span>
+        <button id="decrease">-</button>
+        <button id="increase">+</button>
+      </div>
+    </main>
     <%- include('../partials/footer.ejs') %>
   </body>
 </html>

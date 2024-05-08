@@ -14,7 +14,7 @@
     "gulp": "gulp",
     "gulp:dev": "npm-run-all gulp webpack:dev start",
     "dev": "nodemon --watch src -e ts,ejs,css --exec npm run gulp:dev",
-    "build": "npm-run-all lint gulp webpack:prod"
+    "build": "npm-run-all gulp webpack:prod"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

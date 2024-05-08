@@ -20,7 +20,7 @@ module.exports = env => ({
     extensions: ['.tsx', '.ts', '.js'],
   },
 
-  devtool: 'eval-source-map',
+  devtool: env.production ? undefined : 'eval-source-map',
 
   output: {
     filename: '[name].js',
