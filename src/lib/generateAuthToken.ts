@@ -8,7 +8,7 @@ import { NodeEnv } from '../types/enums'
  * @param userId
  */
 const generateAuthToken = (res: express.Response, userId: string) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET!, {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   })
 

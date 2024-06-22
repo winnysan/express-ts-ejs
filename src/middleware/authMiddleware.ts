@@ -23,7 +23,7 @@ const authCheck = asyncHandler(
 
     if (token) {
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as Decoded
+        const decoded = jwt.verify(token, process.env.JWT_SECRET) as Decoded
         req.session.user = (await User.findById(decoded.userId).select(
           '-password'
         )) as IUser

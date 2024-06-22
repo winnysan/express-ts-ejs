@@ -34,7 +34,7 @@
     "isRequired": "Vyžaduje sa",
     "emailIsRequired": "Email sa vyžaduje",
     "emailIsInvalid": "Email je neplatný",
-    "emailAlreadyExists": "Email already exists",
+    "emailAlreadyExists": "Email už existuje",
     "passwordIsRequired": "Heslo sa vyžaduje",
     "passwordMustHaveAtLeast6Characters": "Heslo musí mať aspoň 6 znakov",
     "confirmPasswordIsRequired": "Potvrdenie hesla sa vyžaduje",

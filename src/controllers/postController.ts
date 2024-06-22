@@ -11,7 +11,7 @@ import Post, { IPost } from '../models/postModel'
 const getPosts = asyncHandler(
   async (req: express.Request, res: express.Response) => {
     try {
-      const limit: number = parseInt(process.env.PER_PAGE!) || 10
+      const limit: number = parseInt(process.env.PER_PAGE) || 10
       const page: number = Number(req.query.page) || 1
 
       const posts: IPost[] = await Post.find()

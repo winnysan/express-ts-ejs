@@ -17,7 +17,7 @@ import publicRouter from './routes/publicRoute'
 dotenv.config()
 
 const PORT = process.env.PORT
-const MONGO_URI = process.env.MONGO_URI!
+const MONGO_URI = process.env.MONGO_URI
 
 connectDB(MONGO_URI)
 
@@ -33,7 +33,7 @@ app.use(cookieParser())
 // Session middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
