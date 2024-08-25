@@ -16,7 +16,7 @@ import publicRouter from './routes/publicRoute'
 
 dotenv.config()
 
-export class App {
+class App {
   public app: Application
   private PORT: number | undefined
   private MONGO_URI: string
@@ -65,7 +65,7 @@ export class App {
     this.app.use(flash())
 
     // Localization
-    this.app.use(localizationMiddleware)
+    this.app.use(localizationMiddleware.use)
 
     // Public folder
     this.app.use(express.static(path.join(__dirname, './public')))
@@ -107,3 +107,5 @@ export class App {
     })
   }
 }
+
+export default App
