@@ -7,26 +7,15 @@ class ErrorMiddleware {
   /**
    * Not found handler
    */
-  public notFound(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): void {
-    const error = new Error(
-      `${req.originalUrl} ${global.dictionary.messages.notFound}`
-    )
+  public notFound(req: express.Request, res: express.Response, next: express.NextFunction): void {
+    const error = new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
     next(error)
   }
 
   /**
    * Error handler
    */
-  public errorHandler(
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): void {
+  public errorHandler(err: Error, req: express.Request, res: express.Response, next: express.NextFunction): void {
     const message = Message.getErrorMessage(err)
 
     const error = {

@@ -12,11 +12,7 @@ class LocalizationMiddleware {
     this.use = this.use.bind(this)
   }
 
-  public use(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): void {
+  public use(req: express.Request, res: express.Response, next: express.NextFunction): void {
     this.host = req.get('host')
     this.domain = this.host?.slice(0, this.host.indexOf(':')).split('.').pop()
 

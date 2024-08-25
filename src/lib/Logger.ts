@@ -11,14 +11,9 @@ class Logger {
       const errorMessage = Message.getErrorMessage(message)
 
       const date = new Date()
-      const time =
-        date.toLocaleTimeString(global.locale) + '.' + date.getMilliseconds()
+      const time = date.toLocaleTimeString(global.locale) + '.' + date.getMilliseconds()
       const day =
-        ('0' + date.getDate()).slice(-2) +
-        '-' +
-        ('0' + (date.getMonth() + 1)).slice(-2) +
-        '-' +
-        date.getFullYear()
+        ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear()
 
       const data = `${time} | ${global.locale} | ${errorMessage}\n`
 

@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs'
 import express from 'express'
 import AsyncHandler from '../lib/AsyncHandler'
-import destroyUserSession from '../lib/destroyUserSession'
-import generateAuthToken from '../lib/generateAuthToken'
 import Message from '../lib/Message'
+import SessionManager from '../lib/SessionManager'
 import User from '../models/userModel'
 import { Role } from '../types/enums'
 
@@ -23,7 +22,7 @@ class AuthController {
         role: isAdmin ? Role.ADMIN : undefined,
       })
       user.password = ''
-      generateAuthToken(res, user._id.toString())
+      SessionManager.generateAuthToken(res, user._id.toString())
 
       req.flash('info', global.dictionary.messages.youAreRegisteredAndLoggedIn)
       res.redirect('/')
@@ -43,7 +42,7 @@ class AuthController {
 
       if (user && (await bcrypt.compare(password, user.password!))) {
         user.password = ''
-        generateAuthToken(res, user._id.toString())
+        SessionManager.generateAuthToken(res, user._id.toString())
 
         req.flash('info', global.dictionary.messages.youAreLoggedIn)
         res.redirect('/')
@@ -63,7 +62,7 @@ class AuthController {
    * Logout user
    */
   public logoutUser = (req: express.Request, res: express.Response) => {
-    destroyUserSession(req, res)
+    SessionManager.destroyUserSession(req, res)
   }
 }
 
