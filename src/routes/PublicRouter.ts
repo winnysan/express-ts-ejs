@@ -6,14 +6,40 @@ import AuthMiddleware from '../middleware/AuthMiddleware'
 import RegisterValidationMiddleware from '../middleware/validation/RegisterValidationMiddleware'
 import RegisterValidator from '../middleware/validation/RegisterValidator'
 
+/**
+ * Router for handling public routes.
+ * @class
+ */
 class PublicRouter {
+  /**
+   * The Express router instance used for handling public routes.
+   * @public
+   * @type {express.Router}
+   */
   public router: express.Router
 
+  /**
+   * Initializes a new instance of the PublicRouter class and sets up the routes.
+   */
   constructor() {
     this.router = express.Router()
     this.setRoutes()
   }
 
+  /**
+   * Defines and sets the routes for public access.
+   * @private
+   * @returns {void}
+   * @description Sets up routes for public access, including:
+   * - `GET /` to fetch posts.
+   * - `POST /search` to search posts.
+   * - `GET /post/:slug` to fetch a single post by slug.
+   * - `GET /register` to render the registration page, accessible only to non-authenticated users.
+   * - `POST /register` to handle user registration, including validation.
+   * - `GET /login` to render the login page, accessible only to non-authenticated users.
+   * - `POST /login` to handle user authentication.
+   * - `POST /logout` to handle user logout.
+   */
   private setRoutes(): void {
     this.router.get('/', PostController.getPosts)
 

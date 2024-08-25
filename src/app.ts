@@ -16,11 +16,36 @@ import PublicRouter from './routes/PublicRouter'
 
 dotenv.config()
 
+/**
+ * Main application class for setting up and running the Express server.
+ * @class
+ */
 class App {
+  /**
+   * The Express application instance.
+   * @public
+   * @type {express.Application}
+   */
   public app: express.Application
+
+  /**
+   * The Database instance used for connecting to MongoDB.
+   * @private
+   * @type {Database}
+   */
   private db: Database
+
+  /**
+   * The port number on which the server will listen.
+   * @private
+   * @type {number | undefined}
+   */
   private PORT: number | undefined
 
+  /**
+   * Initializes a new instance of the App class, setting up the database connection,
+   * middlewares, view engine, routes, and error handlers.
+   */
   constructor() {
     this.app = express()
     this.db = new Database(process.env.MONGO_URI)
@@ -34,14 +59,19 @@ class App {
   }
 
   /**
-   * Database connection
+   * Connects to the MongoDB database.
+   * @private
+   * @returns {Promise<void>} A promise that resolves when the database connection is established.
    */
   private async connectDatabase(): Promise<void> {
     await this.db.connect()
   }
 
   /**
-   * Set middlewares
+   * Configures the middleware for the application, including body parsing, cookie parsing,
+   * session management, flash messages, and static file serving.
+   * @private
+   * @returns {void}
    */
   private setMiddlewares(): void {
     // Body parser middleware
@@ -61,18 +91,20 @@ class App {
       })
     )
 
-    // Flash messages
+    // Flash messages middleware
     this.app.use(flash())
 
-    // Localization
+    // Localization middleware
     this.app.use(LocalizationMiddleware.use)
 
-    // Public folder
+    // Static files middleware
     this.app.use(express.static(path.join(__dirname, './public')))
   }
 
   /**
-   * Set view engine
+   * Sets up the view engine for the application to use EJS with Express Layouts.
+   * @private
+   * @returns {void}
    */
   private setViewEngine(): void {
     this.app.use(expressLayouts)
@@ -82,7 +114,9 @@ class App {
   }
 
   /**
-   * Set routes
+   * Configures the routes for the application, including public, dashboard, and admin routes.
+   * @private
+   * @returns {void}
    */
   private setRoutes(): void {
     this.app.use('/', AuthMiddleware.authCheck, PublicRouter)
@@ -91,7 +125,9 @@ class App {
   }
 
   /**
-   * Set error handlers
+   * Sets up error handling middleware for handling 404 errors and other server errors.
+   * @private
+   * @returns {void}
    */
   private setErrorHandlers(): void {
     this.app.use(ErrorMiddleware.notFound)
@@ -99,7 +135,9 @@ class App {
   }
 
   /**
-   * Start application
+   * Starts the Express server and listens for incoming connections.
+   * @public
+   * @returns {void}
    */
   public start(): void {
     this.app.listen(this.PORT, () => {

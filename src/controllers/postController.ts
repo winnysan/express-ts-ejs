@@ -4,9 +4,17 @@ import Message from '../lib/Message'
 import StringHelper from '../lib/StringHelper'
 import Post, { IPost } from '../models/postModel'
 
+/**
+ * Controller for handling post-related operations.
+ */
 class PostController {
   /**
-   * Get posts
+   * Retrieves and renders posts for the homepage with pagination.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns Renders the 'index' view with posts, current page, and next page information.
+   * @description This method fetches posts from the database, supports pagination, and renders
+   * the homepage with the posts. It includes pagination controls to navigate through the posts.
    */
   public getPosts = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -37,7 +45,12 @@ class PostController {
   })
 
   /**
-   * Get posts by user ID
+   * Retrieves and renders posts created by the currently logged-in user.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns Renders the 'dashboard' view with posts created by the current user.
+   * @description This method fetches posts authored by the currently logged-in user and
+   * renders the dashboard page with these posts.
    */
   public getPostsByUserID = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -57,7 +70,12 @@ class PostController {
   })
 
   /**
-   * Search in posts
+   * Searches for posts based on a search term.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns JSON response with search results and search term.
+   * @description This method performs a search on the posts based on the provided search term.
+   * It uses a diacritics-insensitive regex for the search and returns the matching posts in a JSON format.
    */
   public searchInPosts = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -87,7 +105,12 @@ class PostController {
   })
 
   /**
-   * New post page
+   * Renders the page for creating a new post.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns Renders the 'dashboard/new-post' view with the title for the new post page.
+   * @description This method renders the page where users can create a new post. It includes the
+   * current user session and the title for the new post page.
    */
   public newPostPage = async (req: express.Request, res: express.Response) => {
     res.render('dashboard/new-post', {
@@ -97,7 +120,12 @@ class PostController {
   }
 
   /**
-   * New post
+   * Creates a new post and returns the created post in JSON format.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns JSON response with the newly created post.
+   * @description This method handles the creation of a new post. It generates a slug from the
+   * post title and returns the created post in a JSON format.
    */
   public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -117,7 +145,12 @@ class PostController {
   })
 
   /**
-   * Get post by slug
+   * Retrieves a post by its slug and returns it in JSON format.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   * @returns JSON response with the post matching the provided slug.
+   * @description This method fetches a post based on its slug. If the post is not found, an error
+   * is thrown. Otherwise, it returns the post in a JSON format.
    */
   public getPostBySlug = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
