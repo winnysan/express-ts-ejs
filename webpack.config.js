@@ -1,11 +1,12 @@
-const baseDirectory = 'src'
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
+const path = require('path')
+
+const srcPath = path.resolve(__dirname, 'src')
+const distPath = path.resolve(__dirname, 'dist')
 
 module.exports = env => ({
   mode: env.production ? 'production' : 'development',
-
-  entry: {
-    'public/js/script': [`./${baseDirectory}/public/ts/script`],
-  },
+  devtool: env.production ? undefined : 'eval-source-map',
 
   module: {
     rules: [
@@ -16,13 +17,34 @@ module.exports = env => ({
       },
     ],
   },
+
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
 
-  devtool: env.production ? undefined : 'eval-source-map',
+  entry: {
+    'public/js/script': [`${srcPath}/public/ts/script`],
+  },
 
   output: {
-    filename: '[name].js',
+    filename: '[name].[contenthash].js',
+    path: distPath,
   },
+
+  plugins: [
+    new WebpackManifestPlugin({
+      fileName: 'manifest.json',
+      publicPath: '/',
+      generate: (seed, files) => {
+        const manifest = {}
+        files.forEach(file => {
+          manifest[file.name.replace(/^public/, '')] = file.path.replace(
+            '/public',
+            ''
+          )
+        })
+        return manifest
+      },
+    }),
+  ],
 })
