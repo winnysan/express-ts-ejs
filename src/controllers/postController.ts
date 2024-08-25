@@ -1,8 +1,7 @@
 import express from 'express'
 import AsyncHandler from '../lib/AsyncHandler'
-import diacriticsInsensitiveRegex from '../lib/diacriticsInsensitiveRegex'
 import Message from '../lib/Message'
-import slugify from '../lib/slugify'
+import StringHelper from '../lib/StringHelper'
 import Post, { IPost } from '../models/postModel'
 
 class PostController {
@@ -68,13 +67,13 @@ class PostController {
         $or: [
           {
             title: {
-              $regex: diacriticsInsensitiveRegex(searchTerm),
+              $regex: StringHelper.diacriticsInsensitiveRegex(searchTerm),
               $options: 'i',
             },
           },
           {
             body: {
-              $regex: diacriticsInsensitiveRegex(searchTerm),
+              $regex: StringHelper.diacriticsInsensitiveRegex(searchTerm),
               $options: 'i',
             },
           },
@@ -108,7 +107,7 @@ class PostController {
         author: req.session.user!._id,
         title: title,
         body: body,
-        slug: `${slugify(title)}-${Date.now()}`,
+        slug: `${StringHelper.slugify(title)}-${Date.now()}`,
       })
 
       res.json(post)
