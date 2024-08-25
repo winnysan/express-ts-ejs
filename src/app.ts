@@ -10,9 +10,9 @@ import connectDB from './lib/connectDB'
 import AuthMiddleware from './middleware/AuthMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
-import adminRouter from './routes/adminRoute'
-import dashboardRouter from './routes/dashboardRoute'
-import publicRouter from './routes/publicRoute'
+import AdminRouter from './routes/AdminRouter'
+import DashboardRouter from './routes/DashboardRouter'
+import PublicRouter from './routes/PublicRouter'
 
 dotenv.config()
 
@@ -85,9 +85,9 @@ class App {
    * Set routes
    */
   private setRoutes(): void {
-    this.app.use('/', AuthMiddleware.authCheck, publicRouter)
-    this.app.use('/dashboard', AuthMiddleware.authCheck, dashboardRouter)
-    this.app.use('/admin', AuthMiddleware.authCheck, adminRouter)
+    this.app.use('/', AuthMiddleware.authCheck, PublicRouter)
+    this.app.use('/dashboard', AuthMiddleware.authCheck, DashboardRouter)
+    this.app.use('/admin', AuthMiddleware.authCheck, AdminRouter)
   }
 
   /**
