@@ -1,17 +1,17 @@
 import express from 'express'
+import AsyncHandler from '../lib/AsyncHandler'
 import diacriticsInsensitiveRegex from '../lib/diacriticsInsensitiveRegex'
 import Message from '../lib/Message'
 import slugify from '../lib/slugify'
-import asyncHandler from '../middleware/asyncHandler'
 import Post, { IPost } from '../models/postModel'
 
-/**
- * Get posts
- */
-const getPosts = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+class PostController {
+  /**
+   * Get posts
+   */
+  public getPosts = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
-      const limit: number = parseInt(process.env.PER_PAGE) || 10
+      const limit: number = parseInt(process.env.PER_PAGE!) || 10
       const page: number = Number(req.query.page) || 1
 
       const posts: IPost[] = await Post.find()
@@ -35,14 +35,12 @@ const getPosts = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
+  })
 
-/**
- * Get posts by user ID
- */
-const getPostsByUserID = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+  /**
+   * Get posts by user ID
+   */
+  public getPostsByUserID = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const posts: IPost[] = await Post.find({
         author: req.session.user?._id,
@@ -57,14 +55,12 @@ const getPostsByUserID = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
+  })
 
-/**
- * Search in posts
- */
-const searchInPosts = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+  /**
+   * Search in posts
+   */
+  public searchInPosts = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const searchTerm = req.body.searchTerm
 
@@ -89,24 +85,22 @@ const searchInPosts = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
-
-/**
- * New post page
- */
-const newPostPage = async (req: express.Request, res: express.Response) => {
-  res.render('dashboard/new-post', {
-    user: req.session.user,
-    title: global.dictionary.title.newPostPage,
   })
-}
 
-/**
- * New post
- */
-const newPost = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+  /**
+   * New post page
+   */
+  public newPostPage = async (req: express.Request, res: express.Response) => {
+    res.render('dashboard/new-post', {
+      user: req.session.user,
+      title: global.dictionary.title.newPostPage,
+    })
+  }
+
+  /**
+   * New post
+   */
+  public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const { title, body } = req.body
 
@@ -121,37 +115,26 @@ const newPost = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
+  })
 
-/**
- * Get post by slug
- */
-const getPostBySlug = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+  /**
+   * Get post by slug
+   */
+  public getPostBySlug = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const slug = req.params.slug
 
       const post = await Post.findOne({ slug })
 
       if (!post) {
-        throw new Error(
-          `${req.originalUrl} ${global.dictionary.messages.notFound}`
-        )
+        throw new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
       } else {
         res.json(post)
       }
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
-
-export {
-  getPostBySlug,
-  getPosts,
-  getPostsByUserID,
-  newPost,
-  newPostPage,
-  searchInPosts,
+  })
 }
+
+export default new PostController()

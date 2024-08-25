@@ -1,12 +1,12 @@
 import express from 'express'
-import { getPostsByUserID, newPost, newPostPage } from '../controllers/postController'
+import PostController from '../controllers/PostController'
 import AuthMiddleware from '../middleware/AuthMiddleware'
 import { postSchema, validatePostSchema } from '../middleware/validation/newPostValidation'
 
 const router = express.Router()
 
-router.get('/', AuthMiddleware.protect, getPostsByUserID)
-router.get('/new-post', AuthMiddleware.protect, newPostPage)
-router.post('/new-post', AuthMiddleware.protect, postSchema, validatePostSchema, newPost)
+router.get('/', AuthMiddleware.protect, PostController.getPostsByUserID)
+router.get('/new-post', AuthMiddleware.protect, PostController.newPostPage)
+router.post('/new-post', AuthMiddleware.protect, postSchema, validatePostSchema, PostController.newPost)
 
 export default router

@@ -1,9 +1,9 @@
 import express from 'express'
-import { adminPage } from '../controllers/pageController'
+import PageController from '../controllers/PageController'
 import AuthMiddleware from '../middleware/AuthMiddleware'
 
 const router = express.Router()
 
-router.get('/', AuthMiddleware.protect, AuthMiddleware.admin, adminPage)
+router.get('/', AuthMiddleware.protect, AuthMiddleware.admin, PageController.adminPage)
 
 export default router
