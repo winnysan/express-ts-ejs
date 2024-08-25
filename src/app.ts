@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import express from 'express'
+import express, { Application } from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import flash from 'express-flash'
 import session from 'express-session'
@@ -16,54 +16,94 @@ import publicRouter from './routes/publicRoute'
 
 dotenv.config()
 
-const PORT = process.env.PORT
-const MONGO_URI = process.env.MONGO_URI
+export class App {
+  public app: Application
+  private PORT: number | undefined
+  private MONGO_URI: string
 
-connectDB(MONGO_URI)
+  constructor() {
+    this.app = express()
+    this.PORT = process.env.PORT
+    this.MONGO_URI = process.env.MONGO_URI
 
-const app = express()
+    this.connectDatabase()
+    this.setMiddlewares()
+    this.setViewEngine()
+    this.setRoutes()
+    this.setErrorHandlers()
+  }
 
-// Body parser middleware
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+  /**
+   * Database connection
+   */
+  private connectDatabase(): void {
+    connectDB(this.MONGO_URI)
+  }
 
-// Cookie parser middleware
-app.use(cookieParser())
+  /**
+   * Set middlewares
+   */
+  private setMiddlewares(): void {
+    // Body parser middleware
+    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.urlencoded({ extended: true }))
 
-// Session middleware
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-)
+    // Cookie parser middleware
+    this.app.use(cookieParser())
 
-// Flash messages
-app.use(flash())
+    // Session middleware
+    this.app.use(
+      session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false },
+      })
+    )
 
-// Localization
-app.use(localizationMiddleware)
+    // Flash messages
+    this.app.use(flash())
 
-// Public folder
-app.use(express.static(path.join(__dirname, './public')))
+    // Localization
+    this.app.use(localizationMiddleware)
 
-// View engine
-app.use(expressLayouts)
-app.set('layout', 'layouts/main')
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
+    // Public folder
+    this.app.use(express.static(path.join(__dirname, './public')))
+  }
 
-// Routes
-app.use('/', authCheck, publicRouter)
-app.use('/dashboard', authCheck, dashboardRouter)
-app.use('/admin', authCheck, adminRouter)
+  /**
+   * Set view engine
+   */
+  private setViewEngine(): void {
+    this.app.use(expressLayouts)
+    this.app.set('layout', 'layouts/main')
+    this.app.set('view engine', 'ejs')
+    this.app.set('views', path.join(__dirname, 'views'))
+  }
 
-// Errors
-app.use(notFound)
-app.use(errorHandler)
+  /**
+   * Set routes
+   */
+  private setRoutes(): void {
+    this.app.use('/', authCheck, publicRouter)
+    this.app.use('/dashboard', authCheck, dashboardRouter)
+    this.app.use('/admin', authCheck, adminRouter)
+  }
 
-app.listen(PORT, () => {
-  console.log(`App running on http://localhost:${PORT}`)
-})
+  /**
+   * Set error handlers
+   */
+  private setErrorHandlers(): void {
+    this.app.use(notFound)
+    this.app.use(errorHandler)
+  }
+
+  /**
+   * Start application
+   */
+  public start(): void {
+    this.app.listen(this.PORT, () => {
+      console.log(`App running on http://localhost:${this.PORT}`)
+    })
+  }
+}
