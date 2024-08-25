@@ -6,7 +6,7 @@ import expressLayouts from 'express-ejs-layouts'
 import flash from 'express-flash'
 import session from 'express-session'
 import path from 'path'
-import connectDB from './lib/connectDB'
+import Database from './lib/Database'
 import AuthMiddleware from './middleware/AuthMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
@@ -18,13 +18,13 @@ dotenv.config()
 
 class App {
   public app: express.Application
+  private db: Database
   private PORT: number | undefined
-  private MONGO_URI: string
 
   constructor() {
     this.app = express()
+    this.db = new Database(process.env.MONGO_URI)
     this.PORT = process.env.PORT
-    this.MONGO_URI = process.env.MONGO_URI
 
     this.connectDatabase()
     this.setMiddlewares()
@@ -36,8 +36,8 @@ class App {
   /**
    * Database connection
    */
-  private connectDatabase(): void {
-    connectDB(this.MONGO_URI)
+  private async connectDatabase(): Promise<void> {
+    await this.db.connect()
   }
 
   /**
