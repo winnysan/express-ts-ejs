@@ -1,17 +1,17 @@
 import bcrypt from 'bcryptjs'
 import express from 'express'
+import AsyncHandler from '../lib/AsyncHandler'
 import destroyUserSession from '../lib/destroyUserSession'
 import generateAuthToken from '../lib/generateAuthToken'
 import Message from '../lib/Message'
-import asyncHandler from '../middleware/asyncHandler'
 import User from '../models/userModel'
 import { Role } from '../types/enums'
 
-/**
- * Register user
- */
-const registerUser = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+class AuthController {
+  /**
+   * Register user
+   */
+  public registerUser = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const { email, name, password } = req.body
       const isAdmin: boolean = process.env.ADMIN_USER === email
@@ -30,14 +30,12 @@ const registerUser = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
+  })
 
-/**
- * Auth user
- */
-const authUser = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
+  /**
+   * Auth user
+   */
+  public authUser = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const { email, password } = req.body
 
@@ -59,14 +57,14 @@ const authUser = asyncHandler(
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
-  }
-)
+  })
 
-/**
- * Logout user
- */
-const logoutUser = (req: express.Request, res: express.Response) => {
-  destroyUserSession(req, res)
+  /**
+   * Logout user
+   */
+  public logoutUser = (req: express.Request, res: express.Response) => {
+    destroyUserSession(req, res)
+  }
 }
 
-export { authUser, logoutUser, registerUser }
+export default new AuthController()

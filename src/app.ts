@@ -7,7 +7,7 @@ import flash from 'express-flash'
 import session from 'express-session'
 import path from 'path'
 import connectDB from './lib/connectDB'
-import { authCheck } from './middleware/authMiddleware'
+import AuthMiddleware from './middleware/AuthMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import adminRouter from './routes/adminRoute'
@@ -85,9 +85,9 @@ class App {
    * Set routes
    */
   private setRoutes(): void {
-    this.app.use('/', authCheck, publicRouter)
-    this.app.use('/dashboard', authCheck, dashboardRouter)
-    this.app.use('/admin', authCheck, adminRouter)
+    this.app.use('/', AuthMiddleware.authCheck, publicRouter)
+    this.app.use('/dashboard', AuthMiddleware.authCheck, dashboardRouter)
+    this.app.use('/admin', AuthMiddleware.authCheck, adminRouter)
   }
 
   /**
