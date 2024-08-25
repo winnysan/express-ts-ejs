@@ -1,6 +1,6 @@
 import express from 'express'
 import diacriticsInsensitiveRegex from '../lib/diacriticsInsensitiveRegex'
-import getErrorMessage from '../lib/getErrorMessage'
+import Message from '../lib/Message'
 import slugify from '../lib/slugify'
 import asyncHandler from '../middleware/asyncHandler'
 import Post, { IPost } from '../models/postModel'
@@ -33,7 +33,7 @@ const getPosts = asyncHandler(
         nextPage: hasNextPage ? nextPage : null,
       })
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )
@@ -55,7 +55,7 @@ const getPostsByUserID = asyncHandler(
         posts,
       })
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )
@@ -87,7 +87,7 @@ const searchInPosts = asyncHandler(
 
       res.json({ searchTerm, posts })
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )
@@ -119,7 +119,7 @@ const newPost = asyncHandler(
 
       res.json(post)
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )
@@ -142,7 +142,7 @@ const getPostBySlug = asyncHandler(
         res.json(post)
       }
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )

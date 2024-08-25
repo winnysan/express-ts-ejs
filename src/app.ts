@@ -1,15 +1,15 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import express, { Application } from 'express'
+import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import flash from 'express-flash'
 import session from 'express-session'
 import path from 'path'
 import connectDB from './lib/connectDB'
 import { authCheck } from './middleware/authMiddleware'
-import { errorHandler, notFound } from './middleware/errorMiddleware'
-import localizationMiddleware from './middleware/localizationMiddleware'
+import ErrorMiddleware from './middleware/ErrorMiddleware'
+import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import adminRouter from './routes/adminRoute'
 import dashboardRouter from './routes/dashboardRoute'
 import publicRouter from './routes/publicRoute'
@@ -17,7 +17,7 @@ import publicRouter from './routes/publicRoute'
 dotenv.config()
 
 class App {
-  public app: Application
+  public app: express.Application
   private PORT: number | undefined
   private MONGO_URI: string
 
@@ -65,7 +65,7 @@ class App {
     this.app.use(flash())
 
     // Localization
-    this.app.use(localizationMiddleware.use)
+    this.app.use(LocalizationMiddleware.use)
 
     // Public folder
     this.app.use(express.static(path.join(__dirname, './public')))
@@ -94,8 +94,8 @@ class App {
    * Set error handlers
    */
   private setErrorHandlers(): void {
-    this.app.use(notFound)
-    this.app.use(errorHandler)
+    this.app.use(ErrorMiddleware.notFound)
+    this.app.use(ErrorMiddleware.errorHandler)
   }
 
   /**

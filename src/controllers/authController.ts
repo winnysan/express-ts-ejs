@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import express from 'express'
 import destroyUserSession from '../lib/destroyUserSession'
 import generateAuthToken from '../lib/generateAuthToken'
-import getErrorMessage from '../lib/getErrorMessage'
+import Message from '../lib/Message'
 import asyncHandler from '../middleware/asyncHandler'
 import User from '../models/userModel'
 import { Role } from '../types/enums'
@@ -28,7 +28,7 @@ const registerUser = asyncHandler(
       req.flash('info', global.dictionary.messages.youAreRegisteredAndLoggedIn)
       res.redirect('/')
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )
@@ -57,7 +57,7 @@ const authUser = asyncHandler(
         })
       }
     } catch (err: unknown) {
-      throw new Error(getErrorMessage(err))
+      throw new Error(Message.getErrorMessage(err))
     }
   }
 )

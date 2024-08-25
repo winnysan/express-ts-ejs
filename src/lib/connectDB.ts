@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import getErrorMessage from './getErrorMessage'
-import logToFile from './logToFile'
+import Logger from './Logger'
+import Message from './Message'
 
 /**
  * Connect to database
@@ -11,7 +11,7 @@ const connectDB = async (uri: string) => {
     const conn = await mongoose.connect(uri)
     console.log(`MongoDB Connected: ${conn.connection.host}`)
   } catch (err: unknown) {
-    logToFile(getErrorMessage(err))
+    Logger.logToFile(Message.getErrorMessage(err))
     process.exit(1)
   }
 }
