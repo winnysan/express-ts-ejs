@@ -61,16 +61,19 @@ task('views-update', done => {
 
     const manifest = JSON.parse(data)
     const scriptTag = `<script type="text/javascript" src="${manifest['/js/script.js']}" defer></script>`
+    const styleTag = `<link rel="stylesheet" href="${manifest['/css/style.css']}">`
 
     fs.readFile(ejsFilePath, 'utf8', (err, fileData) => {
       if (err) {
         return done(err)
       }
 
-      const updatedFileData = fileData.replace(
-        /<script type="text\/javascript" src="\/js\/.*\.js" defer><\/script>/,
-        scriptTag
-      )
+      const updatedFileData = fileData
+        .replace(
+          /<script type="text\/javascript" src="\/js\/.*\.js" defer><\/script>/,
+          scriptTag
+        )
+        .replace(/<link rel="stylesheet" href="\/css\/.*\.css" \/>/, styleTag)
 
       fs.writeFile(ejsFilePath, updatedFileData, 'utf8', err => {
         if (err) {
