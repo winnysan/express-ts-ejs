@@ -11,6 +11,7 @@ import AuthMiddleware from './middleware/AuthMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import AdminRouter from './routes/AdminRouter'
+import ApiRouter from './routes/ApiRouter'
 import DashboardRouter from './routes/DashboardRouter'
 import PublicRouter from './routes/PublicRouter'
 
@@ -122,6 +123,7 @@ class App {
     this.app.use('/', AuthMiddleware.authCheck, PublicRouter)
     this.app.use('/dashboard', AuthMiddleware.authCheck, DashboardRouter)
     this.app.use('/admin', AuthMiddleware.authCheck, AdminRouter)
+    this.app.use('/api', ApiRouter)
   }
 
   /**

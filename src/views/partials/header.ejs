@@ -1,15 +1,8 @@
 <header>
   <nav>
-    <figure>
-      <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%=
-      user.name %> <% } %>
-    </figure>
+    <figure><%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %></figure>
     <form action="/search" method="post">
-      <input
-        type="text"
-        name="searchTerm"
-        placeholder="<%= global.dictionary.form.search %>"
-      />
+      <input type="text" name="searchTerm" placeholder="<%= global.dictionary.form.search %>" />
       <button><%= global.dictionary.form.search %></button>
     </form>
     <ul>
@@ -28,9 +21,7 @@
       <% } %>
       <li>
         <form action="/logout" method="post">
-          <button type="submit">
-            <%= global.dictionary.navigation.logout %>
-          </button>
+          <button type="submit"><%= global.dictionary.navigation.logout %></button>
         </form>
       </li>
       <% } %>
@@ -38,6 +29,9 @@
         Reaktivita: <span id="total">0</span>
         <button id="decrease">-</button>
         <button id="increase">+</button>
+      </li>
+      <li>
+        <button id="fetchButton">Fetch</button>
       </li>
     </ul>
   </nav>
