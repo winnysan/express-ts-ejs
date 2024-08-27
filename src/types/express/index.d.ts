@@ -16,7 +16,9 @@ declare global {
     }
   }
   namespace Express {
-    export interface Request {}
+    export interface Request {
+      csrfToken?: () => string
+    }
   }
   var locale: Locale
   var dictionary: Dictionary

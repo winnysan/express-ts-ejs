@@ -267,6 +267,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/lusca@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@types/lusca/-/lusca-1.7.5.tgz#6fff257dc11176bd3150afba90790e626a12cd0f"
+  integrity sha512-l49gAf8pu2iMzbKejLcz6Pqj+51H2na6BgORv1ElnE8ByPFcBdh/eZ0WNR1Va/6ZuNSZa01Hoy1DTZ3IZ+y+kA==
+  dependencies:
+    "@types/express" "*"
+
 "@types/mime@^1":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.5.tgz#1ef302e01cf7d2b5a0fa526790c9123bf1d06690"
@@ -2966,6 +2973,13 @@ lodash@^4.17.21:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
+lusca@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/lusca/-/lusca-1.7.0.tgz#a5d979f1b51776e60d41e0ca98f886f1b8b95502"
+  integrity sha512-msnrplCfY7zaqlZBDEloCIKld+RUeMZVeWzSPaGUKeRXFlruNSdKg2XxCyR+zj6BqzcXhXlRnvcvx6rAGgsvMA==
+  dependencies:
+    tsscmp "^1.0.5"
+
 map-cache@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -4595,6 +4609,11 @@ ts-loader@^9.5.1:
     micromatch "^4.0.0"
     semver "^7.3.4"
     source-map "^0.7.4"
+
+tsscmp@^1.0.5:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/tsscmp/-/tsscmp-1.0.6.tgz#85b99583ac3589ec4bfef825b5000aa911d605eb"
+  integrity sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

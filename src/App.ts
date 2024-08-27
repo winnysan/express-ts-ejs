@@ -5,6 +5,7 @@ import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import flash from 'express-flash'
 import session from 'express-session'
+import lusca from 'lusca'
 import path from 'path'
 import Database from './lib/Database'
 import AuthMiddleware from './middleware/AuthMiddleware'
@@ -91,6 +92,9 @@ class App {
         cookie: { secure: false },
       })
     )
+
+    // CSRF Protection middleware
+    this.app.use('/api', lusca.csrf())
 
     // Flash messages middleware
     this.app.use(flash())
