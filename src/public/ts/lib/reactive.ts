@@ -29,6 +29,17 @@ class ReactiveEffect {
   }
 }
 
+/**
+ * Represents a reactive system that allows defining reactive effects.
+ *
+ * Example usage:
+ * ```typescript
+ * const reactive = new Reactive();
+ * reactive.effect(() => {
+ *   // Reactive code here
+ * });
+ * ```
+ */
 class Reactive {
   private effectManager: ReactiveEffect
 
