@@ -8,6 +8,7 @@ declare global {
     export interface ProcessEnv {
       NODE_ENV: NodeEnv.PROD | NodeEnv.DEV
       PORT: number
+      CLIENT_ORIGIN: string
       MONGO_URI: string
       ADMIN_USER: string
       JWT_SECRET: string

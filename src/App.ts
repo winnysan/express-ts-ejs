@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
@@ -82,6 +83,15 @@ class App {
 
     // Cookie parser middleware
     this.app.use(cookieParser())
+
+    // Cors middleware
+    this.app.use(
+      cors({
+        origin: process.env.CLIENT_ORIGIN,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true,
+      })
+    )
 
     // Session middleware
     this.app.use(
