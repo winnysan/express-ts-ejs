@@ -4,10 +4,7 @@
   "git.autofetch": true,
   "editor.formatOnSave": true,
   "editor.minimap.enabled": false,
-  "reactSnippets.settings.importReactOnTop": false,
   "css.lint.unknownAtRules": "ignore",
-  // "workbench.colorTheme": "SynthWave '84",
-  "liveServer.settings.donotShowInfoMsg": true,
   "editor.codeActionsOnSave": {
     "source.sortImports": "explicit"
   },
