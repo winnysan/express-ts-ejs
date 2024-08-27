@@ -1,28 +1,11 @@
-import { effect, reactive } from './reactivity'
+import { selectElement } from './lib/utils'
+import './reactivity'
 
-const dateEl: HTMLElement | null = document.querySelector('#date')
+console.log(
+  '%cScript loaded successfully',
+  'color: white; background-color: green; font-weight: bold; padding: 2px 4px; border-radius: 3px;'
+)
+
+const dateEl = selectElement<HTMLSpanElement>('#date')
 
 if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
-
-const one: number = 1
-const two: number = 2
-
-console.log(`${one} + ${two} = ${one + two}`)
-
-// Reactivity
-let total = reactive({ count: 0 })
-
-const totalEl: HTMLSpanElement | null = document.querySelector('#total')
-
-document.querySelector('#decrease')?.addEventListener('click', () => {
-  total.count--
-})
-document.querySelector('#increase')?.addEventListener('click', () => {
-  total.count++
-})
-
-effect(() => {
-  if (totalEl) {
-    totalEl.textContent = String(total.count)
-  }
-})

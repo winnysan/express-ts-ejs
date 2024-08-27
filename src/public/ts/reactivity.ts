@@ -1,43 +1,23 @@
-// @ts-nocheck
-let activeEffect = null
-let dep = new Set()
+import Reactive from './lib/reactive'
+import { selectElement } from './lib/utils'
 
-// Observer pattern
+const reactive = new Reactive()
 
-// Register effects to the "deps" (Set)
-function track() {
-  if (activeEffect) {
-    dep.add(activeEffect)
+let total = reactive.reactive({ count: 0 })
+
+const totalEl = selectElement<HTMLSpanElement>('#total')
+const decreaseButton = selectElement<HTMLButtonElement>('#decrease')
+const increaseButton = selectElement<HTMLButtonElement>('#increase')
+
+decreaseButton?.addEventListener('click', () => {
+  total.count--
+})
+increaseButton?.addEventListener('click', () => {
+  total.count++
+})
+
+reactive.effect(() => {
+  if (totalEl) {
+    totalEl.textContent = String(total.count)
   }
-}
-
-// Exexute all the effects
-function trigger() {
-  dep.forEach(effect => effect())
-}
-
-function reactive(target) {
-  const handler = {
-    get(target, key, receiver) {
-      const result = Reflect.get(target, key, receiver)
-      track()
-      return result
-    },
-    set(target, key, value, receiver) {
-      const result = Reflect.set(target, key, value, receiver)
-      trigger()
-      return result
-    },
-  }
-
-  return new Proxy(target, handler)
-}
-
-// Watcher
-function effect(fn) {
-  activeEffect = fn
-  if (activeEffect) activeEffect()
-  activeEffect = null
-}
-
-export { effect, reactive }
+})
