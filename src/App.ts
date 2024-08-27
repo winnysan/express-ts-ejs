@@ -5,10 +5,10 @@ import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
 import flash from 'express-flash'
 import session from 'express-session'
-import lusca from 'lusca'
 import path from 'path'
 import Database from './lib/Database'
 import AuthMiddleware from './middleware/AuthMiddleware'
+import CsrfMiddleware from './middleware/CsrfMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import AdminRouter from './routes/AdminRouter'
@@ -94,7 +94,7 @@ class App {
     )
 
     // CSRF Protection middleware
-    this.app.use('/api', lusca.csrf())
+    this.app.use(CsrfMiddleware.init())
 
     // Flash messages middleware
     this.app.use(flash())
