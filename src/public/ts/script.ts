@@ -1,5 +1,6 @@
-import { ApiClient } from './lib/ApiCLient'
-import { selectElement } from './lib/utils'
+import ApiClient from './lib/ApiCLient'
+import FormHandler from './lib/FormHandler'
+import Helper from './lib/Helper'
 import './reactivity'
 
 console.log(
@@ -7,7 +8,15 @@ console.log(
   'color: white; background-color: green; font-weight: bold; padding: 2px 4px; border-radius: 3px;'
 )
 
-const dateEl = selectElement<HTMLSpanElement>('#date')
+/**
+ * Initialize the FormHandler
+ */
+new FormHandler('#form', 'input[name="_csrf"]')
+
+/**
+ * Set year to footer
+ */
+const dateEl = Helper.selectElement<HTMLSpanElement>('#date')
 
 if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
 
@@ -16,7 +25,7 @@ if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
  */
 const apiClient = new ApiClient('http://localhost:7000/api')
 
-const fetchButton = selectElement<HTMLSpanElement>('#fetchButton')
+const fetchButton = Helper.selectElement<HTMLSpanElement>('#fetchButton')
 
 fetchButton?.addEventListener('click', () => {
   apiClient

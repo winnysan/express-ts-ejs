@@ -26,6 +26,7 @@
     "confirmPassword": "Potvrdiť heslo",
     "title": "Nadpis",
     "body": "Text",
+    "images": "Obrázky",
     "login": "Prihlásenie",
     "register": "Registrácia",
     "addNewPost": "Pridať nový príspevok"
@@ -38,7 +39,8 @@
     "passwordIsRequired": "Heslo sa vyžaduje",
     "passwordMustHaveAtLeast6Characters": "Heslo musí mať aspoň 6 znakov",
     "confirmPasswordIsRequired": "Potvrdenie hesla sa vyžaduje",
-    "passwordsMustMatch": "Heslá sa musia zhodovať"
+    "passwordsMustMatch": "Heslá sa musia zhodovať",
+    "invalidImageFormat": "Neplatný formát obrázka"
   },
   "messages": {
     "invalidCredentials": "Zlé prihlasovacie údaje",

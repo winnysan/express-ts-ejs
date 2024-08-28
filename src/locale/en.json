@@ -26,6 +26,7 @@
     "confirmPassword": "Confirm password",
     "title": "Title",
     "body": "Body",
+    "images": "Images",
     "login": "Login",
     "register": "Register",
     "addNewPost": "Add new post"
@@ -38,7 +39,8 @@
     "passwordIsRequired": "Password is required",
     "passwordMustHaveAtLeast6Characters": "Password must have at least 6 characters",
     "confirmPasswordIsRequired": "Confirm password is required",
-    "passwordsMustMatch": "Passwords must match"
+    "passwordsMustMatch": "Passwords must match",
+    "invalidImageFormat": "Invalid image format"
   },
   "messages": {
     "invalidCredentials": "Invalid credentials",

@@ -3,7 +3,7 @@ import express from 'express'
 import AsyncHandler from '../lib/AsyncHandler'
 import Message from '../lib/Message'
 import SessionManager from '../lib/SessionManager'
-import User from '../models/userModel'
+import User from '../models/User'
 import { Role } from '../types/enums'
 
 /**

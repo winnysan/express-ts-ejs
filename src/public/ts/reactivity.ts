@@ -1,29 +1,29 @@
+import Helper from './lib/Helper'
 import Reactive from './lib/Reactive'
-import { loadFromLocalStorage, saveToLocalStorage, selectElement } from './lib/utils'
 
 const reactive = new Reactive()
 
 /**
  * Counter
  */
-const initialCount = loadFromLocalStorage<number>('totalCount') || 0
+const initialCount = Helper.loadFromLocalStorage<number>('totalCount') || 0
 
 let total = reactive.reactive({ count: initialCount })
 
-const totalEl = selectElement<HTMLSpanElement>('#total')
-const decreaseButton = selectElement<HTMLButtonElement>('#decrease')
-const increaseButton = selectElement<HTMLButtonElement>('#increase')
+const totalEl = Helper.selectElement<HTMLSpanElement>('#total')
+const decreaseButton = Helper.selectElement<HTMLButtonElement>('#decrease')
+const increaseButton = Helper.selectElement<HTMLButtonElement>('#increase')
 
 decreaseButton?.addEventListener('click', () => {
   total.count--
 
-  saveToLocalStorage('totalCount', total.count)
+  Helper.saveToLocalStorage('totalCount', total.count)
 })
 
 increaseButton?.addEventListener('click', () => {
   total.count++
 
-  saveToLocalStorage('totalCount', total.count)
+  Helper.saveToLocalStorage('totalCount', total.count)
 })
 
 /**

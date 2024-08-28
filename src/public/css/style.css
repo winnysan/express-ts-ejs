@@ -1,6 +1,7 @@
 :root {
   --black: #101010;
   --sky: #0284c7;
+  --red: #ef4444;
 }
 
 * {
@@ -66,4 +67,8 @@ main {
 
 footer {
   text-align: center;
+}
+
+#errors {
+  color: var(--red);
 }

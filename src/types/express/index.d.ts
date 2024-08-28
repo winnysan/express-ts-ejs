@@ -1,4 +1,4 @@
-import { IUser } from '../../models/userModel'
+import { IUser } from '../../models/User'
 import { Dictionary } from '../dictionary'
 import { NodeEnv } from '../enums'
 import { Locale } from '../locale'

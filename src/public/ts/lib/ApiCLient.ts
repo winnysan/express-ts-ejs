@@ -15,7 +15,7 @@ type ApiResponse = {
  *
  * @class
  */
-export class ApiClient {
+class ApiClient {
   private baseEndpoint: string
 
   /**
@@ -87,3 +87,5 @@ export class ApiClient {
     }
   }
 }
+
+export default ApiClient

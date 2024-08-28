@@ -114,6 +114,7 @@ class App {
 
     // Static files middleware
     this.app.use(express.static(path.join(__dirname, './public')))
+    this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
   }
 
   /**

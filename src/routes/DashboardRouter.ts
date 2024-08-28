@@ -1,6 +1,7 @@
 import express from 'express'
 import PostController from '../controllers/PostController'
 import AuthMiddleware from '../middleware/AuthMiddleware'
+import upload from '../middleware/uploadMiddleware'
 import PostValidationMiddleware from '../middleware/validation/PostValidationMiddleware'
 import PostValidator from '../middleware/validation/PostValidator'
 
@@ -39,6 +40,7 @@ class DashboardRouter {
     this.router.post(
       '/new-post',
       AuthMiddleware.protect,
+      upload.array('images'),
       PostValidator.getPostSchema(),
       PostValidationMiddleware.validate,
       PostController.newPost

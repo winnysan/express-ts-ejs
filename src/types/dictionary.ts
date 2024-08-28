@@ -26,6 +26,7 @@ export type Dictionary = {
     confirmPassword: string
     title: string
     body: string
+    images: string
     login: string
     register: string
     addNewPost: string
@@ -39,6 +40,7 @@ export type Dictionary = {
     passwordMustHaveAtLeast6Characters: string
     confirmPasswordIsRequired: string
     passwordsMustMatch: string
+    invalidImageFormat: string
   }
   messages: {
     invalidCredentials: string

@@ -1,11 +1,7 @@
 <h1><%= global.dictionary.navigation.newPost %></h1>
 
 <section>
-  <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
-  <div style="color: red"><%= error.msg %></div>
-  <% }) %> <% } %>
-
-  <form action="/dashboard/new-post" method="post">
+  <form id="form" action="/dashboard/new-post" enctype="multipart/form-data" method="post">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <div>
       <label for="title"><%= global.dictionary.form.title %></label>
@@ -14,6 +10,10 @@
     <div>
       <label for="body"><%= global.dictionary.form.body %></label>
       <textarea type="text" name="body"><% if (typeof fill !== 'undefined') { %><%= fill.postBody %><% } %></textarea>
+    </div>
+    <div>
+      <label for="images"><%= global.dictionary.form.images %></label>
+      <input type="file" name="images" multiple />
     </div>
     <button type="submit"><%= global.dictionary.form.addNewPost %></button>
   </form>

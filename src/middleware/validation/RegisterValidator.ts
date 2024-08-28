@@ -1,5 +1,5 @@
 import { body } from 'express-validator'
-import User from '../../models/userModel'
+import User from '../../models/User'
 
 /**
  * Validator class for handling registration data validation.

@@ -1,7 +1,7 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import AsyncHandler from '../lib/AsyncHandler'
-import User, { IUser } from '../models/userModel'
+import User, { IUser } from '../models/User'
 import { Role } from '../types/enums'
 
 type Decoded = {
