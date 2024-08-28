@@ -1,5 +1,7 @@
 import express from 'express'
+import fs from 'fs-extra'
 import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import AsyncHandler from '../lib/AsyncHandler'
 import Message from '../lib/Message'
 import StringHelper from '../lib/StringHelper'
@@ -122,28 +124,45 @@ class PostController {
 
   /**
    * Creates a new post and returns the created post in JSON format.
-   * @param req - The Express request object containing the post data and uploaded files.
-   * @param res - The Express response object used to send the JSON response.
-   * @returns {Promise<void>} JSON response with the newly created post.
-   * @description This method handles the creation of a new post. It processes any uploaded images,
-   * generating metadata for each image, and stores them along with the post data in the database.
-   * The post title is used to generate a unique slug, which is appended with a timestamp.
-   * The method returns the created post in a JSON format, including all related images.
+   *
+   * @param {express.Request} req - The Express request object containing the post data and uploaded files.
+   * @param {express.Response} res - The Express response object used to send the JSON response.
+   * @returns {Promise<void>} A JSON response with the newly created post, including its slug.
+   *
+   * @description This method handles the creation of a new post. It processes any uploaded images by moving them
+   * from the temporary upload directory to the target `uploads/` directory. For each uploaded image, it generates
+   * metadata including a unique UUID, original file name, file extension, MIME type, file size, order of the image,
+   * and creation timestamp. This metadata, along with the post data, is stored in the database. The post title is used
+   * to generate a unique slug, which is appended with a timestamp to ensure uniqueness.
+   *
+   * If any errors occur during the file move operation or database operations, they are caught, and an appropriate error
+   * message is generated. Upon successful creation of the post, the method returns a JSON response containing the slug
+   * of the newly created post. The response format is designed for easy client-side redirection to the newly created post.
    */
   public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
       const { title, body } = req.body
 
       const images = req.files
-        ? (req.files as Express.Multer.File[]).map((file, index) => ({
-            originalName: file.originalname,
-            uuidName: file.filename,
-            extension: path.extname(file.originalname),
-            mimeType: file.mimetype,
-            size: file.size,
-            order: index + 1,
-            createdAt: new Date(),
-          }))
+        ? (req.files as Express.Multer.File[]).map((file, index) => {
+            const uuid = uuidv4()
+            const tempPath = file.path
+            const targetPath = path.join('uploads/', `${uuid}${path.extname(file.originalname)}`)
+
+            fs.move(tempPath, targetPath, err => {
+              if (err) throw new Error(Message.getErrorMessage(err))
+            })
+
+            return {
+              uuid,
+              name: file.originalname,
+              extension: path.extname(file.originalname),
+              mime: file.mimetype,
+              size: file.size,
+              order: index + 1,
+              createdAt: new Date(),
+            }
+          })
         : []
 
       const post = await Post.create({
@@ -154,7 +173,7 @@ class PostController {
         images,
       })
 
-      res.json(post)
+      res.json({ slug: post.slug })
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }

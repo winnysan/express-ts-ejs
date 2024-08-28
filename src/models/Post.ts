@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
 type Images = {
-  originalName: string
-  uuidName: string
+  uuid: string
+  name: string
   extension: string
-  mimeType: string
+  mime: string
   size: number
   order: number
   createdAt: Date
@@ -21,10 +21,10 @@ export interface IPost extends mongoose.Document {
 }
 
 const imageSchema = new mongoose.Schema<Images>({
-  originalName: { type: String, required: true },
-  uuidName: { type: String, required: true },
+  uuid: { type: String, required: true },
+  name: { type: String, required: true },
   extension: { type: String, required: true },
-  mimeType: { type: String, required: true },
+  mime: { type: String, required: true },
   size: { type: Number, required: true },
   order: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },

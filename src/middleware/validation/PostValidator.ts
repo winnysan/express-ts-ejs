@@ -1,4 +1,4 @@
-import { body, check } from 'express-validator'
+import { body } from 'express-validator'
 
 /**
  * Validator class for post-related validation schemas using `express-validator`.
@@ -24,8 +24,9 @@ class PostValidator {
         .trim()
         .notEmpty()
         .withMessage(() => global.dictionary.validation.isRequired),
-      check('images.*')
+      body('images')
         .custom((value, { req }) => {
+          console.log('check', req.files)
           if (!req.files || req.files.length === 0) {
             return true
           }
