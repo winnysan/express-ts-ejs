@@ -26,7 +26,6 @@ class PostValidator {
         .withMessage(() => global.dictionary.validation.isRequired),
       body('images')
         .custom((value, { req }) => {
-          console.log('check', req.files)
           if (!req.files || req.files.length === 0) {
             return true
           }

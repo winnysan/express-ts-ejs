@@ -1,6 +1,7 @@
 import ApiClient from './lib/ApiCLient'
 import FormHandler from './lib/FormHandler'
 import Helper from './lib/Helper'
+import ImagePreviewHandler from './lib/ImagePreviewHandler'
 import './reactivity'
 
 console.log(
@@ -9,9 +10,10 @@ console.log(
 )
 
 /**
- * Initialize the FormHandler
+ * Initialize the FormHandler and ImagePreviewHandler
  */
 new FormHandler('#form', 'input[name="_csrf"]')
+new ImagePreviewHandler('#input-images', '#preview-images')
 
 /**
  * Set year to footer

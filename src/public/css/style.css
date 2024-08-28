@@ -72,3 +72,8 @@ footer {
 #errors {
   color: var(--red);
 }
+
+#preview-images img {
+  max-width: 200px;
+  max-height: 200px;
+}
