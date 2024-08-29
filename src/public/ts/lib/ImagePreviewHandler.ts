@@ -52,7 +52,11 @@ class ImagePreviewHandler {
     const newFiles = input.files
 
     if (newFiles) {
-      this.files.push(...Array.from(newFiles))
+      // Filter out non-image files
+      const imageFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'))
+
+      // Add only image files to the list
+      this.files.push(...imageFiles)
       this.updateInputFiles()
       this.renderPreviews()
     }
@@ -83,8 +87,13 @@ class ImagePreviewHandler {
     this.dropAreaEl?.classList.remove('drop-area__dragging')
 
     const newFiles = event.dataTransfer?.files
+
     if (newFiles) {
-      this.files.push(...Array.from(newFiles))
+      // Filter out non-image files
+      const imageFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'))
+
+      // Add only image files to the list
+      this.files.push(...imageFiles)
       this.updateInputFiles()
       this.renderPreviews()
     }
