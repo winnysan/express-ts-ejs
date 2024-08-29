@@ -113,3 +113,11 @@ footer {
   top: 10px;
   right: 10px;
 }
+
+.opacity {
+  opacity: 0.5;
+}
+
+.highlight {
+  border: 1px dashed var(--sky);
+}

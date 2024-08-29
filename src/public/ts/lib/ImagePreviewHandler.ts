@@ -5,9 +5,10 @@ import Helper from './Helper'
  */
 class ImagePreviewHandler {
   private inputEl: HTMLInputElement | null
-  private previewEl: HTMLDivElement | null
+  private previewEl: HTMLUListElement | null
   private dropAreaEl: HTMLLabelElement | null
   private files: File[] = []
+  private draggedItem: HTMLElement | null = null
 
   /**
    * Initializes the ImagePreviewHandler with the image input, preview container, and drop area selectors.
@@ -17,7 +18,7 @@ class ImagePreviewHandler {
    */
   constructor(inputSelector: string, previewSelector: string, dropAreaSelector: string) {
     this.inputEl = Helper.selectElement<HTMLInputElement>(inputSelector)
-    this.previewEl = Helper.selectElement<HTMLDivElement>(previewSelector)
+    this.previewEl = Helper.selectElement<HTMLUListElement>(previewSelector)
     this.dropAreaEl = Helper.selectElement<HTMLLabelElement>(dropAreaSelector)
 
     if (this.inputEl && this.previewEl && this.dropAreaEl) {
@@ -105,7 +106,8 @@ class ImagePreviewHandler {
    * @param {number} index - The index of the image in the file list.
    */
   private displayImage(event: ProgressEvent<FileReader>, index: number) {
-    const imgContainer = document.createElement('div')
+    const imgContainer = document.createElement('li')
+    imgContainer.setAttribute('draggable', 'true')
     imgContainer.classList.add('preview-images__image-container')
 
     const imgEl = document.createElement('img')
@@ -156,6 +158,122 @@ class ImagePreviewHandler {
         const reader = new FileReader()
         reader.onload = e => this.displayImage(e, index)
         reader.readAsDataURL(file)
+      })
+      this.initializeReordering()
+    }
+  }
+
+  /**
+   * Initializes the reordering of images through drag-and-drop.
+   */
+  private initializeReordering() {
+    if (this.previewEl) {
+      // Handle the dragstart event
+      this.previewEl.addEventListener('dragstart', (event: DragEvent) => {
+        const target = event.target as HTMLElement
+        this.draggedItem = target.closest('li')
+        if (this.draggedItem) {
+          this.draggedItem.classList.add('opacity')
+        }
+      })
+
+      // Handle the dragend event
+      this.previewEl.addEventListener('dragend', (event: DragEvent) => {
+        this.resetDraggedItemStyles()
+      })
+
+      // Handle the dragover event to allow dropping
+      this.previewEl.addEventListener('dragover', (event: DragEvent) => {
+        event.preventDefault() // Necessary to allow dropping
+      })
+
+      // Handle the drop event
+      this.previewEl.addEventListener('drop', (event: DragEvent) => {
+        event.preventDefault()
+
+        this.handleReordering(event.target as HTMLElement)
+      })
+
+      // Handle the touchstart event
+      this.previewEl.addEventListener('touchstart', (event: TouchEvent) => {
+        const touch = event.targetTouches[0]
+        const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement
+        this.draggedItem = target.closest('li')
+        if (this.draggedItem) {
+          this.draggedItem.classList.add('opacity')
+        }
+      })
+
+      // Handle the touchmove event
+      this.previewEl.addEventListener('touchmove', (event: TouchEvent) => {
+        event.preventDefault()
+        const touch = event.targetTouches[0]
+        const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement
+        const targetItem = target.closest('li')
+        if (targetItem && this.draggedItem && targetItem !== this.draggedItem) {
+          targetItem.classList.add('highlight') // Highlight the potential drop target
+        }
+      })
+
+      // Handle the touchend event
+      this.previewEl.addEventListener('touchend', (event: TouchEvent) => {
+        const touch = event.changedTouches[0]
+        const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement
+        this.handleReordering(target)
+      })
+    }
+  }
+
+  /**
+   * Handles the reordering of the files when dropped in a new position.
+   * @param {HTMLElement} target - The drop target element.
+   */
+  private handleReordering(target: HTMLElement) {
+    const targetItem = target.closest('li')
+    if (this.previewEl && targetItem && this.draggedItem && targetItem !== this.draggedItem) {
+      const oldIndex = Array.from(this.previewEl.children).indexOf(this.draggedItem)
+      const newIndex = Array.from(this.previewEl.children).indexOf(targetItem)
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        this.previewEl.insertBefore(this.draggedItem, newIndex > oldIndex ? targetItem.nextSibling : targetItem)
+        this.reorderFiles(oldIndex, newIndex)
+      }
+    }
+
+    this.resetDraggedItemStyles()
+    this.clearHighlighting()
+  }
+
+  /**
+   * Reorders the files array based on the new index.
+   * @param {number} oldIndex - The old index of the file.
+   * @param {number} newIndex - The new index of the file.
+   */
+  private reorderFiles(oldIndex: number, newIndex: number) {
+    const movedFile = this.files[oldIndex]
+    this.files.splice(oldIndex, 1)
+    this.files.splice(newIndex, 0, movedFile)
+
+    this.updateInputFiles()
+  }
+
+  /**
+   * Resets the styles for the dragged item.
+   */
+  private resetDraggedItemStyles() {
+    if (this.draggedItem) {
+      this.draggedItem.classList.remove('opacity')
+      this.draggedItem = null
+    }
+  }
+
+  /**
+   * Clears any visual highlighting from the preview items.
+   */
+  private clearHighlighting() {
+    if (this.previewEl) {
+      Array.from(this.previewEl.children).forEach(item => {
+        ;(item as HTMLElement).classList.remove('highlight')
       })
     }
   }
