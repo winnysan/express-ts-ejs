@@ -73,7 +73,14 @@ footer {
   color: var(--red);
 }
 
+#preview-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 #preview-images img {
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
 }

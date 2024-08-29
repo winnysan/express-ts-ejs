@@ -36,19 +36,17 @@ class ImagePreviewHandler {
    */
   private handleImageChange(event: Event) {
     const input = event.target as HTMLInputElement
-    const files = input.files
+    const newFiles = input.files
 
-    if (files && this.previewEl) {
-      this.previewEl.innerHTML = ''
-      this.files = Array.from(files)
+    if (newFiles) {
+      // Append new files to the existing files array
+      this.files.push(...Array.from(newFiles))
 
-      this.files.forEach((file, index) => {
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader()
-          reader.onload = e => this.displayImage(e, index)
-          reader.readAsDataURL(file)
-        }
-      })
+      // Update the input element's files with the new array of files
+      this.updateInputFiles()
+
+      // Render all images
+      this.renderPreviews()
     }
   }
 
