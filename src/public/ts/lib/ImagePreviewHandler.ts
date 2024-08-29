@@ -1,33 +1,46 @@
 import Helper from './Helper'
 
 /**
- * A class to handle image preview functionality.
+ * A class to handle image preview functionality with drag-and-drop support.
  */
 class ImagePreviewHandler {
   private inputEl: HTMLInputElement | null
   private previewEl: HTMLDivElement | null
+  private dropAreaEl: HTMLLabelElement | null
   private files: File[] = []
 
   /**
-   * Initializes the ImagePreviewHandler with the image input and preview container selectors.
+   * Initializes the ImagePreviewHandler with the image input, preview container, and drop area selectors.
    * @param {string} inputSelector - The CSS selector for the image input element.
    * @param {string} previewSelector - The CSS selector for the image preview container element.
+   * @param {string} dropAreaSelector - The CSS selector for the drop area element.
    */
-  constructor(inputSelector: string, previewSelector: string) {
+  constructor(inputSelector: string, previewSelector: string, dropAreaSelector: string) {
     this.inputEl = Helper.selectElement<HTMLInputElement>(inputSelector)
     this.previewEl = Helper.selectElement<HTMLDivElement>(previewSelector)
+    this.dropAreaEl = Helper.selectElement<HTMLLabelElement>(dropAreaSelector)
 
-    if (this.inputEl && this.previewEl) {
+    if (this.inputEl && this.previewEl && this.dropAreaEl) {
       this.initialize()
     }
   }
 
   /**
-   * Sets up the event listener for the image input change event.
+   * Sets up the event listeners for the image input and drag-and-drop events.
    */
   private initialize() {
     this.inputEl?.addEventListener('change', e => this.handleImageChange(e))
-    console.log('The image preview handler has been initialized')
+
+    if (this.dropAreaEl) {
+      this.dropAreaEl.addEventListener('dragover', e => this.handleDragOver(e))
+      this.dropAreaEl.addEventListener('dragleave', () => this.handleDragLeave())
+      this.dropAreaEl.addEventListener('drop', e => this.handleDrop(e))
+
+      // Add listener to open file dialog on click
+      this.dropAreaEl.addEventListener('click', () => this.inputEl?.click())
+    }
+
+    console.log('The image preview handler with drag-and-drop support has been initialized')
   }
 
   /**
@@ -39,13 +52,40 @@ class ImagePreviewHandler {
     const newFiles = input.files
 
     if (newFiles) {
-      // Append new files to the existing files array
       this.files.push(...Array.from(newFiles))
-
-      // Update the input element's files with the new array of files
       this.updateInputFiles()
+      this.renderPreviews()
+    }
+  }
 
-      // Render all images
+  /**
+   * Handles the dragover event to allow dropping.
+   * @param {DragEvent} event - The dragover event.
+   */
+  private handleDragOver(event: DragEvent) {
+    event.preventDefault()
+    this.dropAreaEl?.classList.add('drop-area__dragging')
+  }
+
+  /**
+   * Handles the dragleave event to remove visual feedback.
+   */
+  private handleDragLeave() {
+    this.dropAreaEl?.classList.remove('drop-area__dragging')
+  }
+
+  /**
+   * Handles the drop event to process dropped files.
+   * @param {DragEvent} event - The drop event triggered by dropping files onto the drop area.
+   */
+  private handleDrop(event: DragEvent) {
+    event.preventDefault()
+    this.dropAreaEl?.classList.remove('drop-area__dragging')
+
+    const newFiles = event.dataTransfer?.files
+    if (newFiles) {
+      this.files.push(...Array.from(newFiles))
+      this.updateInputFiles()
       this.renderPreviews()
     }
   }
@@ -57,19 +97,19 @@ class ImagePreviewHandler {
    */
   private displayImage(event: ProgressEvent<FileReader>, index: number) {
     const imgContainer = document.createElement('div')
-    imgContainer.style.position = 'relative'
+    imgContainer.classList.add('preview-images__image-container')
 
     const imgEl = document.createElement('img')
     imgEl.src = event.target?.result as string
-    imgEl.style.display = 'block'
-    imgEl.style.marginBottom = '10px'
+    imgEl.classList.add('preview-images__image')
 
     const removeBtn = document.createElement('button')
     removeBtn.textContent = 'Remove'
-    removeBtn.style.position = 'absolute'
-    removeBtn.style.top = '10px'
-    removeBtn.style.right = '10px'
-    removeBtn.addEventListener('click', () => this.removeImage(index))
+    removeBtn.classList.add('preview-image__remove-button')
+
+    // Stop propagation on the container and its children
+    imgContainer.addEventListener('click', e => e.stopPropagation())
+    removeBtn.addEventListener('click', e => this.removeImage(index))
 
     imgContainer.appendChild(imgEl)
     imgContainer.appendChild(removeBtn)

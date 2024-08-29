@@ -13,7 +13,7 @@ console.log(
  * Initialize the FormHandler and ImagePreviewHandler
  */
 new FormHandler('#form', 'input[name="_csrf"]')
-new ImagePreviewHandler('#input-images', '#preview-images')
+new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
 
 /**
  * Set year to footer

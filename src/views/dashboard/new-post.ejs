@@ -12,9 +12,11 @@
       <textarea type="text" name="body"><% if (typeof fill !== 'undefined') { %><%= fill.postBody %><% } %></textarea>
     </div>
     <div>
-      <label for="images"><%= global.dictionary.form.images %></label>
-      <input id="input-images" type="file" name="images" multiple />
-      <div id="preview-images"></div>
+      <label id="drop-area" for="images" class="drop-area"
+        ><%= global.dictionary.form.images %>
+        <input id="input-images" type="file" name="images" multiple style="display: none" />
+        <div id="preview-images" class="preview-images__wrapper"></div>
+      </label>
     </div>
     <button type="submit"><%= global.dictionary.form.addNewPost %></button>
   </form>

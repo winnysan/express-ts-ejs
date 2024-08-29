@@ -42,7 +42,7 @@ task('webpack-build', done => {
     if (err) {
       return done(err)
     }
-    console.log(stdout)
+    // console.log(stdout)
     done()
   })
 })
@@ -69,10 +69,7 @@ task('views-update', done => {
       }
 
       const updatedFileData = fileData
-        .replace(
-          /<script type="text\/javascript" src="\/js\/.*\.js" defer><\/script>/,
-          scriptTag
-        )
+        .replace(/<script type="text\/javascript" src="\/js\/.*\.js" defer><\/script>/, scriptTag)
         .replace(/<link rel="stylesheet" href="\/css\/.*\.css" \/>/, styleTag)
 
       fs.writeFile(ejsFilePath, updatedFileData, 'utf8', err => {
@@ -88,12 +85,5 @@ task('views-update', done => {
 
 task(
   'default',
-  series(
-    'build-clean',
-    'typescript-transpile',
-    'views-copy',
-    'assets-copy',
-    'webpack-build',
-    'views-update'
-  )
+  series('build-clean', 'typescript-transpile', 'views-copy', 'assets-copy', 'webpack-build', 'views-update')
 )
