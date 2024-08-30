@@ -10,7 +10,12 @@ console.log(
 )
 
 /**
- * Initialize the FormHandler and ImagePreviewHandler
+ * Initialize color mode switcher
+ */
+Helper.colorModeSwitcher()
+
+/**
+ * Initialize FormHandler and ImagePreviewHandler
  */
 new FormHandler('#form', 'input[name="_csrf"]')
 new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')

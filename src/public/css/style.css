@@ -1,5 +1,6 @@
 :root {
   --black: #101010;
+  --white: #fff;
   --sky: #0284c7;
   --red: #ef4444;
   --gray: #6b7280;
@@ -32,6 +33,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -47,10 +49,13 @@ header nav {
 }
 
 header nav figure {
-  color: var(--sky);
+  color: var(--white);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 0 0 7px var(--sky);
   text-transform: uppercase;
-  border: 1px dashed var(--black);
-  padding: 0.1rem 0.3rem;
+  padding: 0.2rem 0.5rem;
 }
 
 header nav ul {

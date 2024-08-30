@@ -25,7 +25,7 @@ class Helper {
    * @example
    * Helper.saveToLocalStorage('user', { name: 'Alice', age: 30 });
    */
-  static saveToLocalStorage(key: string, value: any) {
+  static saveToLocalStorage(key: string, value: any): void {
     localStorage.setItem(key, JSON.stringify(value))
   }
 
@@ -62,10 +62,35 @@ class Helper {
    *
    * // This will add a new <li> element with the text "Form submission failed" to the errorsEl <ul> element.
    */
-  static addErrorMessage(errorsEl: HTMLUListElement, message: string) {
+  static addErrorMessage(errorsEl: HTMLUListElement, message: string): void {
     const li = document.createElement('li')
     li.textContent = message
     errorsEl.appendChild(li)
+  }
+
+  /**
+   * Switches the color mode between light and dark based on button clicks.
+   * The function adds event listeners to elements with the class `color_mode_button`
+   * and updates the `data-color-mode` attribute on the `documentElement` accordingly.
+   * The selected mode is also saved to localStorage.
+   */
+  static colorModeSwitcher(): void {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.color-mode__button')
+
+    buttons.forEach(button => {
+      button.addEventListener('click', (event: Event) => {
+        const targetElement = event.currentTarget as HTMLButtonElement
+        const elementId = targetElement.id
+
+        if (elementId === 'enable-light-mode') {
+          document.documentElement.setAttribute('data-color-mode', 'light')
+          localStorage.setItem('data-color-mode', 'light')
+        } else if (elementId === 'enable-dark-mode') {
+          document.documentElement.setAttribute('data-color-mode', 'dark')
+          localStorage.setItem('data-color-mode', 'dark')
+        }
+      })
+    })
   }
 }
 
