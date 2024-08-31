@@ -10,8 +10,11 @@
     "start": "node .",
     "lint": "eslint . --ext .ts",
     "gulp": "gulp",
-    "gulp:dev": "npm-run-all gulp --env=development start",
-    "dev": "nodemon --watch src -e ts,ejs,scss --exec npm run gulp:dev",
+    "gulp:dev-with-start": "npm-run-all gulp --env=development start",
+    "gulp:style-compile": "gulp style-compile",
+    "gulp:styling-with-start": "npm-run-all gulp:style-compile start",
+    "dev": "nodemon --watch src -e ts,ejs,scss --exec npm run gulp:dev-with-start",
+    "styling": "nodemon --watch src -e scss --exec npm run gulp:styling-with-start",
     "build": "gulp --env=production"
   },
   "dependencies": {
