@@ -116,7 +116,7 @@ class ImagePreviewHandler {
 
     const removeBtn = document.createElement('button')
     removeBtn.textContent = 'Remove'
-    removeBtn.classList.add('preview-image__remove-button')
+    removeBtn.classList.add('preview-images__remove-button')
 
     // Stop propagation on the container and its children
     imgContainer.addEventListener('click', e => e.stopPropagation())

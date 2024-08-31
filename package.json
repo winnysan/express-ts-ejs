@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .ts",
     "gulp": "gulp",
     "gulp:dev": "npm-run-all gulp --env=development start",
-    "dev": "nodemon --watch src -e ts,ejs,css --exec npm run gulp:dev",
+    "dev": "nodemon --watch src -e ts,ejs,scss --exec npm run gulp:dev",
     "build": "gulp --env=production"
   },
   "dependencies": {
@@ -64,6 +64,8 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.41",
     "postcss-loader": "^8.1.1",
+    "sass": "^1.77.8",
+    "sass-loader": "^16.0.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "webpack": "^5.94.0",

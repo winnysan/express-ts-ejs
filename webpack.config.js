@@ -17,7 +17,7 @@ module.exports = env => ({
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -34,18 +34,19 @@ module.exports = env => ({
               },
             },
           },
+          'sass-loader',
         ],
       },
     ],
   },
 
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.css'],
+    extensions: ['.tsx', '.ts', '.js', '.scss'],
   },
 
   entry: {
     'public/js/script': [`${srcPath}/public/ts/script.ts`],
-    'public/css/style': [`${srcPath}/public/css/style.css`],
+    'public/css/style': [`${srcPath}/public/css/style.scss`],
   },
 
   output: {
@@ -63,10 +64,7 @@ module.exports = env => ({
       generate: (seed, files) => {
         const manifest = {}
         files.forEach(file => {
-          manifest[file.name.replace(/^public/, '')] = file.path.replace(
-            '/public',
-            ''
-          )
+          manifest[file.name.replace(/^public/, '')] = file.path.replace('/public', '')
         })
         return manifest
       },
