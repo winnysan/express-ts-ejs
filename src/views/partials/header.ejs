@@ -1,12 +1,17 @@
 <header>
   <nav>
-    <figure><%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %></figure>
-    <form action="/search" method="post">
+    <figure class="logo">
+      <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
+    </figure>
+    <form action="/search" class="search" method="post">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <input type="text" name="searchTerm" placeholder="<%= global.dictionary.form.search %>" />
-      <button><%= global.dictionary.form.search %></button>
+      <input type="text" name="searchTerm" class="search-input" placeholder="<%= global.dictionary.form.search %>" />
+      <button class="search-button" disabled>
+        <span class="search-button__icon"><%- include('./svg/searchIcon.ejs') %></span>
+      </button>
     </form>
-    <ul>
+    <button id="hamburger">☰</button>
+    <ul class="navigation">
       <li><a href="/"><%= global.dictionary.navigation.home %></a></li>
       <% if (typeof user === 'undefined') { %>
       <li><a href="/login"><%= global.dictionary.navigation.login %></a></li>
@@ -27,17 +32,23 @@
         </form>
       </li>
       <% } %>
-      <li>
-        Reaktivita: <span id="total">0</span>
-        <button id="decrease">-</button>
-        <button id="increase">+</button>
-      </li>
-      <li>
-        <button id="fetchButton">Fetch</button>
-      </li>
-      <li>
-        <button id="enable-light-mode" class="color-mode__button light-mode--hidden">Light mode</button>
-        <button id="enable-dark-mode" class="color-mode__button dark-mode--hidden">Dark mode</button>
+
+      <li class="dropdown">
+        <button class="dropdown__button">Fíčury</button>
+        <ul class="dropdown__menu">
+          <li>
+            Reaktivita: <span id="total">0</span>
+            <button id="decrease">-</button>
+            <button id="increase">+</button>
+          </li>
+          <li>
+            <button id="fetchButton">Fetch</button>
+          </li>
+          <li>
+            <button id="enable-light-mode" class="color-mode__button light-mode--hidden">Light mode</button>
+            <button id="enable-dark-mode" class="color-mode__button dark-mode--hidden">Dark mode</button>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>

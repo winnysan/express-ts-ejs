@@ -2,6 +2,7 @@ import ApiClient from './lib/ApiCLient'
 import FormHandler from './lib/FormHandler'
 import Helper from './lib/Helper'
 import ImagePreviewHandler from './lib/ImagePreviewHandler'
+import './lib/Layout'
 import './reactivity'
 
 console.log(
@@ -19,13 +20,6 @@ Helper.colorModeSwitcher()
  */
 new FormHandler('#form', 'input[name="_csrf"]')
 new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
-
-/**
- * Set year to footer
- */
-const dateEl = Helper.selectElement<HTMLSpanElement>('#date')
-
-if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
 
 /**
  * Fetch
