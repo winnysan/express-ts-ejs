@@ -1,55 +1,84 @@
-<header>
-  <nav>
-    <figure class="logo">
-      <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
-    </figure>
-    <form action="/search" class="search" method="post">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <input type="text" name="searchTerm" class="search-input" placeholder="<%= global.dictionary.form.search %>" />
-      <button class="search-button" disabled>
-        <span class="search-button__icon"><%- include('./svg/searchIcon.ejs') %></span>
-      </button>
-    </form>
-    <button id="hamburger">☰</button>
-    <ul class="navigation">
-      <li><a href="/"><%= global.dictionary.navigation.home %></a></li>
-      <% if (typeof user === 'undefined') { %>
-      <li><a href="/login"><%= global.dictionary.navigation.login %></a></li>
-      <li>
-        <a href="/register"><%= global.dictionary.navigation.register %></a>
-      </li>
-      <% } else { %>
-      <li>
-        <a href="/dashboard"><%= global.dictionary.navigation.dashboard %></a>
-      </li>
-      <% if (user.role === 'admin') { %>
-      <li><a href="/admin"><%= global.dictionary.navigation.admin %></a></li>
-      <% } %>
-      <li>
-        <form action="/logout" method="post">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <button type="submit"><%= global.dictionary.navigation.logout %></button>
-        </form>
-      </li>
-      <% } %>
+<header id="header" class="header">
+  <nav class="navbar container">
+    <a href="/">
+      <h2 class="logo">
+        <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
+      </h2>
+    </a>
 
-      <li class="dropdown">
-        <button class="dropdown__button">Fíčury</button>
-        <ul class="dropdown__menu">
-          <li>
-            Reaktivita: <span id="total">0</span>
-            <button id="decrease">-</button>
-            <button id="increase">+</button>
-          </li>
-          <li>
-            <button id="fetchButton">Fetch</button>
-          </li>
-          <li>
-            <button id="enable-light-mode" class="color-mode__button light-mode--hidden">Light mode</button>
-            <button id="enable-dark-mode" class="color-mode__button dark-mode--hidden">Dark mode</button>
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <div id="menu" class="menu">
+      <ul class="list">
+        <li class="list-item">
+          <a href="/" class="list-link current"><%= global.dictionary.navigation.home %></a>
+        </li>
+        <li class="list-item">
+          <a href="/" class="list-link">Články</a>
+        </li>
+        <li class="list-item">
+          <a href="/" class="list-link">Kontakt</a>
+        </li>
+        <% if (typeof user === 'undefined') { %>
+        <li class="list-item screen-lg-hidden">
+          <a href="/login" class="list-link"><%= global.dictionary.navigation.login %></a>
+        </li>
+        <li class="list-item screen-lg-hidden">
+          <a href="/register" class="list-link"><%= global.dictionary.navigation.register %></a>
+        </li>
+        <% } else { %>
+        <li class="list-item">
+          <a href="/dashboard" class="list-link"><%= global.dictionary.navigation.dashboard %></a>
+        </li>
+        <% if (user.role === 'admin') { %>
+        <li class="list-item">
+          <a href="/admin" class="list-link"><%= global.dictionary.navigation.admin %></a>
+        </li>
+        <% } %> <% } %>
+      </ul>
+    </div>
+
+    <div class="list list-right">
+      <button id="enable-light-mode" class="btn place-items-center color-mode">
+        <i class="ri-sun-line"></i>
+      </button>
+      <button id="enable-dark-mode" class="btn place-items-center color-mode">
+        <i class="ri-moon-line"></i>
+      </button>
+
+      <button id="search-icon" class="btn place-items-center">
+        <i class="ri-search-line"></i>
+      </button>
+
+      <button id="menu-toggle-icon" class="btn place-items-center screen-lg-hidden menu-toggle-icon">
+        <i class="ri-menu-3-line open-menu-icon"></i>
+        <i class="ri-close-line close-menu-icon"></i>
+      </button>
+
+      <a href="/login" class="list-link screen-sm-hidden"><%= global.dictionary.navigation.login %></a>
+      <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
+        <span><%= global.dictionary.navigation.register %></span>
+      </a>
+    </div>
   </nav>
 </header>
+
+<div id="search-form-container" class="search-form-container container">
+  <div class="search-form-container-inner">
+    <form action="/search" class="search-form" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input
+        type="text"
+        name="searchTerm"
+        class="search-form-input"
+        placeholder="<%= global.dictionary.form.search %>"
+      />
+      <button class="btn search-form-btn">
+        <i class="ri-search-line"></i>
+      </button>
+    </form>
+    <span class="search-form-note">Or press ESC to close</span>
+  </div>
+
+  <button id="search-form-close-btn" class="btn search-form-close-btn place-items-center">
+    <i class="ri-close-line"></i>
+  </button>
+</div>

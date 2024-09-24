@@ -75,7 +75,7 @@ class Helper {
    * The selected mode is also saved to localStorage.
    */
   static colorModeSwitcher(): void {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('.color-mode__button')
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.color-mode')
 
     buttons.forEach(button => {
       button.addEventListener('click', (event: Event) => {

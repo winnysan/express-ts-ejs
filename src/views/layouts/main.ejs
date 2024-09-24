@@ -4,24 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
     <style>
       :root[data-color-mode='light'] {
-        --background-color: #ffffff;
-        --text-color: #181818;
+        --light-color-alt: rgba(0, 0, 0, 0.6);
+        --primary-background-color: #fff;
       }
       :root[data-color-mode='dark'] {
-        --background-color: #181818;
-        --text-color: #ffffff;
+        --light-color-alt: #afb5cd;
+        --primary-background-color: #131417;
       }
       body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-      }
-      :root[data-color-mode='light'] .light-mode--hidden {
-        display: none;
-      }
-      :root[data-color-mode='dark'] .dark-mode--hidden {
-        display: none;
+        color: var(--light-color-alt);
+        background-color: var(--primary-background-color);
       }
     </style>
 
@@ -46,7 +41,6 @@
   <body>
     <%- include('../partials/header.ejs') %>
     <main><%- body %></main>
-    <%- include('../partials/footer.ejs') %>
-    <div id="overlay"></div>
+    <!-- <%- include('../partials/footer.ejs') %> -->
   </body>
 </html>

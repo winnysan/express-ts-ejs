@@ -1,64 +1,52 @@
 import Helper from './Helper'
 
 /**
- * Navigation
- */
-
-const hamburgerBtnEl = Helper.selectElement<HTMLButtonElement>('#hamburger')
-const navigationEl = Helper.selectElement<HTMLUListElement>('.navigation')
-const overlayEl = Helper.selectElement<HTMLDivElement>('#overlay')
-const dropdownBtnEl = Helper.selectElement<HTMLButtonElement>('.dropdown__button')
-const dropdownMenuEl = Helper.selectElement<HTMLUListElement>('.dropdown__menu')
-const searchInputEl = Helper.selectElement<HTMLInputElement>('.search-input')
-const searchBtn = Helper.selectElement<HTMLButtonElement>('.search-button')
-
-/**
- * Mobile menu
- */
-hamburgerBtnEl?.addEventListener('click', () => {
-  navigationEl?.classList.toggle('active')
-  overlayEl?.classList.toggle('active')
-})
-
-overlayEl?.addEventListener('click', () => {
-  navigationEl?.classList.remove('active')
-  overlayEl?.classList.remove('active')
-})
-
-/**
- * Dropdown menu
- */
-dropdownBtnEl?.addEventListener('click', event => {
-  event.stopPropagation()
-
-  dropdownMenuEl?.classList.toggle('active')
-  dropdownBtnEl?.classList.toggle('active')
-})
-
-document.addEventListener('click', event => {
-  const target = event.target as Node
-
-  if (!dropdownBtnEl?.contains(target) && !dropdownBtnEl?.contains(target)) {
-    dropdownMenuEl?.classList.remove('active')
-  }
-})
-
-/**
- * Search
- */
-
-searchInputEl?.addEventListener('input', () => {
-  if (searchBtn)
-    if (searchInputEl.value.trim() === '') {
-      searchBtn.disabled = true
-    } else {
-      searchBtn.disabled = false
-    }
-})
-
-/**
  * Set year to footer
  */
 const dateEl = Helper.selectElement<HTMLSpanElement>('#date')
 
 if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
+
+/**
+ * Nav styles on scroll
+ */
+
+const scrollHeader = () => {
+  const headerEl = Helper.selectElement<HTMLDivElement>('#header')
+  if (window.scrollY >= 15) {
+    headerEl?.classList.add('activated')
+  } else {
+    headerEl?.classList.remove('activated')
+  }
+}
+
+window.addEventListener('scroll', scrollHeader)
+
+/*
+ * Open menu
+ */
+
+const menuToggleIconEl = Helper.selectElement<HTMLButtonElement>('#menu-toggle-icon')
+
+const toggleMenu = () => {
+  const mobileMenuEl = Helper.selectElement<HTMLDivElement>('#menu')
+  mobileMenuEl?.classList.toggle('activated')
+  menuToggleIconEl?.classList.toggle('activated')
+}
+
+menuToggleIconEl?.addEventListener('click', toggleMenu)
+
+/*
+ * Open search pop-up
+ */
+
+const searchFormOpenBtnEl = Helper.selectElement<HTMLButtonElement>('#search-icon')
+const searchFormCloseBtnEl = Helper.selectElement<HTMLButtonElement>('#search-form-close-btn')
+const searchFormContainerEl = Helper.selectElement<HTMLDivElement>('#search-form-container')
+
+searchFormOpenBtnEl?.addEventListener('click', () => searchFormContainerEl?.classList.add('activated'))
+searchFormCloseBtnEl?.addEventListener('click', () => searchFormContainerEl?.classList.remove('activated'))
+
+window.addEventListener('keyup', event => {
+  if (event.key === 'Escape') searchFormContainerEl?.classList.remove('activated')
+})
