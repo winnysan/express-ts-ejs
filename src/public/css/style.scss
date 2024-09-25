@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 :root {
+  --font-family: 'Poppins', sans-serif;
   --black: #101010;
   --dark: #262626;
   --white: #fff;
@@ -51,7 +54,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   transition: background-color 0.3s, color 0.3s;
-  font-family: sans-serif;
+  font-family: var(--font-family);
 }
 
 a,
@@ -112,7 +115,6 @@ nav {
 .logo {
   padding: 0.5rem 0;
   font-size: 1rem;
-  font-family: monospace;
   text-transform: uppercase;
   text-shadow: 0 0 7px var(--primary);
   white-space: nowrap;
