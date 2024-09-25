@@ -9,8 +9,11 @@ const navigationEl = Helper.selectElement<HTMLUListElement>('.navigation')
 const overlayEl = Helper.selectElement<HTMLDivElement>('#overlay')
 const dropdownBtnEl = Helper.selectElement<HTMLButtonElement>('.dropdown__button')
 const dropdownMenuEl = Helper.selectElement<HTMLUListElement>('.dropdown__menu')
-const searchInputEl = Helper.selectElement<HTMLInputElement>('.search-input')
-const searchBtn = Helper.selectElement<HTMLButtonElement>('.search-button')
+const searchOverlayEl = Helper.selectElement<HTMLButtonElement>('#search-overlay')
+const openSearchEl = Helper.selectElement<HTMLButtonElement>('#search-open')
+const closeSearchEl = Helper.selectElement<HTMLButtonElement>('#search-close')
+const searchInputEl = Helper.selectElement<HTMLInputElement>('#search-input')
+const searchBtn = Helper.selectElement<HTMLButtonElement>('#search-button')
 
 /**
  * Mobile menu
@@ -47,13 +50,19 @@ document.addEventListener('click', event => {
  * Search
  */
 
+openSearchEl?.addEventListener('click', () => searchOverlayEl?.classList.toggle('active'))
+
+closeSearchEl?.addEventListener('click', () => searchOverlayEl?.classList.remove('active'))
+
+window.addEventListener('keyup', event => {
+  if (event.key === 'Escape') searchOverlayEl?.classList.remove('active')
+})
+
 searchInputEl?.addEventListener('input', () => {
-  if (searchBtn)
-    if (searchInputEl.value.trim() === '') {
-      searchBtn.disabled = true
-    } else {
-      searchBtn.disabled = false
-    }
+  if (searchBtn) {
+    if (searchInputEl.value.trim() === '') searchBtn.disabled = true
+    else searchBtn.disabled = false
+  }
 })
 
 /**

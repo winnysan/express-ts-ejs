@@ -3,13 +3,9 @@
     <figure class="logo">
       <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
     </figure>
-    <form action="/search" class="search" method="post">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <input type="text" name="searchTerm" class="search-input" placeholder="<%= global.dictionary.form.search %>" />
-      <button class="search-button" disabled>
-        <span class="search-button__icon"><%- include('./svg/searchIcon.ejs') %></span>
-      </button>
-    </form>
+    <button id="search-open" class="search__button-open">
+      <span><%- include('./svg/searchIcon.ejs') %></span>
+    </button>
     <button id="hamburger">☰</button>
     <ul class="navigation">
       <li><a href="/"><%= global.dictionary.navigation.home %></a></li>
@@ -52,4 +48,23 @@
       </li>
     </ul>
   </nav>
+
+  <div id="search-overlay" class="search__overlay">
+    <div class="search__container">
+      <button id="search-close" class="search__button-close"><%- include('./svg/closeIcon.ejs') %></button>
+      <form action="/search" class="search__form" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input
+          id="search-input"
+          type="text"
+          name="searchTerm"
+          class="search__form-input"
+          placeholder="<%= global.dictionary.form.search %>"
+        />
+        <button id="search-button" class="search__form-button" disabled><%- include('./svg/searchIcon.ejs') %></button>
+
+        <p class="search__escape">Stlač ESC pre zatvorenie</p>
+      </form>
+    </div>
+  </div>
 </header>
