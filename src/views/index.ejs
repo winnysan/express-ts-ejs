@@ -1,29 +1,176 @@
-<h1><%= global.dictionary.navigation.home %></h1>
+<section class="featured-articles section-header-offset">
+  <div class="featured-articles-container container d-grid">
+    <div class="featured-content d-grid">
+      <div class="headline-banner">
+        <h3 class="headline fancy-border">
+          <span class="place-items-center">Breaking news</span>
+        </h3>
+        <span class="headline-description">Apple announced a new partnership</span>
+      </div>
 
-<section>
-  <% if (messages.length > 0) { %>
-  <div>
-    <% messages.forEach(message => { %>
-    <p style="color: green"><%= message %></p>
-    <% }); %>
+      <% posts.forEach((post, index) => { %>
+      <a href="/post/<%= post.slug %>" class="article featured-article feature-article-<%= index + 1 %>">
+        <% if (post.images && post.images.length > 0) { %>
+        <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="" class="article-image" />
+        <% } else { %>
+        <img src="/img/placeholder.jpg" alt="" class="article-image" />
+        <% } %>
+        <span class="article-category">Kategoria</span>
+
+        <div class="article-data-container">
+          <div class="article-data">
+            <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
+            <span class="article-data-spacer"></span>
+            <span>8 min čítania</span>
+          </div>
+
+          <h3 class="title article-title"><%= post.title %></h3>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <div class="sidebar d-grid">
+      <h3 class="title featured-content-title">Trending news</h3>
+
+      <% posts.forEach((post,index) => { %>
+      <a href="/post/<%= post.slug %>" class="trending-news-box">
+        <div class="trending-news-image-box">
+          <span class="trending-number place-items-center">0<%= index + 1 %></span>
+          <% if (post.images && post.images.length > 0) { %>
+          <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="" class="article-image" />
+          <% } else { %>
+          <img src="/img/placeholder.jpg" alt="" class="article-image" />
+          <% } %>
+        </div>
+
+        <div class="trending-news-data">
+          <div class="article-data">
+            <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
+            <span class="article-data-spacer"></span>
+            <span>8 min čítania</span>
+          </div>
+        </div>
+
+        <h3 class="title article-title"><%= post.title %></h3>
+      </a>
+      <% }) %>
+    </div>
   </div>
-  <% } %>
+</section>
 
-  <ul>
-    <% posts.forEach(post => { %>
-    <li>
-      <a href="/post/<%= post.slug %>"><%= post.title %></a>
-      <span><%= post.author.name %></span>
-      <span
-        ><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span
-      >
-    </li>
-    <% }) %>
-  </ul>
+<section class="quick-read section">
+  <div class="container">
+    <h2 class="title section-title" data-name="Quick read">Quick Read</h2>
 
-  <% if (nextPage !== null) { %>
-  <a href="/?page=<%= nextPage %>"
-    ><%= global.dictionary.navigation.viewOlderPosts %></a
-  >
-  <% } %>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <% posts.forEach((post) => { %>
+        <a href="/post/<%= post.slug %>" class="article swiper-slide">
+          <% if (post.images && post.images.length > 0) { %>
+          <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="" class="article-image" />
+          <% } else { %>
+          <img src="/img/placeholder.jpg" alt="" class="article-image" />
+          <% } %>
+
+          <div class="article-data-container">
+            <div class="article-data">
+              <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
+              <span class="article-data-spacer"></span>
+              <span>8 min čítania</span>
+            </div>
+
+            <h3 class="title article-title"><%= post.title %></h3>
+          </div>
+        </a>
+        <% }) %>
+      </div>
+
+      <div class="swiper-button-prev swiper-controls"></div>
+      <div class="swiper-button-next swiper-controls"></div>
+
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<section class="older-posts section">
+  <div class="container">
+    <h2 class="title section-title" data-name="Older posts">Older posts</h2>
+
+    <div class="older-posts-grid-wrapper d-grid">
+      <% posts.forEach((post) => { %>
+      <a href="" class="article d-grid">
+        <div class="older-posts-article-image-wrapper">
+          <% if (post.images && post.images.length > 0) { %>
+          <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="" class="article-image" />
+          <% } else { %>
+          <img src="/img/placeholder.jpg" alt="" class="article-image" />
+          <% } %>
+        </div>
+
+        <div class="article-data-container">
+          <div class="article-data">
+            <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
+            <span class="article-data-spacer"></span>
+            <span>8 min čítania</span>
+          </div>
+
+          <h3 class="title article-title"><%= post.title %></h3>
+          <p class="article-description"><%= post.body %></p>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <div class="see-more-container">
+      <a href="#" class="btn see-more-btn place-items-center">Pozri viac <i class="ri-arrow-right-s-line"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="popular-tags section">
+  <div class="container">
+    <h2 class="title section-title" data-name="Popular tags">Popular tags</h2>
+
+    <div class="popular-tags-container d-grid">
+      <a href="#" class="article">
+        <span class="tag-name">#travel</span>
+        <img src="/img/placeholder.jpg" alt="" class="article-image" />
+      </a>
+
+      <a href="#" class="article">
+        <span class="tag-name">#technology</span>
+        <img src="/img/placeholder.jpg" alt="" class="article-image" />
+      </a>
+
+      <a href="#" class="article">
+        <span class="tag-name">#nature</span>
+        <img src="/img/placeholder.jpg" alt="" class="article-image" />
+      </a>
+
+      <a href="#" class="article">
+        <span class="tag-name">#health</span>
+        <img src="/img/placeholder.jpg" alt="" class="article-image" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter section">
+  <div class="container">
+    <h2 class="title section-title" data-name="Newsletter">Newsletter</h2>
+
+    <div class="search-form-container-inner">
+      <h6 class="title newsletter-title">Subscribe</h6>
+      <p class="newsletter-description">Ab, debitis alias deleniti voluptas eaque ducimus.</p>
+
+      <form action="" class="search-form">
+        <input type="text" class="search-form-input" placeholder="Enter your email address" />
+        <button class="btn search-form-btn">
+          <i class="ri-mail-send-line"></i>
+        </button>
+      </form>
+    </div>
+  </div>
 </section>
