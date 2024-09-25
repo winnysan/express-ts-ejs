@@ -92,6 +92,33 @@ class Helper {
       })
     })
   }
+
+  /**
+   * Logs the selector and z-index of elements when hovered over.
+   * This method listens for 'mouseover' events and logs the element's CSS selector and z-index.
+   *
+   * @example
+   * Helper.logElementDetailsOnHover();
+   */
+  static logElementDetailsOnHover(): void {
+    document.addEventListener('mouseover', (event: MouseEvent) => {
+      const element = event.target as HTMLElement
+
+      if (element) {
+        let selector = element.tagName.toLowerCase()
+        if (element.id) {
+          selector += `#${element.id}`
+        }
+        if (element.className) {
+          selector += `.${element.className.split(' ').join('.')}`
+        }
+
+        const zIndex = window.getComputedStyle(element).zIndex
+
+        console.log(`Selector: ${selector}, z-index: ${zIndex}`)
+      }
+    })
+  }
 }
 
 export default Helper

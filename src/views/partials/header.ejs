@@ -1,48 +1,51 @@
 <header>
   <nav>
-    <figure class="logo">
+    <figure
+      class="logo"
+      data-name="<%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>"
+    >
       <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
     </figure>
-    <button id="search-open" class="search__button-open">
+    <button id="search-open" class="search__button-open link">
       <span><%- include('./svg/searchIcon.ejs') %></span>
     </button>
-    <button id="hamburger">☰</button>
+    <button id="hamburger" class="link">☰</button>
     <ul class="navigation">
-      <li><a href="/"><%= global.dictionary.navigation.home %></a></li>
+      <li><a href="/" class="link"><%= global.dictionary.navigation.home %></a></li>
       <% if (typeof user === 'undefined') { %>
-      <li><a href="/login"><%= global.dictionary.navigation.login %></a></li>
+      <li><a href="/login" class="link"><%= global.dictionary.navigation.login %></a></li>
       <li>
-        <a href="/register"><%= global.dictionary.navigation.register %></a>
+        <a href="/register" class="link"><%= global.dictionary.navigation.register %></a>
       </li>
       <% } else { %>
       <li>
-        <a href="/dashboard"><%= global.dictionary.navigation.dashboard %></a>
+        <a href="/dashboard" class="link"><%= global.dictionary.navigation.dashboard %></a>
       </li>
       <% if (user.role === 'admin') { %>
-      <li><a href="/admin"><%= global.dictionary.navigation.admin %></a></li>
+      <li><a href="/admin" class="link"><%= global.dictionary.navigation.admin %></a></li>
       <% } %>
       <li>
         <form action="/logout" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <button type="submit"><%= global.dictionary.navigation.logout %></button>
+          <button type="submit" class="link"><%= global.dictionary.navigation.logout %></button>
         </form>
       </li>
       <% } %>
 
       <li class="dropdown">
-        <button class="dropdown__button">Fíčury</button>
+        <button class="dropdown__button link">Fíčury</button>
         <ul class="dropdown__menu">
           <li>
             Reaktivita: <span id="total">0</span>
-            <button id="decrease">-</button>
-            <button id="increase">+</button>
+            <button id="decrease" class="link">-</button>
+            <button id="increase" class="link">+</button>
           </li>
           <li>
-            <button id="fetchButton">Fetch</button>
+            <button id="fetchButton" class="link">Fetch</button>
           </li>
           <li>
-            <button id="enable-light-mode" class="color-mode__button light-mode--hidden">Light mode</button>
-            <button id="enable-dark-mode" class="color-mode__button dark-mode--hidden">Dark mode</button>
+            <button id="enable-light-mode" class="color-mode__button light-mode--hidden link">Light mode</button>
+            <button id="enable-dark-mode" class="color-mode__button dark-mode--hidden link">Dark mode</button>
           </li>
         </ul>
       </li>
@@ -51,7 +54,7 @@
 
   <div id="search-overlay" class="search__overlay">
     <div class="search__container">
-      <button id="search-close" class="search__button-close"><%- include('./svg/closeIcon.ejs') %></button>
+      <button id="search-close" class="search__button-close link"><%- include('./svg/closeIcon.ejs') %></button>
       <form action="/search" class="search__form" method="post">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <input
@@ -61,7 +64,9 @@
           class="search__form-input"
           placeholder="<%= global.dictionary.form.search %>"
         />
-        <button id="search-button" class="search__form-button" disabled><%- include('./svg/searchIcon.ejs') %></button>
+        <button id="search-button" class="search__form-button link" disabled>
+          <%- include('./svg/searchIcon.ejs') %>
+        </button>
 
         <p class="search__escape">Stlač ESC pre zatvorenie</p>
       </form>

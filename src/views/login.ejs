@@ -1,20 +1,31 @@
-<h1><%= global.dictionary.navigation.login %></h1>
-
-<section>
+<section class="section">
+  <h2 class="title" data-name="<%= global.dictionary.navigation.login %>"><%= global.dictionary.navigation.login %></h2>
   <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
   <div style="color: red"><%= error.msg %></div>
   <% }) %> <% } %>
 
-  <form action="/login" method="post">
+  <form action="/login" method="post" class="auth-form">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-    <div>
-      <label for="email"><%= global.dictionary.form.email %></label>
-      <input type="email" name="email" <% if (typeof fill !== 'undefined') { %> value="<%= fill.email %>" <% } %> />
+    <div class="auth-form__group">
+      <label for="email" class="auth-form__label"
+        ><%- include('./partials/svg/mailIcon.ejs', {strokeWidth: 1}) %></label
+      >
+      <input type="email" name="email" class="auth-form__input" <% if (typeof fill !== 'undefined') { %> value="<%=
+      fill.email %>" <% } %> placeholder="<%= global.dictionary.form.email %>"/>
     </div>
-    <div>
-      <label for="password"><%= global.dictionary.form.password %></label>
-      <input type="password" name="password" />
+    <div class="auth-form__group">
+      <label for="password" class="auth-form__label"
+        ><%- include('./partials/svg/keyIcon.ejs', {strokeWidth: 1}) %></label
+      >
+      <input
+        type="password"
+        name="password"
+        class="auth-form__input"
+        placeholder="<%= global.dictionary.form.password %>"
+      />
     </div>
-    <button type="submit"><%= global.dictionary.form.login %></button>
+    <button type="submit" class="auth-form__button"><%= global.dictionary.form.login %></button>
+
+    <p class="auth-form__redirect">Ešte nemáte účet? <a href="/register" class="link">Zaregistrujte sa.</a></p>
   </form>
 </section>
