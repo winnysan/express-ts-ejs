@@ -119,6 +119,33 @@ class Helper {
       }
     })
   }
+
+  /**
+   * Creates a debounced version of a function that delays its execution.
+   * The function will only be executed after the specified delay time has passed
+   * without it being called again.
+   *
+   * @param {Function} func - The function to debounce.
+   * @param {number} delay - The delay time in milliseconds.
+   * @returns {Function} A debounced version of the original function.
+   *
+   * @example
+   * window.addEventListener('resize', Helper.debounce(() => {
+   *   console.log('Window resized!');
+   * }, 1000));
+   */
+  static debounce<T extends (...args: any[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
+    let timeoutId: number | undefined
+
+    return (...args: Parameters<T>): void => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      timeoutId = window.setTimeout(() => {
+        func(...args)
+      }, delay)
+    }
+  }
 }
 
 export default Helper
