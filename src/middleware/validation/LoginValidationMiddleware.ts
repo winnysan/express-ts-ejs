@@ -4,7 +4,7 @@ import { validationResult } from 'express-validator'
 /**
  * Middleware class for validating form data.
  */
-class RegisterValidationMiddleware {
+class LoginValidationMiddleware {
   /**
    * Middleware function to validate data and handle errors.
    * @param {express.Request} req - The HTTP request object.
@@ -23,4 +23,4 @@ class RegisterValidationMiddleware {
   }
 }
 
-export default new RegisterValidationMiddleware()
+export default new LoginValidationMiddleware()

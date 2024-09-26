@@ -31,7 +31,7 @@ task('views-copy', () => src('./src/views/**/*.ejs').pipe(dest('./dist/views')))
 /**
  * copy assets to targer folder
  */
-task('assets-copy', () => src('./src/public/**/*').pipe(dest('./dist/public')))
+task('assets-copy', () => src('./src/public/**/*', { encoding: false }).pipe(dest('./dist/public')))
 
 /**
  * frontend processing by webpack

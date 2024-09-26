@@ -61,13 +61,14 @@ class FormHandler {
           Helper.addErrorMessage(errorsEl, 'Form submission failed')
         } else {
           const result = await response.json()
+
           if (result.errors) {
             result.errors.forEach((error: { msg: string }) => {
               Helper.addErrorMessage(errorsEl, error.msg)
             })
           } else {
-            if (result.slug) {
-              window.location.href = `/post/${result.slug}`
+            if (result.redirect) {
+              window.location.href = result.redirect
             } else {
               Helper.addErrorMessage(errorsEl, 'Form submission failed')
             }

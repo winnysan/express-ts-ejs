@@ -173,7 +173,7 @@ class PostController {
         images,
       })
 
-      res.json({ slug: post.slug })
+      res.json({ redirect: `/post/${post.slug}` })
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }

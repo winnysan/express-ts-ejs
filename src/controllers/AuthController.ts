@@ -34,8 +34,10 @@ class AuthController {
       user.password = ''
       SessionManager.generateAuthToken(res, user._id.toString())
 
-      req.flash('info', global.dictionary.messages.youAreRegisteredAndLoggedIn)
-      res.redirect('/')
+      res.json({
+        message: global.dictionary.messages.youAreRegisteredAndLoggedIn,
+        redirect: '/',
+      })
     } catch (err: unknown) {
       throw new Error(Message.getErrorMessage(err))
     }
@@ -61,13 +63,17 @@ class AuthController {
         user.password = ''
         SessionManager.generateAuthToken(res, user._id.toString())
 
-        req.flash('info', global.dictionary.messages.youAreLoggedIn)
-        res.redirect('/')
+        res.json({
+          message: global.dictionary.messages.youAreLoggedIn,
+          redirect: '/',
+        })
       } else {
-        res.render('login', {
-          alert: [{ msg: global.dictionary.messages.invalidCredentials }],
-          fill: { email: req.body.email },
-          title: global.dictionary.title.loginPage,
+        res.json({
+          errors: [
+            {
+              msg: global.dictionary.messages.invalidCredentials,
+            },
+          ],
         })
       }
     } catch (err: unknown) {

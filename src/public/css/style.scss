@@ -275,7 +275,14 @@ nav {
     display: flex;
     justify-content: center;
     position: relative;
-    &-input,
+    &-input {
+      display: inline-block;
+      padding: 1.5rem;
+      border: 2px solid var(--gray);
+      @media (max-width: 640px) {
+        padding: 1rem 0.5rem;
+      }
+    }
     &-button {
       display: inline-block;
       padding: 1.5rem;
@@ -433,14 +440,14 @@ main {
 footer {
   transform-origin: left bottom;
   position: absolute;
+  z-index: 100;
   bottom: 2rem;
   left: 1.5rem;
   transform: rotate(-90deg);
+  padding: 0.2rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
   font-size: 0.8rem;
   color: var(--gray);
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 0.2rem 1rem;
-  z-index: 100;
   @media (max-width: 640px) {
     bottom: 0;
     left: 0;
@@ -572,8 +579,8 @@ footer {
     display: block;
     position: absolute;
     top: 0;
-    transition: all ease-in-out 0.5s;
     padding-bottom: 1.5rem;
+    transition: all ease-in-out 0.5s;
     border-bottom: 1px solid transparent;
     @media (max-width: 640px) {
       border: none;
@@ -582,20 +589,20 @@ footer {
       border-color: var(--gray);
     }
     & figure {
+      position: relative;
+      overflow: hidden;
       width: 100%;
       height: 0;
       padding-bottom: 100%;
-      position: relative;
-      overflow: hidden;
     }
     & img {
       user-select: none;
+      object-fit: cover;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
       transition: transform 0.5s ease-in-out;
     }
     &:hover img {
@@ -604,9 +611,9 @@ footer {
     & h2 {
       display: block;
       padding: 0.5rem;
+      transition: color 0.5s ease-in-out;
       font-size: 1.2rem;
       color: var(--dark);
-      transition: color 0.5s ease-in-out;
       text-decoration: none;
     }
     &:hover h2 {
@@ -616,11 +623,11 @@ footer {
   & p {
     display: flex;
     gap: 2rem;
-    color: var(--gray);
     padding: 0 0.5rem;
+    color: var(--gray);
     @media (max-width: 640px) {
-      justify-content: space-between;
       flex-wrap: wrap;
+      justify-content: space-between;
     }
     & span {
       display: flex;
@@ -634,17 +641,17 @@ footer {
   }
   &__nav-item,
   &__nav-item {
-    position: absolute;
-    z-index: 100;
-    cursor: pointer;
     display: flex;
-    width: 3rem;
-    height: 3rem;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: var(--white);
+    position: absolute;
+    z-index: 100;
+    width: 3rem;
+    height: 3rem;
     transition: background-color 0.3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    color: var(--white);
     &:hover {
       background-color: rgba(0, 0, 0, 0.3);
     }

@@ -4,14 +4,12 @@
   <div style="color: red"><%= error.msg %></div>
   <% }) %> <% } %>
 
-  <form action="/login" method="post" class="auth-form">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <form id="form" action="/login" method="post" class="auth-form">
     <div class="auth-form__group">
       <label for="email" class="auth-form__label"
         ><%- include('./partials/svg/mailIcon.ejs', {strokeWidth: 1}) %></label
       >
-      <input type="email" name="email" class="auth-form__input" <% if (typeof fill !== 'undefined') { %> value="<%=
-      fill.email %>" <% } %> placeholder="<%= global.dictionary.form.email %>"/>
+      <input type="email" name="email" class="auth-form__input" placeholder="<%= global.dictionary.form.email %>" />
     </div>
     <div class="auth-form__group">
       <label for="password" class="auth-form__label"
