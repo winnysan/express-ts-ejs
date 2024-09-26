@@ -1,4 +1,5 @@
 import ApiClient from './lib/ApiCLient'
+import Carousel from './lib/Carousel'
 import FormHandler from './lib/FormHandler'
 import Helper from './lib/Helper'
 import ImagePreviewHandler from './lib/ImagePreviewHandler'
@@ -20,6 +21,12 @@ Helper.colorModeSwitcher()
  */
 new FormHandler('#form', 'input[name="_csrf"]')
 new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
+
+/**
+ * Initialize Carousel
+ */
+
+new Carousel('#carousel', 3)
 
 /**
  * Fetch

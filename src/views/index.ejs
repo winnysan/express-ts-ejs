@@ -1,4 +1,32 @@
-<h1><%= global.dictionary.navigation.home %></h1>
+<section class="section--full">
+  <div class="carousel__container">
+    <div id="carousel" class="carousel">
+      <% posts.forEach(post => { %>
+      <a href="/post/<%= post.slug %>" class="carousel__item carousel-item" data-name="<%= post.slug %>">
+        <figure>
+          <% if (post.images && post.images.length > 0) { %>
+          <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="<%= post.title %>" />
+          <% } else { %>
+          <img src="/img/placeholder.jpg" alt="placeholder" />
+          <% } %>
+        </figure>
+        <h2><%= post.title %></h2>
+        <p>
+          <span><%- include('./partials/svg/userIcon.ejs') %> <%= post.author.name %></span>
+          <span
+            ><%- include('./partials/svg/calendarIcon.ejs') %><%= new
+            Date(post.createdAt).toLocaleDateString(global.locale) %></span
+          >
+        </p>
+      </a>
+      <% }) %>
+      <div class="carousel__nav-item carousel-nav" data-dir="prev"><%- include('./partials/svg/leftIcon.ejs') %></div>
+      <div class="carousel__nav-item carousel-nav" data-dir="next"><%- include('./partials/svg/rightIcon.ejs') %></div>
+    </div>
+  </div>
+</section>
+
+<!-- <h1><%= global.dictionary.navigation.home %></h1>
 
 <section>
   <% if (messages.length > 0) { %>
@@ -9,21 +37,9 @@
   </div>
   <% } %>
 
-  <ul>
-    <% posts.forEach(post => { %>
-    <li>
-      <a href="/post/<%= post.slug %>"><%= post.title %></a>
-      <span><%= post.author.name %></span>
-      <span
-        ><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span
-      >
-    </li>
-    <% }) %>
-  </ul>
-
   <% if (nextPage !== null) { %>
   <a href="/?page=<%= nextPage %>"
     ><%= global.dictionary.navigation.viewOlderPosts %></a
   >
   <% } %>
-</section>
+</section> -->

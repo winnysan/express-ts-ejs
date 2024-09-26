@@ -29,6 +29,12 @@ ul {
   list-style: none;
 }
 
+a {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
 input,
 button {
   outline: none;
@@ -55,9 +61,6 @@ body {
 
 .link {
   transition: color 0.3s;
-  cursor: pointer;
-  color: inherit;
-  text-decoration: none;
   white-space: nowrap;
   &:not(:disabled):hover {
     color: var(--primary);
@@ -435,6 +438,9 @@ footer {
   transform: rotate(-90deg);
   font-size: 0.8rem;
   color: var(--gray);
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.2rem 1rem;
+  z-index: 100;
   @media (max-width: 640px) {
     bottom: 0;
     left: 0;
@@ -444,8 +450,42 @@ footer {
   }
 }
 
+:root[data-color-mode='dark'] {
+  footer {
+    border: 1px solid var(--primary);
+    border-top: none;
+    @media (max-width: 640px) {
+      border: none;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  @media (min-width: 641px) {
+    max-width: 600px;
+  }
+  @media (min-width: 769px) {
+    max-width: 768px;
+  }
+  @media (min-width: 1025px) {
+    max-width: 960px;
+  }
+  @media (min-width: 1281px) {
+    max-width: 1140px;
+  }
+  @media (min-width: 1536) {
+    max-width: 1320px;
+  }
+}
+
 .section {
   padding-block: 2rem;
+  &--full {
+    padding-block: 2rem;
+    width: 100%;
+  }
 }
 
 .title {
@@ -516,5 +556,114 @@ footer {
     right: 0;
     color: var(--gray);
     text-align: right;
+  }
+}
+
+/* Carousel */
+
+.carousel {
+  position: relative;
+  overflow-x: clip;
+  &__container {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+  &__item {
+    display: block;
+    position: absolute;
+    top: 0;
+    transition: all ease-in-out 0.5s;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid transparent;
+    @media (max-width: 640px) {
+      border: none;
+    }
+    &:hover {
+      border-color: var(--gray);
+    }
+    & figure {
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    & img {
+      user-select: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease-in-out;
+    }
+    &:hover img {
+      transform: scale(1.05);
+    }
+    & h2 {
+      display: block;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      color: var(--dark);
+      transition: color 0.5s ease-in-out;
+      text-decoration: none;
+    }
+    &:hover h2 {
+      color: var(--primary);
+    }
+  }
+  & p {
+    display: flex;
+    gap: 2rem;
+    color: var(--gray);
+    padding: 0 0.5rem;
+    @media (max-width: 640px) {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    & span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      @media (max-width: 640px) {
+        gap: 0.3rem;
+        font-size: 0.6rem;
+      }
+    }
+  }
+  &__nav-item,
+  &__nav-item {
+    position: absolute;
+    z-index: 100;
+    cursor: pointer;
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--white);
+    transition: background-color 0.3s ease-in-out;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+  &__nav-item[data-dir='prev'] {
+    left: 0;
+  }
+  &__nav-item[data-dir='next'] {
+    right: 0;
+  }
+}
+
+:root[data-color-mode='dark'] {
+  .carousel__item {
+    & h2 {
+      color: var(--white);
+    }
+    &:hover h2 {
+      color: var(--primary);
+    }
   }
 }

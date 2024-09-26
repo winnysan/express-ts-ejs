@@ -1,11 +1,6 @@
 <header>
   <nav>
-    <figure
-      class="logo"
-      data-name="<%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>"
-    >
-      <%= global.dictionary.logo %> <% if (typeof user !== 'undefined') { %> <%= user.name %> <% } %>
-    </figure>
+    <figure class="logo" data-name="<%= global.dictionary.logo %>"><%= global.dictionary.logo %></figure>
     <button id="search-open" class="search__button-open link">
       <span><%- include('./svg/searchIcon.ejs') %></span>
     </button>
