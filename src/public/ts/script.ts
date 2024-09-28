@@ -37,7 +37,7 @@ const fetchButton = Helper.selectElement<HTMLSpanElement>('#fetchButton')
 
 fetchButton?.addEventListener('click', () => {
   apiClient
-    .fetch<string>('Hello from frontend', 'hello')
+    .fetch<string>('Hello', 'hello')
     .then(response => {
       console.log('message:', response.message)
       if (response.data) {

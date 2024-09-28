@@ -47,25 +47,52 @@ class Helper {
   }
 
   /**
-   * Appends an error message to a specified unordered list element.
-   *
-   * This helper function creates a new list item (`<li>`) element with the given message,
-   * and appends it to the provided unordered list (`<ul>`) element. This is useful for
-   * dynamically displaying error messages in the UI.
-   *
-   * @param {HTMLUListElement} errorsEl - The unordered list element to which the error message will be appended.
-   * @param {string} message - The error message to be displayed. This message will be set as the text content of the new list item.
-   *
-   * @example
-   * // Assuming 'errorsEl' is a reference to an existing <ul> element in the DOM
-   * Helper.addErrorMessage(errorsEl, 'Form submission failed');
-   *
-   * // This will add a new <li> element with the text "Form submission failed" to the errorsEl <ul> element.
+   * Static method to create or return a toast element by ID.
+   * @param {string} id - The ID of the toast element to create or select.
+   * @returns {HTMLUListElement} The toast element.
    */
-  static addErrorMessage(errorsEl: HTMLUListElement, message: string): void {
+  static makeToast(id: string): HTMLUListElement {
+    let toastEl = Helper.selectElement<HTMLUListElement>(id)
+
+    if (!toastEl) {
+      toastEl = document.createElement('ul')
+      toastEl.id = id.replace('#', '')
+      document.body.appendChild(toastEl)
+    }
+
+    toastEl.innerHTML = ''
+
+    return toastEl
+  }
+
+  /**
+   * Adds a toast message with a specified type and allows setting the disappearance time.
+   *
+   * @param {HTMLUListElement} toastEl - The element where the toast message will be inserted.
+   * @param {string} message - The text of the message to display in the toast.
+   * @param {'info' | 'success' | 'warning' | 'danger'} [type='info'] - The type of the message (toast style), default is 'info'.
+   * @param {number} [duration=5000] - The duration in milliseconds after which the toast will disappear, default is 5000ms (5 seconds).
+   * @returns {void}
+   */
+  static addToastMessage(
+    toastEl: HTMLUListElement,
+    message: string,
+    type: 'info' | 'success' | 'warning' | 'danger' = 'info',
+    duration: number = 5000
+  ): void {
     const li = document.createElement('li')
     li.textContent = message
-    errorsEl.appendChild(li)
+    li.classList.add(type)
+
+    toastEl.appendChild(li)
+
+    setTimeout(() => {
+      li.classList.add('fade-out')
+
+      setTimeout(() => {
+        li.remove()
+      }, 500) // 0.5 seconds corresponds to the CSS opacity transition
+    }, duration) // The duration after which the toast will disappear (in milliseconds)
   }
 
   /**

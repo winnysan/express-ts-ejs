@@ -49,28 +49,35 @@ class FormHandler {
           body: formData,
         })
 
-        let errorsEl = Helper.selectElement<HTMLUListElement>('#errors')
-        if (!errorsEl) {
-          errorsEl = document.createElement('ul')
-          errorsEl.id = 'errors'
-          this.formEl.before(errorsEl)
-        }
-        errorsEl.innerHTML = ''
+        let toastEl = Helper.makeToast('#toast')
+
+        this.formEl.querySelectorAll('.is-error').forEach(element => {
+          element.classList.remove('is-error')
+        })
 
         if (!response.ok) {
-          Helper.addErrorMessage(errorsEl, 'Form submission failed')
+          Helper.addToastMessage(toastEl, 'Form submission failed', 'danger')
         } else {
           const result = await response.json()
 
           if (result.errors) {
-            result.errors.forEach((error: { msg: string }) => {
-              Helper.addErrorMessage(errorsEl, error.msg)
+            result.errors.forEach((error: { msg: string; path: string }) => {
+              Helper.addToastMessage(toastEl, error.msg, 'danger', 3000)
+
+              const inputEl = this.formEl!.querySelector(`[name="${error.path}"]`)
+
+              if (inputEl) {
+                const parentEl = inputEl.closest('div')
+                if (parentEl) {
+                  parentEl.classList.add('is-error')
+                }
+              }
             })
           } else {
             if (result.redirect) {
               window.location.href = result.redirect
             } else {
-              Helper.addErrorMessage(errorsEl, 'Form submission failed')
+              Helper.addToastMessage(toastEl, 'Form submission failed', 'danger')
             }
           }
         }
