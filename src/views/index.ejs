@@ -1,34 +1,40 @@
-<section class="section--full">
-  <div class="carousel__container">
-    <div id="carousel" class="carousel">
-      <% posts.forEach(post => { %>
-      <a href="/post/<%= post.slug %>" class="carousel__item carousel-item" data-name="<%= post.slug %>">
-        <figure>
-          <% if (post.images && post.images.length > 0) { %>
-          <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="<%= post.title %>" />
-          <% } else { %>
-          <img src="/img/placeholder.jpg" alt="placeholder" />
-          <% } %>
-        </figure>
-        <h2><%= post.title %></h2>
-        <p>
-          <span><%- include('./partials/svg/userIcon.ejs') %> <%= post.author.name %></span>
-          <span
-            ><%- include('./partials/svg/calendarIcon.ejs') %><%= new
-            Date(post.createdAt).toLocaleDateString(global.locale) %></span
-          >
-        </p>
-      </a>
-      <% }) %>
-      <div class="carousel__nav-item carousel-nav" data-dir="prev"><%- include('./partials/svg/leftIcon.ejs') %></div>
-      <div class="carousel__nav-item carousel-nav" data-dir="next"><%- include('./partials/svg/rightIcon.ejs') %></div>
+<main class="container">
+  <section class="section--full"><%- include('./partials/hero.ejs', { posts }) %></section>
+
+  <section class="section--full">
+    <h2 class="title" data-name="Carousel">Carousel</h2>
+
+    <div class="carousel__container">
+      <div id="carousel" class="carousel">
+        <% posts.forEach(post => { %>
+        <a href="/post/<%= post.slug %>" class="carousel__item carousel-item" data-name="<%= post.slug %>">
+          <figure>
+            <% if (post.images && post.images.length > 0) { %>
+            <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="<%= post.title %>" />
+            <% } else { %>
+            <img src="/img/placeholder.jpg" alt="placeholder" />
+            <% } %>
+          </figure>
+          <h2><%= post.title %></h2>
+          <p>
+            <span><%- include('./partials/svg/userIcon.ejs') %> <%= post.author.name %></span>
+            <span
+              ><%- include('./partials/svg/calendarIcon.ejs') %><%= new
+              Date(post.createdAt).toLocaleDateString(global.locale) %></span
+            >
+          </p>
+        </a>
+        <% }) %>
+        <div class="carousel__nav-item carousel-nav" data-dir="prev"><%- include('./partials/svg/leftIcon.ejs') %></div>
+        <div class="carousel__nav-item carousel-nav" data-dir="next">
+          <%- include('./partials/svg/rightIcon.ejs') %>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- <h1><%= global.dictionary.navigation.home %></h1>
-
-<section>
+<!-- <section>
   <% if (messages.length > 0) { %>
   <div>
     <% messages.forEach(message => { %>

@@ -1,0 +1,12 @@
+<div class="feature-articles__container">
+  <div class="feature-articles__grid">
+    <% posts.forEach((post, index) => { %>
+    <div class="article"><%= index + 1 %> <%= post.title %></div>
+    <% }) %>
+  </div>
+  <aside class="trending-news__grid">
+    <% posts.forEach((post, index) => { %>
+    <div class="news"><%= index + 1 %> <%= post.title %></div>
+    <% }) %>
+  </aside>
+</div>
