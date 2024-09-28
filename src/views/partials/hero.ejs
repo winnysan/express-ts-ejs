@@ -8,8 +8,8 @@
         <p>
           <span><%- include('./svg/userIcon.ejs') %> <%= post.author.name %></span>
           <span
-            ><%- include('./svg/calendarIcon.ejs') %><%= new Date(post.createdAt).toLocaleDateString(global.locale)
-            %></span
+            ><%- include('./svg/calendarIcon.ejs') %><%= new
+            Date(post.createdAt).toLocaleDateString(global.locale)%></span
           >
         </p>
       </div>
@@ -17,8 +17,19 @@
     <% }) %>
   </div>
   <aside class="trending-news__grid">
-    <% posts.forEach((post, index) => { %>
-    <div class="news"><%= index + 1 %> <%= post.title %></div>
+    <% posts.forEach((post,index) => { %>
+    <a class="news">
+      <h3><%= post.title %></h3>
+      <div class="news__data-group">
+        <p>
+          <span><%- include('./svg/userIcon.ejs') %> <%= post.author.name %></span>
+          <span>
+            <%- include('./svg/calendarIcon.ejs') %><%= new Date(post.createdAt).toLocaleDateString(global.locale)%>
+          </span>
+        </p>
+      </div>
+      <figure><%- include('./image.ejs', { post }) %></figure>
+    </a>
     <% }) %>
   </aside>
 </div>

@@ -2,12 +2,14 @@
 
 :root {
   --font-family: 'Poppins', sans-serif;
-  --black: #101010;
-  --dark: #262626;
   --white: #fefefe;
+  --gray: #737373;
+  --dark: #262626;
+  --black: #101010;
   --primary: #0284c7;
   --red: #ef4444;
-  --gray: #737373;
+  --transparent-light: rgba(0, 0, 0, 0.2);
+  --transparent-dark: rgba(0, 0, 0, 0.5);
 }
 
 :root[data-color-mode='dark'] {
@@ -91,6 +93,8 @@ body {
 
 #overlay {
   @media (max-width: 640px) {
+    // transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    // background-color: var(--transparent-dark);
     position: fixed;
     z-index: 10;
     top: 0;
@@ -98,8 +102,6 @@ body {
     opacity: 0;
     width: 100%;
     height: 0;
-    // transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    // background-color: rgba(0, 0, 0, 0.5);
   }
   &.active {
     // opacity: 1;
@@ -108,12 +110,12 @@ body {
 }
 
 header {
-  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 10px var(--transparent-light);
+  z-index: 20;
   padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--transparent-light);
   border-bottom: 1px solid transparent;
   color: var(--dark);
-  z-index: 20;
   @media (max-width: 640px) {
     padding: 0.5rem;
   }
@@ -258,7 +260,7 @@ nav {
     width: 100%;
     max-height: 0;
     padding-top: 0;
-    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
     &.active {
       max-height: 500px;
       padding-top: 1rem;
@@ -276,7 +278,7 @@ nav {
     transform: scale(0);
     width: 100%;
     height: 100%;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     background-color: var(--dark);
     color: var(--white);
     &.active {
@@ -376,7 +378,6 @@ nav {
 .dropdown__menu {
   transform-origin: top right;
   pointer-events: none;
-
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -387,10 +388,10 @@ nav {
   transform: scale(0);
   width: fit-content;
   padding: 0.5rem 1rem;
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   background-color: var(--white);
   border: 1px solid var(--primary);
-  color: var(--black);
+  color: var(--dark);
   white-space: nowrap;
   @media (max-width: 640px) {
     position: static;
@@ -401,28 +402,24 @@ nav {
     max-height: 0;
     margin-top: 0.5rem;
     padding: 0;
-    transition: max-height 0.5s ease-in-out;
+    transition: max-height 0.3s ease-in-out;
     background-color: transparent;
     border: 0;
     color: inherit;
   }
   &.active {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--transparent-light);
     pointer-events: auto;
     opacity: 1;
     transform: scale(1);
     @media (max-width: 640px) {
-      max-height: 200px;
       box-shadow: none;
+      max-height: 200px;
     }
   }
 }
 
-/* *** */
-
-#errors {
-  color: var(--red);
-}
+/* Dropzone */
 
 .drop-area {
   display: block;
@@ -496,7 +493,7 @@ footer {
   left: 0;
   transform: rotate(-90deg);
   padding: 0.2rem 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--transparent-light);
   color: var(--gray);
   @media (max-width: 640px) {
     position: relative;
@@ -557,14 +554,16 @@ footer {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr;
+    height: fit-content;
     @media (min-width: 769px) {
       grid-template-columns: 1fr 1fr;
     }
     .article {
-      position: relative;
+      box-shadow: 0 0px 10px var(--transparent-light);
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       overflow: hidden;
       width: 100%;
       height: 20rem;
@@ -585,35 +584,35 @@ footer {
         }
       }
       & img {
+        object-fit: cover;
         width: 100%;
         height: 100%;
         min-height: auto;
-        object-fit: cover;
-        transition: transform 0.5s ease-in-out;
+        transition: transform 0.3s ease-in-out;
       }
       & h3 {
         overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        line-height: 3rem;
-        letter-spacing: 0.1rem;
+        transition: color 0.3s ease-in-out;
         font-size: 1.5rem;
+        line-height: 3rem;
         text-transform: uppercase;
-        transition: color 0.5s ease-in-out;
+        text-overflow: ellipsis;
+        letter-spacing: 0.1rem;
+        white-space: nowrap;
         @media (max-width: 640px) {
           font-size: 1rem;
         }
       }
       &__data-group {
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
         width: 100%;
         padding: 0.5rem;
         padding-bottom: 1rem;
+        transition: background-color 0.3s ease-in-out;
+        background-color: var(--transparent-dark);
         color: var(--white);
-        background-color: rgba(0, 0, 0, 0.5);
-        transition: background-color 0.5s ease-in-out;
         & p {
           display: flex;
           flex-wrap: wrap;
@@ -623,10 +622,10 @@ footer {
             justify-content: space-between;
           }
           & span {
-            white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            white-space: nowrap;
           }
         }
       }
@@ -635,7 +634,7 @@ footer {
           transform: scale(1.05);
         }
         & .article__data-group {
-          background-color: rgba(0, 0, 0, 0.2);
+          background-color: var(--transparent-light);
           & h3 {
             color: var(--primary);
           }
@@ -650,21 +649,94 @@ footer {
     display: grid;
     gap: 0.5rem;
     grid-template-columns: 1fr;
+    height: fit-content;
     @media (min-width: 769px) {
       grid-template-columns: 1fr 1fr;
     }
     @media (min-width: 1025px) {
+      gap: 0.3rem;
       grid-template-columns: 1fr;
     }
     .news {
-      padding: 0.5rem;
-      background-color: #ccc;
-      border: 1px solid #777;
+      box-shadow: 0 0px 10px var(--transparent-light);
+      display: flex;
+      gap: 1rem;
+      position: relative;
+      width: 100%;
+      height: 6rem;
+      padding: 0.2rem;
+      background-color: var(--transparent-light);
       color: var(--dark);
       &:nth-child(n + 7) {
         display: none;
       }
+      & figure {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 6rem;
+        max-width: 6rem;
+        height: 100%;
+        & img {
+          object-fit: cover;
+          filter: grayscale(1);
+          width: 100%;
+          height: 100%;
+          transition: filter 0.3s ease-in-out;
+        }
+      }
+      &__data-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        flex-grow: 1;
+        width: 100%;
+        padding: 0.3rem 0.5rem;
+        & p {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          column-gap: 1rem;
+          span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+          }
+        }
+      }
+      & h3 {
+        position: absolute;
+        z-index: 10;
+        top: 0.2rem;
+        left: 0.2rem;
+        right: 0.2rem;
+        overflow: hidden;
+        padding: 0.3rem;
+        transition: color 0.3s ease-in-out;
+        background-color: var(--transparent-light);
+        color: white;
+        text-transform: uppercase;
+        text-overflow: ellipsis;
+        letter-spacing: 0.1rem;
+        white-space: nowrap;
+      }
+      &:hover {
+        h3 {
+          color: var(--primary);
+        }
+        & img {
+          filter: grayscale(0);
+        }
+      }
     }
+  }
+}
+
+:root[data-color-mode='dark'] {
+  .trending-news__grid .news {
+    background-color: var(--dark);
+    color: var(--white);
   }
 }
 
@@ -735,7 +807,7 @@ footer {
   &__button {
     width: 100%;
     padding: 0.7rem;
-    transition: background-color 0.5s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     background-color: var(--gray);
     color: var(--white);
     text-align: center;
@@ -766,7 +838,7 @@ footer {
     position: absolute;
     top: 0;
     padding-bottom: 1.5rem;
-    transition: all ease-in-out 0.5s;
+    transition: all ease-in-out 0.3s;
     border-bottom: 1px solid transparent;
     @media (max-width: 640px) {
       border: none;
@@ -789,7 +861,7 @@ footer {
       left: 0;
       width: 100%;
       height: 100%;
-      transition: transform 0.5s ease-in-out;
+      transition: transform 0.3s ease-in-out;
     }
     &:hover img {
       transform: scale(1.05);
@@ -797,7 +869,7 @@ footer {
     & h2 {
       display: block;
       padding: 0.5rem;
-      transition: color 0.5s ease-in-out;
+      transition: color 0.3s ease-in-out;
       font-size: 1.2rem;
       color: var(--dark);
       text-decoration: none;
@@ -835,11 +907,11 @@ footer {
     width: 3rem;
     height: 3rem;
     transition: background-color 0.3s ease-in-out;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--transparent-dark);
     cursor: pointer;
     color: var(--white);
     &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: var(--transparent-light);
     }
   }
   &__nav-item[data-dir='prev'] {
@@ -878,12 +950,12 @@ footer {
     width: auto;
   }
   & li {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--transparent-light);
     opacity: 0.9;
     transform: translateY(0.5rem);
     margin-bottom: 0.5rem;
     padding: 0.3rem 1rem;
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
     border-radius: 0.5rem;
     color: var(--white);
   }
@@ -903,6 +975,6 @@ footer {
   & li.fade-out {
     opacity: 0;
     transform: translateY(0.5rem);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
   }
 }
