@@ -1,0 +1,5 @@
+<% if (post.images && post.images.length > 0) { %>
+<img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="<%= post.title %>" />
+<% } else { %>
+<img src="/img/placeholder.jpg" alt="Placeholder image" />
+<% } %>
