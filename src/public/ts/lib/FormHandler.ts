@@ -112,6 +112,8 @@ class FormHandler {
             if (result.redirect) {
               // If a redirect URL is provided, navigate to it
               window.location.href = result.redirect
+            } else if (result.json) {
+              console.log(result.json)
             } else {
               // Otherwise, show a generic failure message
               Helper.addToastMessage(toastEl, 'Form submission failed', 'danger')

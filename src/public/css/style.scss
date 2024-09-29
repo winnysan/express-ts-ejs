@@ -535,6 +535,21 @@ footer {
   }
 }
 
+.grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  @media (min-width: 1025px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  & > * {
+    height: fit-content;
+  }
+  & > :nth-child(1):only-child {
+    grid-column: span 2;
+  }
+}
+
 /* Feature articles */
 
 .feature-articles {
@@ -567,6 +582,7 @@ footer {
       overflow: hidden;
       width: 100%;
       height: 20rem;
+      max-height: 41rem;
       @media (max-width: 640px) {
         height: 16rem;
       }
@@ -982,49 +998,49 @@ footer {
 /* Editor */
 
 .post-form {
-  box-shadow: 0 4px 8px var(--transparent-light);
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
+  box-shadow: 0 0.3rem 0.5rem var(--transparent-light);
+  max-width: 37.5rem;
+  margin: 1.3rem;
+  padding: 1.3rem;
   background: #f9f9f9;
-  border-radius: 8px;
+  border-radius: 0.3rem;
   font-family: Arial, sans-serif;
   color: var(--dark);
 }
 
 .post-form div {
-  margin-bottom: 15px;
+  margin-bottom: 0.9rem;
 }
 
 .post-form label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0.3rem;
   font-weight: bold;
-  color: #333;
+  color: var(--dark);
 }
 
 .post-form input[type='text'],
 .post-form textarea {
   box-sizing: border-box;
   width: 100%;
-  padding: 8px;
-  border: 1px solid var(--transparent-light);
-  border-radius: 4px;
+  padding: 0.5rem;
   background-color: var(--white);
+  border: 1px solid var(--transparent-light);
+  border-radius: 0.1rem;
 }
 
 .post-form textarea {
   resize: vertical;
-  height: 150px;
+  height: 9.4rem;
 }
 
 .post-form button {
-  padding: 10px 20px;
+  padding: 0.6rem 1.3rem;
   background-color: var(--dark);
   cursor: pointer;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 0.1rem;
+  font-size: 1rem;
   color: white;
 }
 
@@ -1033,23 +1049,23 @@ footer {
 }
 
 .editor {
-  padding: 10px;
+  padding: 0.6rem;
   background: var(--white);
   border: 1px solid var(--transparent-light);
-  border-radius: 4px;
+  border-radius: 0.1rem;
 }
 
 .toolbar {
-  margin-bottom: 10px;
+  margin-bottom: 0.6rem;
 }
 
 .toolbar button {
-  margin-right: 5px;
-  padding: 5px 10px;
+  margin-right: 0.3rem;
+  padding: 0.3rem 0.6rem;
   background: var(--dark);
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 0.1rem;
+  font-size: 0.9rem;
 }
 
 .toolbar button:hover {
@@ -1058,10 +1074,10 @@ footer {
 
 .content {
   outline: none;
-  min-height: 100px;
-  padding: 10px;
+  min-height: 6.3rem;
+  padding: 0.6rem;
   border: 1px solid var(--transparent-light);
-  border-radius: 4px;
+  border-radius: 0.1rem;
 }
 
 .post-form input[type='text']:focus,

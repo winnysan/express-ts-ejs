@@ -33,6 +33,7 @@ class DashboardRouter {
    * - `GET /` to fetch posts by the authenticated user.
    * - `GET /new-post` to render the new post creation page for authenticated users.
    * - `POST /new-post` to handle form submission for creating a new post, including validation.
+   * - `POST /edit-post/:id
    */
   private setRoutes(): void {
     this.router.get('/', AuthMiddleware.protect, PostController.getPostsByUserID)
@@ -44,6 +45,14 @@ class DashboardRouter {
       PostValidator.getPostSchema(),
       PostValidationMiddleware.validate,
       PostController.newPost
+    )
+    this.router.post(
+      '/edit-post/:id',
+      AuthMiddleware.protect,
+      upload.array('images'),
+      PostValidator.getPostSchema(),
+      PostValidationMiddleware.validate,
+      PostController.editPost
     )
   }
 }
