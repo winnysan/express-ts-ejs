@@ -8,6 +8,7 @@
     <% }) %> <% } %>
 
     <form id="form" action="/login" method="post" class="auth-form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="auth-form__group">
         <label for="email" class="auth-form__label"
           ><%- include('./partials/svg/mailIcon.ejs', {strokeWidth: 1}) %></label

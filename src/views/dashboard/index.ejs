@@ -1,15 +1,17 @@
-<h1><%= global.dictionary.navigation.dashboard %></h1>
+<main class="container">
+  <section class="section--full">
+    <h2 class="title" data-name="<%= global.dictionary.navigation.dashboard %>">
+      <%= global.dictionary.navigation.dashboard %>
+    </h2>
+    <a href="/dashboard/new-post"><%= global.dictionary.navigation.newPost %></a>
 
-<section>
-  <a href="/dashboard/new-post"><%= global.dictionary.navigation.newPost %></a>
-
-<ul>
-  <% posts.forEach(post => { %>
-  <li>
-    <a href="/post/<%= post.slug %>"><%= post.title %></a>
-    <span
-      ><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span
-    >
-  </li>
-  <% }) %>
-</section>
+    <ul>
+      <% posts.forEach(post => { %>
+      <li>
+        <a href="/post/<%= post.slug %>"><%= post.title %></a>
+        <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
+      </li>
+      <% }) %>
+    </ul>
+  </section>
+</main>

@@ -1,23 +1,27 @@
-<h1><%= global.dictionary.navigation.newPost %></h1>
+<main class="container">
+  <section class="section--full">
+    <h2 class="title" data-name="<%= global.dictionary.navigation.newPost %>">
+      <%= global.dictionary.navigation.newPost %>
+    </h2>
 
-<section>
-  <form id="form" action="/dashboard/new-post" enctype="multipart/form-data" method="post">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-    <div>
-      <label for="title"><%= global.dictionary.form.title %></label>
-      <input type="text" name="title" <% if (typeof fill !== 'undefined') { %> value="<%= fill.postTitle %>" <% } %> />
-    </div>
-    <div>
-      <label for="body"><%= global.dictionary.form.body %></label>
-      <textarea type="text" name="body"><% if (typeof fill !== 'undefined') { %><%= fill.postBody %><% } %></textarea>
-    </div>
-    <div>
-      <label id="drop-area" for="images" class="drop-area"
-        ><%= global.dictionary.form.images %>
-        <input id="input-images" type="file" name="images" multiple style="display: none" />
-      </label>
-      <ul id="preview-images" class="preview-images__wrapper"></ul>
-    </div>
-    <button type="submit"><%= global.dictionary.form.addNewPost %></button>
-  </form>
-</section>
+    <form
+      id="form"
+      action="/dashboard/new-post"
+      enctype="multipart/form-data"
+      method="post"
+      data-form="editor"
+      class="post-form"
+    >
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <div>
+        <label for="title"><%= global.dictionary.form.title %></label>
+        <input type="text" name="title" />
+      </div>
+      <div>
+        <label for="body"><%= global.dictionary.form.body %></label>
+        <textarea name="body"></textarea>
+      </div>
+      <button type="submit"><%= global.dictionary.form.addNewPost %></button>
+    </form>
+  </section>
+</main>

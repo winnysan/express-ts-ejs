@@ -141,13 +141,14 @@ class PostController {
    */
   public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
-      const { title, body } = req.body
+      let { title, body } = req.body
 
       const images = req.files
         ? (req.files as Express.Multer.File[]).map((file, index) => {
             const uuid = uuidv4()
             const tempPath = file.path
-            const targetPath = path.join('uploads/', `${uuid}${path.extname(file.originalname)}`)
+            const extension = path.extname(file.originalname)
+            const targetPath = path.join('uploads/', `${uuid}${extension}`)
 
             fs.move(tempPath, targetPath, err => {
               if (err) throw new Error(Message.getErrorMessage(err))
@@ -156,7 +157,8 @@ class PostController {
             return {
               uuid,
               name: file.originalname,
-              extension: path.extname(file.originalname),
+              filename: `${uuid}${extension}`,
+              extension,
               mime: file.mimetype,
               size: file.size,
               order: index + 1,
@@ -164,6 +166,11 @@ class PostController {
             }
           })
         : []
+
+      images.forEach(image => {
+        const regex = new RegExp(`(<img[^>]+src=["']${image.name}["'][^>]*>)`, 'g')
+        body = body.replace(regex, `<img src="/uploads/${image.filename}" alt="${image.name}">`)
+      })
 
       const post = await Post.create({
         author: req.session.user!._id,

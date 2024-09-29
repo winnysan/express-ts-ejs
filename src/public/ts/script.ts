@@ -1,5 +1,6 @@
 import ApiClient from './lib/ApiCLient'
 import Carousel from './lib/Carousel'
+import Editor from './lib/Editor'
 import FormHandler from './lib/FormHandler'
 import Helper from './lib/Helper'
 import ImagePreviewHandler from './lib/ImagePreviewHandler'
@@ -14,13 +15,18 @@ console.log(
 /**
  * Initialize color mode switcher
  */
+
 Helper.colorModeSwitcher()
 
 /**
- * Initialize FormHandler and ImagePreviewHandler
+ * Initialize Editor, FormHandler, ImagePreviewHandler
  */
-new FormHandler('#form', 'input[name="_csrf"]')
-new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
+
+document.addEventListener('DOMContentLoaded', () => {
+  const editor = new Editor('#form')
+  new FormHandler('#form', 'input[name="_csrf"]', editor)
+  new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
+})
 
 /**
  * Initialize Carousel
@@ -31,6 +37,7 @@ new Carousel('#carousel', 3)
 /**
  * Fetch
  */
+
 const apiClient = new ApiClient('http://localhost:7000/api')
 
 const fetchButton = Helper.selectElement<HTMLSpanElement>('#fetchButton')
