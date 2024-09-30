@@ -2,30 +2,28 @@
   <section class="section--full">
     <h1 class="title" data-name="<%= post.title %>"><%= post.title %></h1>
 
-    <div class="grid">
-      <article><%- post.body %></article>
-
-      <% if (isAuthor) { %>
-      <form
-        id="form"
-        action="/dashboard/edit-post/<%= post._id %>"
-        enctype="multipart/form-data"
-        method="post"
-        data-form="editor"
-        class="post-form"
-      >
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-        <div>
-          <label for="title"><%= global.dictionary.form.title %></label>
-          <input type="text" name="title" value="<%= post.title %>" />
-        </div>
-        <div>
-          <label for="body"><%= global.dictionary.form.body %></label>
-          <textarea name="body"><%- post.body %></textarea>
-        </div>
-        <button type="submit">Edit</button>
-      </form>
-      <% } %>
-    </div>
+    <% if (isAuthor) { %>
+    <form
+      id="form"
+      action="/dashboard/edit-post/<%= post._id %>"
+      enctype="multipart/form-data"
+      method="post"
+      data-form="editor"
+      class="post-form"
+    >
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <div>
+        <label for="title"><%= global.dictionary.form.title %></label>
+        <input type="text" name="title" value="<%= post.title %>" />
+      </div>
+      <div>
+        <label for="body"><%= global.dictionary.form.body %></label>
+        <textarea name="body"><%- post.body %></textarea>
+      </div>
+      <button type="submit">Edit</button>
+    </form>
+    <% } else { %>
+    <article><%- post.body %></article>
+    <% } %>
   </section>
 </main>
