@@ -4,6 +4,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import AsyncHandler from '../lib/AsyncHandler'
 import Message from '../lib/Message'
+import { ProcessImages } from '../lib/ProcessImages'
 import StringHelper from '../lib/StringHelper'
 import Post, { IPost } from '../models/Post'
 
@@ -139,30 +140,33 @@ class PostController {
 
       // Process uploaded images, if any
       const images = req.files
-        ? (req.files as Express.Multer.File[]).map((file, index) => {
-            const uuid = uuidv4() // Generate a unique UUID for the image
-            const tempPath = file.path // Temporary upload path
-            const extension = path.extname(file.originalname) // Get the file extension
-            const filename = `${uuid}${extension}`
-            const targetPath = path.join('uploads/', filename) // Define the target path for the image
+        ? await Promise.all(
+            (req.files as Express.Multer.File[]).map(async (file, index) => {
+              const uuid = uuidv4() // Generate a unique UUID for the image
+              const tempPath = file.path // Temporary upload path
+              const extension = path.extname(file.originalname) // Get the file extension
+              const filename = `${uuid}${extension}`
+              const targetPath = path.join('uploads/', filename) // Define the target path for the image
 
-            // Move the file from the temporary path to the target path
-            fs.move(tempPath, targetPath, err => {
-              if (err) throw new Error(Message.getErrorMessage(err))
+              // Resize the image
+              await ProcessImages.resize(file)
+
+              // Move the file from the temporary path to the target path
+              await fs.move(tempPath, targetPath)
+
+              // Return metadata about the uploaded image
+              return {
+                uuid,
+                name: file.originalname,
+                filename: filename,
+                extension,
+                mime: file.mimetype,
+                size: file.size,
+                order: index + 1,
+                createdAt: new Date(),
+              }
             })
-
-            // Return metadata about the uploaded image
-            return {
-              uuid,
-              name: file.originalname,
-              filename: filename,
-              extension,
-              mime: file.mimetype,
-              size: file.size,
-              order: index + 1,
-              createdAt: new Date(),
-            }
-          })
+          )
         : []
 
       // Update the body with the new image paths
@@ -223,44 +227,49 @@ class PostController {
 
       // Process uploaded files
       const newImages = req.files
-        ? (req.files as Express.Multer.File[]).map((file, index) => {
-            const uuid = uuidv4() // Generate a unique UUID for the new image
-            const extension = path.extname(file.originalname) // Get the file extension
-            const filename = `${uuid}${extension}`
-            const targetPath = path.join('uploads/', filename) // Define the target path for the new image
+        ? await Promise.all(
+            (req.files as Express.Multer.File[]).map(async (file, index) => {
+              const uuid = uuidv4() // Generate a unique UUID for the new image
+              const extension = path.extname(file.originalname) // Get the file extension
+              const filename = `${uuid}${extension}`
+              const targetPath = path.join('uploads/', filename) // Define the target path for the new image
 
-            // Move the file from the temporary path to the target path
-            fs.moveSync(file.path, targetPath)
+              // Resize the image
+              await ProcessImages.resize(file)
 
-            // Update the body with the new image paths
-            const originalName = file.originalname
+              // Move the file from the temporary path to the target path
+              await fs.move(file.path, targetPath)
 
-            // Escape special characters in the original file name
-            function escapeRegExp(string: string): string {
-              return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')
-            }
+              // Update the body with the new image paths
+              const originalName = file.originalname
 
-            // Regex to find the markdown syntax image with the original file name
-            const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${escapeRegExp(originalName)}\\)`, 'g')
+              // Escape special characters in the original file name
+              function escapeRegExp(string: string): string {
+                return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')
+              }
 
-            // Replace the image name in the markdown syntax with the new image URL
-            const imageUrl = `/uploads/${filename}`
-            body = body.replace(regex, `![$1](${imageUrl})`)
+              // Regex to find the markdown syntax image with the original file name
+              const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${escapeRegExp(originalName)}\\)`, 'g')
 
-            // Add the new image URL to the set of used images
-            usedImageUrls.add(imageUrl)
+              // Replace the image name in the markdown syntax with the new image URL
+              const imageUrl = `/uploads/${filename}`
+              body = body.replace(regex, `![$1](${imageUrl})`)
 
-            return {
-              uuid,
-              name: file.originalname,
-              filename: filename,
-              extension,
-              mime: file.mimetype,
-              size: file.size,
-              order: post.images.length + index + 1,
-              createdAt: new Date(),
-            }
-          })
+              // Add the new image URL to the set of used images
+              usedImageUrls.add(imageUrl)
+
+              return {
+                uuid,
+                name: file.originalname,
+                filename: filename,
+                extension,
+                mime: file.mimetype,
+                size: file.size,
+                order: post.images.length + index + 1,
+                createdAt: new Date(),
+              }
+            })
+          )
         : []
 
       // Merge images: existing images that are still used, plus new images
