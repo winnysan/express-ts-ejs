@@ -123,21 +123,14 @@ class PostController {
   }
 
   /**
-   * Creates a new post and returns the created post in JSON format.
+   * Creates a new post in the database with the provided title and body.
+   * Processes any uploaded images and updates the body with the new image paths.
    *
-   * @param {express.Request} req - The Express request object containing the post data and uploaded files.
-   * @param {express.Response} res - The Express response object used to send the JSON response.
-   * @returns {Promise<void>} A JSON response with the newly created post, including its slug.
+   * @param {express.Request} req - The request object containing the post data and files.
+   * @param {express.Response} res - The response object used to send the JSON response.
+   * @returns {Promise<void>} A promise that resolves when the post is created and the response is sent.
    *
-   * @description This method handles the creation of a new post. It processes any uploaded images by moving them
-   * from the temporary upload directory to the target `uploads/` directory. For each uploaded image, it generates
-   * metadata including a unique UUID, original file name, file extension, MIME type, file size, order of the image,
-   * and creation timestamp. This metadata, along with the post data, is stored in the database. The post title is used
-   * to generate a unique slug, which is appended with a timestamp to ensure uniqueness.
-   *
-   * If any errors occur during the file move operation or database operations, they are caught, and an appropriate error
-   * message is generated. Upon successful creation of the post, the method returns a JSON response containing the slug
-   * of the newly created post. The response format is designed for easy client-side redirection to the newly created post.
+   * @throws {Error} Throws an error if there is an issue with file processing or post creation.
    */
   public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -150,7 +143,8 @@ class PostController {
             const uuid = uuidv4() // Generate a unique UUID for the image
             const tempPath = file.path // Temporary upload path
             const extension = path.extname(file.originalname) // Get the file extension
-            const targetPath = path.join('uploads/', `${uuid}${extension}`) // Define the target path for the image
+            const filename = `${uuid}${extension}`
+            const targetPath = path.join('uploads/', filename) // Define the target path for the image
 
             // Move the file from the temporary path to the target path
             fs.move(tempPath, targetPath, err => {
@@ -161,7 +155,7 @@ class PostController {
             return {
               uuid,
               name: file.originalname,
-              filename: `${uuid}${extension}`,
+              filename: filename,
               extension,
               mime: file.mimetype,
               size: file.size,
@@ -173,8 +167,9 @@ class PostController {
 
       // Update the body with the new image paths
       images.forEach(image => {
-        const regex = new RegExp(`(<img[^>]+src=["']${image.name}["'][^>]*>)`, 'g')
-        body = body.replace(regex, `<img src="/uploads/${image.filename}" alt="${image.name}">`)
+        const imageMarkdownRegex = new RegExp(`!\\[([^\\]]*)\\]\\(${image.name}\\)`, 'g')
+        const imageUrl = `/uploads/${image.filename}`
+        body = body.replace(imageMarkdownRegex, `![$1](${imageUrl})`)
       })
 
       // Create the new post in the database
@@ -195,41 +190,34 @@ class PostController {
   })
 
   /**
-   * Edits an existing post and returns the updated post in JSON format.
+   * Edits an existing post in the database.
+   * Updates the title, body, and images associated with the post.
    *
-   * @param {express.Request} req - The Express request object containing the updated post data and uploaded files.
-   * @param {express.Response} res - The Express response object used to send the JSON response.
-   * @returns {Promise<void>} A JSON response with the updated post, including its slug.
+   * @param {express.Request} req - The request object containing the post ID and updated data.
+   * @param {express.Response} res - The response object used to send the JSON response.
+   * @returns {Promise<void>} A promise that resolves when the post is updated and the response is sent.
    *
-   * @description This method handles the editing of an existing post. It first retrieves the post from the database
-   * using the provided post ID. It processes any uploaded images, updating their paths in the post body if necessary,
-   * and manages the existing images by checking their UUIDs against the images present in the updated post body.
-   *
-   * If any errors occur during the image upload, file operations, or database updates, they are caught and an
-   * appropriate error message is generated. Upon successful update of the post, the method returns a JSON response
-   * containing the slug of the updated post. This response format is designed for easy client-side redirection
-   * to the updated post.
+   * @throws {Error} Throws an error if the post is not found, or if there is an issue with file processing or updating the post.
    */
   public editPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
-      // Retrieve the post by ID
+      // Find the post by ID
       const post = await Post.findById(req.params.id)
       if (!post) {
-        return res.status(404).json({ errors: [{ msg: 'Post not found' }] }) // Handle case where post is not found
+        return res.status(404).json({ errors: [{ msg: 'Post not found' }] }) // Handle case where the post is not found
       }
 
-      // Extract updated title and body from the request
+      // Get updated title and body from the request
       let { title, body } = req.body
 
-      // Extract all 'src' attributes from the img tags in the post body
-      const usedImageUuids = new Set<string>()
-      const imgSrcRegex = /<img[^>]+src=["']\/uploads\/([a-f0-9\-]+)\.([a-zA-Z0-9]+)["']/g
+      // Extract all image URLs from markdown syntax in the post body
+      const usedImageUrls = new Set<string>()
+      const imageMarkdownRegex = /!\[[^\]]*\]\(([^)]+)\)/g
       let match
-      while ((match = imgSrcRegex.exec(body)) !== null) {
-        const uuid = match[1]
-        const extension = match[2]
-        if (uuid && extension) {
-          usedImageUuids.add(uuid) // Add used UUIDs to the set
+      while ((match = imageMarkdownRegex.exec(body)) !== null) {
+        const imageUrl = match[1] // This is the image URL in markdown syntax
+        if (imageUrl) {
+          usedImageUrls.add(imageUrl) // Add used image URLs to the set
         }
       }
 
@@ -238,27 +226,34 @@ class PostController {
         ? (req.files as Express.Multer.File[]).map((file, index) => {
             const uuid = uuidv4() // Generate a unique UUID for the new image
             const extension = path.extname(file.originalname) // Get the file extension
-            const targetFilename = `${uuid}${extension}`
-            const targetPath = path.join('uploads/', targetFilename) // Define the target path for the new image
+            const filename = `${uuid}${extension}`
+            const targetPath = path.join('uploads/', filename) // Define the target path for the new image
 
             // Move the file from the temporary path to the target path
             fs.moveSync(file.path, targetPath)
 
             // Update the body with the new image paths
+            const originalName = file.originalname
+
+            // Escape special characters in the original file name
             function escapeRegExp(string: string): string {
               return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')
             }
 
-            // Regex to find the img tag with the original file name
-            const regex = new RegExp(`<img[^>]+src=["'][^"']*${escapeRegExp(file.originalname)}["'][^>]*>`, 'g')
-            body = body.replace(regex, `<img src="/uploads/${targetFilename}" alt="${file.originalname}">`)
+            // Regex to find the markdown syntax image with the original file name
+            const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${escapeRegExp(originalName)}\\)`, 'g')
 
-            // Add the new UUID to the set of used images
-            usedImageUuids.add(uuid)
+            // Replace the image name in the markdown syntax with the new image URL
+            const imageUrl = `/uploads/${filename}`
+            body = body.replace(regex, `![$1](${imageUrl})`)
+
+            // Add the new image URL to the set of used images
+            usedImageUrls.add(imageUrl)
 
             return {
               uuid,
               name: file.originalname,
+              filename: filename,
               extension,
               mime: file.mimetype,
               size: file.size,
@@ -271,12 +266,15 @@ class PostController {
       // Merge images: existing images that are still used, plus new images
       const updatedImages = []
       for (const image of post.images) {
-        if (usedImageUuids.has(image.uuid)) {
+        // Create URL for the image used in the body
+        const imageUrl = `/uploads/${image.uuid}${image.extension}`
+
+        if (usedImageUrls.has(imageUrl)) {
           // The image is still used
           updatedImages.push(image)
         } else {
           // The image is no longer used; remove it from the filesystem
-          const filePath = path.join('uploads/', `${image.uuid}${image.extension}`)
+          const filePath = path.join('uploads/', image.uuid + image.extension)
           try {
             await fs.unlink(filePath)
           } catch (err) {
@@ -304,12 +302,14 @@ class PostController {
   })
 
   /**
-   * Retrieves a post by its slug and returns it in JSON format.
-   * @param req - The HTTP request object.
-   * @param res - The HTTP response object.
-   * @returns JSON response with the post matching the provided slug.
-   * @description This method fetches a post based on its slug. If the post is not found, an error
-   * is thrown. Otherwise, it returns the post in a JSON format.
+   * Retrieves a post by its slug and renders it in the response.
+   * Parses the markdown body into HTML for rendering.
+   *
+   * @param {express.Request} req - The request object containing the post slug.
+   * @param {express.Response} res - The response object used to render the post view.
+   * @returns {Promise<void>} A promise that resolves when the post is rendered.
+   *
+   * @throws {Error} Throws an error if the post is not found or if there is an issue retrieving the post.
    */
   public getPostBySlug = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     try {
@@ -322,12 +322,14 @@ class PostController {
 
         res.render('post', {
           title: post.title,
+          parsedBody: StringHelper.parseBody(post.body), // Parse the markdown body to HTML
           post,
           user: req.session.user,
           isAuthor,
         })
       }
     } catch (err: unknown) {
+      // Handle errors and generate an appropriate error message
       throw new Error(Message.getErrorMessage(err))
     }
   })

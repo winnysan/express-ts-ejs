@@ -1,38 +1,45 @@
 /**
- * A simple text editor class that replaces a textarea element.
+ * A simple markdown editor class that replaces a textarea element.
  * Supports headings (levels 1-3), paragraphs, and image insertion.
  */
 class Editor {
   private formEl!: HTMLFormElement
   private editorEl: HTMLDivElement = document.createElement('div')
   private toolbarEl: HTMLDivElement = document.createElement('div')
-  public contentEl: HTMLDivElement = document.createElement('div')
+  public contentEl: HTMLTextAreaElement = document.createElement('textarea')
   private inputEl!: HTMLTextAreaElement
   private images: { originalName: string; file: File }[] = []
 
   /**
-   * Initializes the Editor.
+   * Factory method to create an instance of Editor.
+   * Returns undefined if the form does not have the data-form="editor" attribute.
    * @param {string} formSelector - CSS selector for the form element.
+   * @returns {Editor | undefined} An instance of Editor or undefined.
    */
-  constructor(formSelector: string) {
-    // Select the form element using the provided selector.
+  static create(formSelector: string): Editor | undefined {
     const form = document.querySelector(formSelector)
     if (form) {
-      // Check if the form has the data-name attribute set to 'editor'
       if (form.getAttribute('data-form') !== 'editor') {
-        return // Skip initialization if the form does not have the correct data-name attribute
+        return undefined // Returns undefined if the form does not have the correct attribute
       }
 
-      this.formEl = form as HTMLFormElement
+      return new Editor(formSelector)
+    }
+    return undefined
+  }
 
-      // Find the textarea element within the form.
-      const textarea = this.formEl.querySelector<HTMLTextAreaElement>('textarea[name="body"]')
-      if (textarea) {
-        this.inputEl = textarea
+  // Set the constructor to private to prevent direct instantiation
+  private constructor(formSelector: string) {
+    // No longer need to check for the data-form attribute; that was done in the create method
+    this.formEl = document.querySelector(formSelector) as HTMLFormElement
 
-        // Initialize the editor.
-        this.initialize()
-      }
+    // Find the textarea element within the form.
+    const textarea = this.formEl.querySelector<HTMLTextAreaElement>('textarea[name="body"]')
+    if (textarea) {
+      this.inputEl = textarea
+
+      // Initialize the editor.
+      this.initialize()
     }
   }
 
@@ -43,42 +50,33 @@ class Editor {
     // Hide the original textarea.
     this.inputEl.style.display = 'none'
 
-    // Add classes to the editor elements for styling.
+    // Add classes for styling.
     this.editorEl.classList.add('editor')
     this.toolbarEl.classList.add('toolbar')
     this.contentEl.classList.add('content')
 
-    // Make the content element editable.
-    this.contentEl.contentEditable = 'true'
+    // Set the content of the textarea.
+    this.contentEl.value = this.inputEl.value
 
-    // Load existing content from the textarea into the editor.
-    this.contentEl.innerHTML = this.inputEl.value
-
-    // Set the default paragraph separator to <p>.
-    document.execCommand('defaultParagraphSeparator', false, 'p')
+    // Set styles for the textarea.
+    this.contentEl.style.width = '100%'
+    this.contentEl.style.height = '300px'
 
     // Create toolbar buttons and add event listeners.
     this.createToolbarButtons()
     this.addEventListeners()
 
-    // Assemble the editor elements.
+    // Assemble the editor.
     this.editorEl.appendChild(this.toolbarEl)
     this.editorEl.appendChild(this.contentEl)
     this.inputEl.parentNode!.insertBefore(this.editorEl, this.inputEl)
 
-    // Update the textarea value when the form is submitted.
+    // Update the textarea value on form submission.
     this.formEl.addEventListener('submit', () => {
-      const images = this.contentEl.querySelectorAll('img')
-      images.forEach(img => {
-        const originalName = img.getAttribute('data-image')
-        if (originalName) {
-          img.setAttribute('src', originalName)
-        }
-      })
-      this.inputEl.value = this.contentEl.innerHTML
+      this.inputEl.value = this.contentEl.value
     })
 
-    console.log('The text editor has been initialized')
+    console.log('Markdown editor has been initialized')
   }
 
   /**
@@ -87,11 +85,10 @@ class Editor {
   private createToolbarButtons() {
     // Define the buttons with their commands and display text.
     const buttons = [
-      { command: 'heading1', text: 'H1' },
       { command: 'heading2', text: 'H2' },
       { command: 'heading3', text: 'H3' },
       { command: 'paragraph', text: 'P' },
-      { command: 'insertImage', text: 'Obrázok' },
+      { command: 'insertImage', text: 'Image' },
     ]
 
     // Create each button and add it to the toolbar.
@@ -105,10 +102,10 @@ class Editor {
   }
 
   /**
-   * Adds event listeners to the toolbar and content elements.
+   * Adds event listeners to the toolbar and content.
    */
   private addEventListeners() {
-    // Handle toolbar button clicks.
+    // Handle clicks on the toolbar buttons.
     this.toolbarEl.addEventListener('click', e => {
       const target = e.target as HTMLButtonElement
       if (target.dataset.command) {
@@ -118,7 +115,7 @@ class Editor {
 
     // Update the textarea value when the content changes.
     this.contentEl.addEventListener('input', () => {
-      this.inputEl.value = this.contentEl.innerHTML
+      this.inputEl.value = this.contentEl.value
     })
   }
 
@@ -128,27 +125,74 @@ class Editor {
    */
   private executeCommand(command: string) {
     switch (command) {
-      case 'heading1':
-        // Format selected text as heading level 1.
-        document.execCommand('formatBlock', false, 'h1')
-        break
       case 'heading2':
-        // Format selected text as heading level 2.
-        document.execCommand('formatBlock', false, 'h2')
+        this.insertHeading('## ')
         break
       case 'heading3':
-        // Format selected text as heading level 3.
-        document.execCommand('formatBlock', false, 'h3')
+        this.insertHeading('### ')
         break
       case 'paragraph':
-        // Format selected text as paragraph.
-        document.execCommand('formatBlock', false, 'p')
+        this.insertParagraph()
         break
       case 'insertImage':
-        // Insert an image at the cursor position.
         this.insertImage()
         break
     }
+  }
+
+  /**
+   * Inserts markdown syntax for a heading at the beginning of the current line.
+   * @param {string} markdown - The markdown syntax for the heading to insert.
+   */
+  private insertHeading(markdown: string) {
+    const selectionStart = this.contentEl.selectionStart
+    const selectionEnd = this.contentEl.selectionEnd
+
+    // Get text before and after the selection.
+    const textBefore = this.contentEl.value.substring(0, selectionStart)
+    const textAfter = this.contentEl.value.substring(selectionEnd)
+
+    // Find the start of the current line.
+    const lineStart = textBefore.lastIndexOf('\n') + 1
+    const currentLine = this.contentEl.value.substring(lineStart, selectionEnd)
+
+    // Remove existing heading syntax.
+    const currentLineWithoutHeading = currentLine.replace(/^#+\s*/, '')
+
+    // Insert markdown heading.
+    const newLine = markdown + currentLineWithoutHeading
+
+    // Update content.
+    const newText = this.contentEl.value.substring(0, lineStart) + newLine + textAfter
+    this.contentEl.value = newText
+
+    // Set cursor position.
+    const newCursorPos = lineStart + newLine.length
+    this.contentEl.selectionStart = this.contentEl.selectionEnd = newCursorPos
+
+    // Dispatch 'input' event to update hidden textarea.
+    this.contentEl.dispatchEvent(new Event('input'))
+  }
+
+  /**
+   * Inserts a paragraph (new line) at the current cursor position.
+   */
+  private insertParagraph() {
+    const selectionStart = this.contentEl.selectionStart
+    const selectionEnd = this.contentEl.selectionEnd
+
+    // Insert double newline for a paragraph.
+    const textBefore = this.contentEl.value.substring(0, selectionStart)
+    const textAfter = this.contentEl.value.substring(selectionEnd)
+    const newText = textBefore + '\n\n' + textAfter
+    this.contentEl.value = newText
+
+    // Set cursor position.
+    const newCursorPos = selectionStart + 2
+    this.contentEl.selectionStart = this.contentEl.selectionEnd = newCursorPos
+
+    // Dispatch 'input' event to update hidden textarea.
+    this.contentEl.dispatchEvent(new Event('input'))
   }
 
   /**
@@ -166,13 +210,23 @@ class Editor {
         // Store the image file and its original name.
         this.images.push({ originalName, file })
 
-        // Create an image element for display in the editor.
-        const img = document.createElement('img')
-        img.src = URL.createObjectURL(file)
-        img.alt = originalName
-        img.setAttribute('data-image', originalName)
-        // Insert the image at the cursor position.
-        this.insertNodeAtCursor(img)
+        // Insert markdown syntax for the image at the cursor position.
+        const selectionStart = this.contentEl.selectionStart
+        const selectionEnd = this.contentEl.selectionEnd
+
+        const textBefore = this.contentEl.value.substring(0, selectionStart)
+        const textAfter = this.contentEl.value.substring(selectionEnd)
+        const imageMarkdown = `![${originalName}](${originalName})`
+
+        // Update content.
+        this.contentEl.value = textBefore + imageMarkdown + textAfter
+
+        // Set cursor position.
+        const newCursorPos = selectionStart + imageMarkdown.length
+        this.contentEl.selectionStart = this.contentEl.selectionEnd = newCursorPos
+
+        // Dispatch 'input' event to update hidden textarea.
+        this.contentEl.dispatchEvent(new Event('input'))
       }
     }
     // Trigger the file input dialog.
@@ -180,20 +234,10 @@ class Editor {
   }
 
   /**
-   * Inserts a node at the current cursor position.
-   * @param {Node} node - The node to insert.
+   * Updates the hidden textarea with the current content of the editor.
    */
-  private insertNodeAtCursor(node: Node) {
-    const sel = window.getSelection()
-    if (sel && sel.rangeCount > 0) {
-      const range = sel.getRangeAt(0)
-      range.deleteContents()
-      range.insertNode(node)
-      range.collapse(false)
-    } else {
-      // If no selection, append the node at the end.
-      this.contentEl.appendChild(node)
-    }
+  public updateTextarea() {
+    this.inputEl.value = this.contentEl.value
   }
 
   /**

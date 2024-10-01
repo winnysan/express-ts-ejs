@@ -23,7 +23,7 @@ Helper.colorModeSwitcher()
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const editor = new Editor('#form')
+  const editor = Editor.create('#form')
   new FormHandler('#form', 'input[name="_csrf"]', editor)
   new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
 })

@@ -68,6 +68,54 @@ class StringHelper {
       .replace(/\s+/g, '-') // Replace spaces with hyphens
       .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
   }
+
+  /**
+   * Converts markdown text to HTML.
+   *
+   * @param {string} markdownText - Text in markdown syntax.
+   * @returns {string} HTML representation of the markdown text.
+   *
+   * @example
+   * const htmlContent = Helper.parseBody(markdownText);
+   */
+  static parseBody(markdownText: string): string {
+    // Split the markdown text into lines
+    const lines = markdownText.split('\n')
+
+    // Initialize an array for processed lines
+    const htmlLines = []
+
+    for (let line of lines) {
+      let htmlLine = ''
+
+      // Process images in the line using a regular expression
+      const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
+      line = line.replace(imageRegex, (match, alt, src) => {
+        return `<img src="${src}" alt="${alt}" />`
+      })
+
+      // Check for headings
+      if (line.startsWith('### ')) {
+        htmlLine = '<h3>' + line.substring(4) + '</h3>'
+      } else if (line.startsWith('## ')) {
+        htmlLine = '<h2>' + line.substring(3) + '</h2>'
+        // Converts the first-level heading to the species level
+      } else if (line.startsWith('# ')) {
+        htmlLine = '<h2>' + line.substring(2) + '</h2>'
+      } else if (line.trim() === '') {
+        // Skip empty lines
+        htmlLine = ''
+      } else {
+        // Wrap the line in <p>
+        htmlLine = '<p>' + line + '</p>'
+      }
+
+      htmlLines.push(htmlLine)
+    }
+
+    // Join the processed lines into a single HTML string
+    return htmlLines.join('\n')
+  }
 }
 
 export default StringHelper

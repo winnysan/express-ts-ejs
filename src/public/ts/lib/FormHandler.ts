@@ -45,20 +45,24 @@ class FormHandler {
     if (this.formEl) {
       const formData = new FormData(this.formEl)
 
-      // Collect current images present in the editor's content
+      // Append images present in the content
       if (this.editor) {
-        // Select all <img> elements within the editor's content
-        const imgElements = this.editor.contentEl.querySelectorAll('img')
+        // Update the textarea value with the latest content
+        this.editor.updateTextarea()
 
-        // Create a Set to store unique original names of images present in the content
+        // Get the content from the editor
+        const content = this.editor.contentEl.value
+
+        // Use a regular expression to find all markdown image syntaxes
+        const imageMarkdownRegex = /!\[[^\]]*\]\(([^)]+)\)/g
+        let match
         const currentImageNames = new Set<string>()
 
-        imgElements.forEach(img => {
-          const originalName = img.getAttribute('data-image')
-          if (originalName) {
-            currentImageNames.add(originalName)
-          }
-        })
+        // Extract image names from the markdown content
+        while ((match = imageMarkdownRegex.exec(content)) !== null) {
+          const imageName = match[1] // This is the image name in the markdown syntax
+          currentImageNames.add(imageName)
+        }
 
         // Iterate over the editor's images array and append only those present in the content
         this.editor.getImages().forEach(image => {
