@@ -18,6 +18,9 @@ class ErrorMiddleware {
    */
   public notFound(req: express.Request, res: express.Response, next: express.NextFunction): void {
     const error = new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
+
+    res.status(404)
+
     next(error)
   }
 
@@ -35,13 +38,29 @@ class ErrorMiddleware {
     const message = Message.getErrorMessage(err)
 
     const error = {
-      message,
+      msg: message,
       name: err.name,
-      stack: process.env.NODE_ENV === NodeEnv.PROD ? undefined : err.stack,
+      code: res.statusCode !== 200 ? res.statusCode : 500,
+      stack: err.stack,
     }
 
     Logger.logToFile(error)
-    res.render('error', { error, title: global.dictionary.title.errorPage })
+
+    if (process.env.NODE_ENV === NodeEnv.PROD) {
+      error.msg = global.dictionary.messages.somethingWentWrong
+      error.stack = undefined
+    }
+
+    if (res.statusCode === 404) {
+      res.render('error', {
+        title: global.dictionary.title.errorPage,
+        error,
+      })
+    } else {
+      res.status(res.statusCode !== 200 ? res.statusCode : 500).json({
+        errors: [error],
+      })
+    }
   }
 }
 

@@ -59,8 +59,8 @@ class Editor {
     this.contentEl.value = this.inputEl.value
 
     // Set styles for the textarea.
-    this.contentEl.style.width = '100%'
-    this.contentEl.style.height = '300px'
+    // this.contentEl.style.width = '100% - 4px'
+    // this.contentEl.style.height = '300px'
 
     // Create toolbar buttons and add event listeners.
     this.createToolbarButtons()

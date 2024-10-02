@@ -73,6 +73,14 @@ class FormHandler {
         })
       }
 
+      // Create a toast element for notifications
+      let toastEl = Helper.makeToast('#toast')
+
+      // Remove any existing error indicators
+      this.formEl.querySelectorAll('.is-error').forEach(element => {
+        element.classList.remove('is-error')
+      })
+
       try {
         // Send the form data to the server using Fetch API
         const response = await fetch(this.formEl.action, {
@@ -83,50 +91,48 @@ class FormHandler {
           body: formData,
         })
 
-        // Create a toast element for notifications
-        let toastEl = Helper.makeToast('#toast')
-
-        // Remove any existing error indicators
-        this.formEl.querySelectorAll('.is-error').forEach(element => {
-          element.classList.remove('is-error')
-        })
-
         if (!response.ok) {
           // If the response is not OK, show a generic failure message
-          Helper.addToastMessage(toastEl, 'Form submission failed', 'danger')
+          const result = await response.json()
+
+          let message: string = 'Form submission failed'
+
+          if (result.errors && result.errors[0].msg) message = result.errors[0].msg
+
+          Helper.addToastMessage(toastEl, message, 'danger')
         } else {
           // Parse the JSON response from the server
           const result = await response.json()
 
           if (result.errors) {
             // If there are validation errors, display them
-            result.errors.forEach((error: { msg: string; path: string }) => {
+            result.errors.forEach((error: { msg: string; path?: string }) => {
               Helper.addToastMessage(toastEl, error.msg, 'danger', 3000)
 
               // Highlight the form field that caused the error
-              const inputEl = this.formEl!.querySelector(`[name="${error.path}"]`)
-              if (inputEl) {
-                const parentEl = inputEl.closest('div')
-                if (parentEl) {
-                  parentEl.classList.add('is-error')
+              if (error.path) {
+                const inputEl = this.formEl!.querySelector(`[name="${error.path}"]`)
+
+                if (inputEl) {
+                  const parentEl = inputEl.closest('div')
+
+                  if (parentEl) parentEl.classList.add('is-error')
                 }
               }
             })
           } else {
-            if (result.redirect) {
-              // If a redirect URL is provided, navigate to it
-              window.location.href = result.redirect
-            } else if (result.json) {
-              console.log(result.json)
-            } else {
-              // Otherwise, show a generic failure message
-              Helper.addToastMessage(toastEl, 'Form submission failed', 'danger')
-            }
+            // If a redirect URL is provided, navigate to it
+            if (result.redirect) window.location.href = result.redirect
+            else if (result.json) console.log(result.json)
+            // Otherwise, show a generic failure message
+            else Helper.addToastMessage(toastEl, 'No action is required', 'warning')
           }
         }
-      } catch (error) {
+      } catch (err) {
         // Log any unexpected errors to the console
-        console.error('An error occurred:', error)
+        console.error('Something went wrong:', err)
+
+        Helper.addToastMessage(toastEl, 'Something went wrong', 'danger')
       }
     }
   }

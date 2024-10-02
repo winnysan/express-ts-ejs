@@ -971,21 +971,19 @@ footer {
     margin-bottom: 0.5rem;
     padding: 0.3rem 1rem;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease;
-    border-radius: 0.5rem;
     color: var(--white);
   }
   & .info {
-    background-color: #007bff;
+    background-color: #0284c7;
   }
   & .success {
-    background-color: #28a745;
+    background-color: #65a30d;
   }
   & .warning {
-    background-color: #ffc107;
-    color: var(--dark);
+    background-color: #ca8a04;
   }
   & .danger {
-    background-color: #dc3545;
+    background-color: #dc2626;
   }
   & li.fade-out {
     opacity: 0;
@@ -1040,8 +1038,13 @@ footer {
         }
       }
       & .content {
+        resize: vertical;
+        display: block;
+        width: calc(100% - 4px);
+        min-height: 33vh;
         margin: 2px;
         padding: 1rem 0.5rem;
+        border: none;
         &:focus {
           outline: 2px solid var(--primary);
         }
