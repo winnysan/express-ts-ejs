@@ -14,40 +14,38 @@ import ErrorMiddleware from './middleware/ErrorMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import AdminRouter from './routes/AdminRouter'
 import ApiRouter from './routes/ApiRouter'
+import AuthRouter from './routes/AuthRouter'
 import DashboardRouter from './routes/DashboardRouter'
-import PublicRouter from './routes/PublicRouter'
+import PostRouter from './routes/PostRouter'
 
 dotenv.config()
 
 /**
  * Main application class for setting up and running the Express server.
- * @class
  */
 class App {
   /**
    * The Express application instance.
    * @public
-   * @type {express.Application}
    */
   public app: express.Application
 
   /**
    * The Database instance used for connecting to MongoDB.
    * @private
-   * @type {Database}
    */
   private db: Database
 
   /**
    * The port number on which the server will listen.
    * @private
-   * @type {number | undefined}
    */
   private PORT: number | undefined
 
   /**
    * Initializes a new instance of the App class, setting up the database connection,
    * middlewares, view engine, routes, and error handlers.
+   * @description Initializes the Express app, sets up middleware, routes, view engine, and database connection.
    */
   constructor() {
     this.app = express()
@@ -64,27 +62,22 @@ class App {
   /**
    * Connects to the MongoDB database.
    * @private
-   * @returns {Promise<void>} A promise that resolves when the database connection is established.
+   * @description Establishes a connection to the MongoDB database using the Database class.
    */
   private async connectDatabase(): Promise<void> {
     await this.db.connect()
   }
 
   /**
-   * Configures the middleware for the application, including body parsing, cookie parsing,
-   * session management, flash messages, and static file serving.
+   * Configures middleware for body parsing, cookie parsing, session management, CSRF protection, and static files.
    * @private
-   * @returns {void}
+   * @description Sets up various middlewares like body parser, session, CSRF protection, and static file handling.
    */
   private setMiddlewares(): void {
-    // Body parser middleware
     this.app.use(bodyParser.json())
     this.app.use(bodyParser.urlencoded({ extended: true }))
-
-    // Cookie parser middleware
     this.app.use(cookieParser())
 
-    // Cors middleware
     this.app.use(
       cors({
         origin: process.env.CLIENT_ORIGIN,
@@ -93,7 +86,6 @@ class App {
       })
     )
 
-    // Session middleware
     this.app.use(
       session({
         secret: process.env.SESSION_SECRET,
@@ -103,16 +95,9 @@ class App {
       })
     )
 
-    // CSRF Protection middleware
     this.app.use(CsrfMiddleware.init())
-
-    // Flash messages middleware
     this.app.use(flash())
-
-    // Localization middleware
     this.app.use(LocalizationMiddleware.use)
-
-    // Static files middleware
     this.app.use(express.static(path.join(__dirname, './public')))
     this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
   }
@@ -120,7 +105,7 @@ class App {
   /**
    * Sets up the view engine for the application to use EJS with Express Layouts.
    * @private
-   * @returns {void}
+   * @description Configures the view engine to use EJS templates and layouts.
    */
   private setViewEngine(): void {
     this.app.use(expressLayouts)
@@ -132,10 +117,11 @@ class App {
   /**
    * Configures the routes for the application, including public, dashboard, and admin routes.
    * @private
-   * @returns {void}
+   * @description Defines the routes for the application, including authentication, dashboard, admin, and API routes.
    */
   private setRoutes(): void {
-    this.app.use('/', AuthMiddleware.authCheck, PublicRouter)
+    this.app.use('/', AuthMiddleware.authCheck, PostRouter)
+    this.app.use('/auth', AuthMiddleware.authCheck, AuthRouter)
     this.app.use('/dashboard', AuthMiddleware.authCheck, DashboardRouter)
     this.app.use('/admin', AuthMiddleware.authCheck, AdminRouter)
     this.app.use('/api', ApiRouter)
@@ -144,7 +130,7 @@ class App {
   /**
    * Sets up error handling middleware for handling 404 errors and other server errors.
    * @private
-   * @returns {void}
+   * @description Configures middleware for handling 404 Not Found and other server errors.
    */
   private setErrorHandlers(): void {
     this.app.use(ErrorMiddleware.notFound)
@@ -154,7 +140,7 @@ class App {
   /**
    * Starts the Express server and listens for incoming connections.
    * @public
-   * @returns {void}
+   * @description Starts the server and listens on the configured port.
    */
   public start(): void {
     this.app.listen(this.PORT, () => {

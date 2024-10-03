@@ -14,7 +14,7 @@ class ErrorMiddleware {
    * @param res - The Express response object.
    * @param next - The next middleware function in the stack.
    * @returns {void}
-   * @description Creates a 404 Not Found error with the original request URL and passes it to the next middleware.
+   * @description Creates a 404 Not Found error with the request URL and passes it to the next middleware.
    */
   public notFound(req: express.Request, res: express.Response, next: express.NextFunction): void {
     const error = new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
@@ -31,14 +31,13 @@ class ErrorMiddleware {
    * @param res - The Express response object.
    * @param next - The next middleware function in the stack.
    * @returns {void}
-   * @description Logs the error using the `Logger` and renders an error page. The error stack trace is included
-   * only if the application is not in production mode.
+   * @description Logs the error and renders an error page. The stack trace is included only if not in production mode.
    */
   public errorHandler(err: Error, req: express.Request, res: express.Response, next: express.NextFunction): void {
     const message = Message.getErrorMessage(err)
 
     const error = {
-      msg: message,
+      message,
       name: err.name,
       code: res.statusCode !== 200 ? res.statusCode : 500,
       stack: err.stack,
@@ -47,7 +46,7 @@ class ErrorMiddleware {
     Logger.logToFile(error)
 
     if (process.env.NODE_ENV === NodeEnv.PROD) {
-      error.msg = global.dictionary.messages.somethingWentWrong
+      error.message = global.dictionary.messages.somethingWentWrong
       error.stack = undefined
     }
 

@@ -27,7 +27,6 @@
     "express-ejs-layouts": "^2.5.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.0",
-    "express-validator": "^7.2.0",
     "fs-extra": "^11.2.0",
     "jsonwebtoken": "^9.0.2",
     "lusca": "^1.7.0",

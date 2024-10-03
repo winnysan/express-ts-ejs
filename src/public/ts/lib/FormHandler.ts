@@ -11,9 +11,10 @@ class FormHandler {
 
   /**
    * Initializes the FormHandler with the form element selector, CSRF token input selector, and optional Editor instance.
-   * @param {string} formSelector - The CSS selector for the form element.
-   * @param {string} csrfSelector - The CSS selector for the CSRF token input element.
-   * @param {Editor} [editor] - An optional instance of the Editor class.
+   * @param formSelector - The CSS selector for the form element.
+   * @param csrfSelector - The CSS selector for the CSRF token input element.
+   * @param editor - An optional instance of the Editor class.
+   * @description Initializes the form handler and sets up the form submission process.
    */
   constructor(formSelector: string, csrfSelector: string, editor?: Editor) {
     this.formEl = Helper.selectElement<HTMLFormElement>(formSelector)
@@ -27,6 +28,7 @@ class FormHandler {
 
   /**
    * Sets up the event listener for the form submit event.
+   * @description Adds a submit event listener to handle form submission.
    */
   private initialize() {
     this.formEl?.addEventListener('submit', async e => {
@@ -40,6 +42,7 @@ class FormHandler {
   /**
    * Handles form submission by collecting form data and images,
    * sending them to the server, and processing the server's response.
+   * @description Gathers form data, processes editor content, and sends the data to the server.
    */
   private async handleSubmit() {
     if (this.formEl) {
@@ -60,14 +63,13 @@ class FormHandler {
 
         // Extract image names from the markdown content
         while ((match = imageMarkdownRegex.exec(content)) !== null) {
-          const imageName = match[1] // This is the image name in the markdown syntax
+          const imageName = match[1]
           currentImageNames.add(imageName)
         }
 
-        // Iterate over the editor's images array and append only those present in the content
+        // Append only images present in the content
         this.editor.getImages().forEach(image => {
           if (currentImageNames.has(image.originalName)) {
-            // Append the image file to FormData with the original name
             formData.append('images', image.file, image.originalName)
           }
         })
@@ -92,12 +94,12 @@ class FormHandler {
         })
 
         if (!response.ok) {
-          // If the response is not OK, show a generic failure message
+          // Handle non-OK responses with a failure message
           const result = await response.json()
 
           let message: string = 'Form submission failed'
 
-          if (result.errors && result.errors[0].msg) message = result.errors[0].msg
+          if (result.errors && result.errors[0].message) message = result.errors[0].message
 
           Helper.addToastMessage(toastEl, message, 'danger')
         } else {
@@ -105,33 +107,31 @@ class FormHandler {
           const result = await response.json()
 
           if (result.errors) {
-            // If there are validation errors, display them
-            result.errors.forEach((error: { msg: string; path?: string }) => {
-              Helper.addToastMessage(toastEl, error.msg, 'danger', 3000)
+            console.log(result.errors)
+            // Display validation errors
+            result.errors.forEach((error: { message: string; field?: string }) => {
+              Helper.addToastMessage(toastEl, error.message, 'danger', 3000)
 
               // Highlight the form field that caused the error
-              if (error.path) {
-                const inputEl = this.formEl!.querySelector(`[name="${error.path}"]`)
+              if (error.field) {
+                const inputEl = this.formEl!.querySelector(`[name="${error.field}"]`)
 
                 if (inputEl) {
                   const parentEl = inputEl.closest('div')
-
                   if (parentEl) parentEl.classList.add('is-error')
                 }
               }
             })
           } else {
-            // If a redirect URL is provided, navigate to it
+            // Handle redirect or log JSON response
             if (result.redirect) window.location.href = result.redirect
             else if (result.json) console.log(result.json)
-            // Otherwise, show a generic failure message
             else Helper.addToastMessage(toastEl, 'No action is required', 'warning')
           }
         }
       } catch (err) {
-        // Log any unexpected errors to the console
+        // Log any unexpected errors and show a failure message
         console.error('Something went wrong:', err)
-
         Helper.addToastMessage(toastEl, 'Something went wrong', 'danger')
       }
     }

@@ -4,14 +4,7 @@
       <%= global.dictionary.navigation.newPost %>
     </h2>
 
-    <form
-      id="form"
-      action="/dashboard/new-post"
-      enctype="multipart/form-data"
-      method="post"
-      data-form="editor"
-      class="post-form"
-    >
+    <form id="form" action="/new-post" enctype="multipart/form-data" method="post" data-form="editor" class="post-form">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div>
         <label for="title"><%= global.dictionary.form.title %></label>

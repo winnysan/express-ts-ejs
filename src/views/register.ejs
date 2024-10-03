@@ -7,7 +7,7 @@
     <div style="color: red"><%= error.msg %></div>
     <% }) %> <% } %>
 
-    <form id="form" action="/register" method="post" class="auth-form">
+    <form id="form" action="/auth/register" method="post" class="auth-form">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="auth-form__group">
         <label for="email" class="auth-form__label">
@@ -45,7 +45,7 @@
       </div>
       <button type="submit" class="auth-form__button"><%= global.dictionary.form.register %></button>
 
-      <p class="auth-form__redirect">Máte už účet? <a href="/login" class="link">Prihláste sa.</a></p>
+      <p class="auth-form__redirect">Máte už účet? <a href="/auth/login" class="link">Prihláste sa.</a></p>
     </form>
   </section>
 </main>
