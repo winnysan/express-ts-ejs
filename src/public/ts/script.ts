@@ -1,55 +1,18 @@
-import ApiClient from './lib/ApiCLient'
-import Carousel from './lib/Carousel'
-import Editor from './lib/Editor'
-import FormHandler from './lib/FormHandler'
-import Helper from './lib/Helper'
-import ImagePreviewHandler from './lib/ImagePreviewHandler'
-import './lib/Layout'
-import './reactivity'
+import Layout from './lib/Layout'
+import SpaRouter from './lib/SpaRouter'
 
+/**
+ * Main entry point of the application.
+ * @description Initializes the SPA router and the layout components when the script is loaded.
+ */
 console.log(
   '%cScript loaded successfully',
   'color: white; background-color: green; font-weight: bold; padding: 2px 4px; border-radius: 3px;'
 )
 
 /**
- * Initialize color mode switcher
+ * Initializes the SPA router with a callback to initialize the layout on navigation.
  */
-
-Helper.colorModeSwitcher()
-
-/**
- * Initialize Editor, FormHandler, ImagePreviewHandler
- */
-
-document.addEventListener('DOMContentLoaded', () => {
-  const editor = Editor.create('#form')
-  new FormHandler('#form', 'input[name="_csrf"]', editor)
-  new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
-})
-
-/**
- * Initialize Carousel
- */
-
-new Carousel('#carousel', 3)
-
-/**
- * Fetch
- */
-
-const apiClient = new ApiClient('http://localhost:7000/api')
-
-const fetchButton = Helper.selectElement<HTMLSpanElement>('#fetchButton')
-
-fetchButton?.addEventListener('click', () => {
-  apiClient
-    .fetch<string>('Hello', 'hello')
-    .then(response => {
-      console.log('message:', response.message)
-      if (response.data) {
-        alert(response.data)
-      }
-    })
-    .catch(error => console.error(error))
+new SpaRouter(() => {
+  Layout.initialize()
 })

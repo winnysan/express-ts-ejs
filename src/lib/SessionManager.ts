@@ -48,8 +48,10 @@ class SessionManager {
 
     delete req.session.user
 
-    req.flash('info', global.dictionary.messages.youAreLoggedOut)
-    res.redirect('/')
+    res.json({
+      message: global.dictionary.messages.youAreLoggedOut,
+      redirect: '/',
+    })
   }
 }
 

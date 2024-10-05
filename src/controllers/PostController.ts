@@ -36,10 +36,11 @@ class PostController {
     res.render('index', {
       user: req.session.user,
       messages: req.flash('info'),
-      title: global.dictionary.title.homePage,
       posts,
       current: page,
       nextPage: hasNextPage ? nextPage : null,
+      title: global.dictionary.title.homePage,
+      layout: res.locals.isAjax ? false : 'layouts/main',
     })
   })
 
@@ -84,6 +85,7 @@ class PostController {
     res.render('post/new', {
       user: req.session.user,
       title: global.dictionary.title.newPostPage,
+      layout: res.locals.isAjax ? false : 'layouts/main',
     })
   }
 
@@ -241,11 +243,12 @@ class PostController {
       const isAuthor = req.session.user ? req.session.user._id.equals(post?.author) : false
 
       res.render('post', {
-        title: post.title,
         parsedBody: StringHelper.parseBody(post.body),
         post,
         user: req.session.user,
         isAuthor,
+        title: post.title,
+        layout: res.locals.isAjax ? false : 'layouts/main',
       })
     }
   })

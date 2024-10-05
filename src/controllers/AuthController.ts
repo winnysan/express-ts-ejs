@@ -6,7 +6,7 @@ import User from '../models/User'
 import { Role } from '../types/enums'
 
 /**
- * Controller for authentication-related routes and actions.
+ * Controller for handling authentication-related routes and actions.
  */
 class AuthController {
   /**
@@ -14,12 +14,13 @@ class AuthController {
    * @param req - The HTTP request object.
    * @param res - The HTTP response object.
    * @returns Renders the 'register' view with user data and page title.
-   * @description Renders the registration page with user session and page title.
+   * @description Renders the registration page with user session and page title. Uses main layout unless the request is AJAX.
    */
   public registerPage(req: express.Request, res: express.Response): void {
     res.render('register', {
       user: req.session.user,
       title: global.dictionary.title.registerPage,
+      layout: res.locals.isAjax ? false : 'layouts/main',
     })
   }
 
@@ -28,12 +29,13 @@ class AuthController {
    * @param req - The HTTP request object.
    * @param res - The HTTP response object.
    * @returns Renders the 'login' view with user data and page title.
-   * @description Renders the login page with user session and page title.
+   * @description Renders the login page with user session and page title. Uses main layout unless the request is AJAX.
    */
   public loginPage(req: express.Request, res: express.Response): void {
     res.render('login', {
       user: req.session.user,
       title: global.dictionary.title.loginPage,
+      layout: res.locals.isAjax ? false : 'layouts/main',
     })
   }
 
@@ -97,7 +99,7 @@ class AuthController {
    * @param req - The HTTP request object.
    * @param res - The HTTP response object.
    * @returns Redirects to the home page.
-   * @description Clears the auth token and session, then redirects to the home page.
+   * @description Clears the authentication token and session, then redirects to the home page.
    */
   public logoutUser = (req: express.Request, res: express.Response) => {
     SessionManager.destroyUserSession(req, res)

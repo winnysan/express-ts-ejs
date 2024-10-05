@@ -52,8 +52,9 @@ class ErrorMiddleware {
 
     if (res.statusCode === 404) {
       res.render('error', {
-        title: global.dictionary.title.errorPage,
         error,
+        title: global.dictionary.title.errorPage,
+        layout: res.locals.isAjax ? false : 'layouts/main',
       })
     } else {
       res.status(res.statusCode !== 200 ? res.statusCode : 500).json({

@@ -1,14 +1,16 @@
+<%- include('../partials/header.ejs') %>
+
 <main class="container">
   <section class="section--full">
     <h2 class="title" data-name="<%= global.dictionary.navigation.dashboard %>">
       <%= global.dictionary.navigation.dashboard %>
     </h2>
-    <a href="/new-post"><%= global.dictionary.navigation.newPost %></a>
+    <a href="/new-post" data-link><%= global.dictionary.navigation.newPost %></a>
 
     <ul>
       <% posts.forEach(post => { %>
       <li>
-        <a href="/post/<%= post.slug %>"><%= post.title %></a>
+        <a href="/post/<%= post.slug %>" data-link><%= post.title %></a>
         <span><%= new Date(post.createdAt).toLocaleDateString(global.locale) %></span>
       </li>
       <% }) %>

@@ -1,3 +1,5 @@
+<%- include('./partials/header.ejs') %>
+
 <main class="container">
   <section class="section--full"><%- include('./partials/hero.ejs', { posts }) %></section>
 
@@ -7,7 +9,7 @@
     <div class="carousel__container">
       <div id="carousel" class="carousel">
         <% posts.forEach(post => { %>
-        <a href="/post/<%= post.slug %>" class="carousel__item carousel-item" data-name="<%= post.slug %>">
+        <a href="/post/<%= post.slug %>" class="carousel__item carousel-item" data-name="<%= post.slug %>" data-link>
           <figure>
             <% if (post.images && post.images.length > 0) { %>
             <img src="/uploads/<%= post.images[0].uuid + post.images[0].extension %>" alt="<%= post.title %>" />
@@ -35,17 +37,9 @@
 </main>
 
 <!-- <section>
-  <% if (messages.length > 0) { %>
-  <div>
-    <% messages.forEach(message => { %>
-    <p style="color: green"><%= message %></p>
-    <% }); %>
-  </div>
-  <% } %>
-
   <% if (nextPage !== null) { %>
   <a href="/?page=<%= nextPage %>"
-    ><%= global.dictionary.navigation.viewOlderPosts %></a
+    data-link><%= global.dictionary.navigation.viewOlderPosts %></a
   >
   <% } %>
 </section> -->

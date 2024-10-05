@@ -1,5 +1,6 @@
 import Editor from './Editor'
 import Helper from './Helper'
+import SpaRouter from './SpaRouter'
 
 /**
  * A class to handle form submission and validation.
@@ -106,8 +107,9 @@ class FormHandler {
           // Parse the JSON response from the server
           const result = await response.json()
 
+          if (result.message) Helper.addToastMessage(toastEl, result.message, 'success')
+
           if (result.errors) {
-            console.log(result.errors)
             // Display validation errors
             result.errors.forEach((error: { message: string; field?: string }) => {
               Helper.addToastMessage(toastEl, error.message, 'danger', 3000)
@@ -124,7 +126,7 @@ class FormHandler {
             })
           } else {
             // Handle redirect or log JSON response
-            if (result.redirect) window.location.href = result.redirect
+            if (result.redirect) SpaRouter.navigateTo(result.redirect)
             else if (result.json) console.log(result.json)
             else Helper.addToastMessage(toastEl, 'No action is required', 'warning')
           }

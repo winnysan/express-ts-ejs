@@ -1,7 +1,7 @@
 <div class="feature-articles__container">
   <div class="feature-articles__grid">
     <% posts.forEach((post, index) => { %>
-    <a href="/post/<%= post.slug %>" class="article">
+    <a href="/post/<%= post.slug %>" class="article" data-link>
       <%- include('./image.ejs', { post }) %>
       <div class="article__data-group">
         <h3><%= post.title %></h3>
@@ -18,7 +18,7 @@
   </div>
   <aside class="trending-news__grid">
     <% posts.forEach((post, index) => { %>
-    <a href="/post/<%= post.slug %>" class="news">
+    <a href="/post/<%= post.slug %>" class="news" data-link>
       <h3><%= post.title %></h3>
       <div class="news__data-group">
         <p>

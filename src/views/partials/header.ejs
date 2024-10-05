@@ -6,21 +6,21 @@
     </button>
     <button id="hamburger" class="link">☰</button>
     <ul class="navigation">
-      <li><a href="/" class="link"><%= global.dictionary.navigation.home %></a></li>
+      <li><a href="/" class="link" data-link><%= global.dictionary.navigation.home %></a></li>
       <% if (typeof user === 'undefined') { %>
-      <li><a href="/auth/login" class="link"><%= global.dictionary.navigation.login %></a></li>
+      <li><a href="/auth/login" class="link" data-link><%= global.dictionary.navigation.login %></a></li>
       <li>
-        <a href="/auth/register" class="link"><%= global.dictionary.navigation.register %></a>
+        <a href="/auth/register" class="link" data-link><%= global.dictionary.navigation.register %></a>
       </li>
       <% } else { %>
       <li>
-        <a href="/dashboard" class="link"><%= global.dictionary.navigation.dashboard %></a>
+        <a href="/dashboard" class="link" data-link><%= global.dictionary.navigation.dashboard %></a>
       </li>
       <% if (user.role === 'admin') { %>
-      <li><a href="/admin" class="link"><%= global.dictionary.navigation.admin %></a></li>
+      <li><a href="/admin" class="link" data-link><%= global.dictionary.navigation.admin %></a></li>
       <% } %>
       <li>
-        <form action="/auth/logout" method="post">
+        <form id="form-logout" action="/auth/logout" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <button type="submit" class="link"><%= global.dictionary.navigation.logout %></button>
         </form>
@@ -68,3 +68,5 @@
     </div>
   </div>
 </header>
+
+<div id="header-overlay"></div>

@@ -44,7 +44,8 @@
     <script type="text/javascript" src="/js/script.js" defer></script>
   </head>
   <body>
-    <%- include('../partials/header.ejs') %> <%- body %> <%- include('../partials/footer.ejs') %>
-    <div id="overlay"></div>
+    <div id="app"><%- body %></div>
+    <%- include('../partials/footer.ejs') %>
+    <div id="loading">Loading...</div>
   </body>
 </html>
