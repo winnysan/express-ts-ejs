@@ -10,13 +10,13 @@
     "viewOlderPosts": "Zobraziť staršie príspevky"
   },
   "title": {
-    "homePage": "",
-    "loginPage": "",
-    "registerPage": "",
-    "dashboardPage": "",
-    "adminPage": "",
-    "newPostPage": "",
-    "errorPage": ""
+    "homePage": "Domovská stránka",
+    "loginPage": "Prihlásenie",
+    "registerPage": "Registrácia",
+    "dashboardPage": "Užívateľský panel",
+    "adminPage": "Administrácia",
+    "newPostPage": "Nový príspevok",
+    "errorPage": "Chyba"
   },
   "form": {
     "search": "Hľadať",

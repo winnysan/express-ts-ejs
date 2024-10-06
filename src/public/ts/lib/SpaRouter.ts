@@ -27,13 +27,31 @@ class SpaRouter {
       loadingIndicator.style.display = 'flex'
     }
 
-    fetch(url, {
+    SpaRouter.loadPage(url, true)
+      .catch((err: Error) => console.error('Error loading page:', err))
+      .finally(() => {
+        if (loadingIndicator) {
+          loadingIndicator.style.display = 'none'
+        }
+      })
+  }
+
+  /**
+   * Loads a page via AJAX and updates the content.
+   * @param url - The URL to fetch.
+   * @param updateHistory - Whether to update the browser's history state.
+   * @description Fetches the content and updates the '#app' element.
+   */
+  private static loadPage(url: string, updateHistory: boolean): Promise<void> {
+    return fetch(url, {
       headers: {
         'X-Requested-With': 'XMLHttpRequest', // Indicates an AJAX request
       },
     })
       .then((response: Response) => {
         if (!response.ok) {
+          if (response.status === 404) return response.text()
+
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         return response.text() // Fetches the response as HTML text
@@ -42,23 +60,28 @@ class SpaRouter {
         const appElement = Helper.selectElement<HTMLDivElement>('#app')
         if (appElement) {
           appElement.innerHTML = html
+
+          // Extracting the title
+          const mainTagRegex = /<main[^>]*data-title="([^"]*)"[^>]*>/i
+          const match = mainTagRegex.exec(html)
+          if (match && match[1]) {
+            document.title = match[1]
+          } else {
+            document.title = ''
+          }
         } else {
           console.error("Element with id 'app' not found.")
           return
         }
 
-        // Updates browser history without page reload
-        history.pushState(null, '', url)
+        // Updates browser history if required
+        if (updateHistory) {
+          history.pushState(null, '', url)
+        }
 
         // Initializes page elements after navigation
         if (SpaRouter.initializePage) {
           SpaRouter.initializePage()
-        }
-      })
-      .catch((err: Error) => console.error('Error loading page:', err))
-      .finally(() => {
-        if (loadingIndicator) {
-          loadingIndicator.style.display = 'none'
         }
       })
   }
@@ -90,31 +113,8 @@ class SpaRouter {
      * @description Handles browser back/forward button navigation by fetching the current URL's content.
      */
     window.addEventListener('popstate', () => {
-      fetch(location.pathname + location.search, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest', // Indicates an AJAX request
-        },
-      })
-        .then((response: Response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-          }
-          return response.text()
-        })
-        .then((html: string) => {
-          const appElement = Helper.selectElement<HTMLDivElement>('#app')
-          if (appElement) {
-            appElement.innerHTML = html
-          } else {
-            console.error("Element with id 'app' not found.")
-            return
-          }
-
-          if (SpaRouter.initializePage) {
-            SpaRouter.initializePage()
-          }
-        })
-        .catch((err: Error) => console.error('Error loading page:', err))
+      const url = location.pathname + location.search
+      SpaRouter.loadPage(url, false).catch((err: Error) => console.error('Error loading page:', err))
     })
 
     // Initialize the page on first load

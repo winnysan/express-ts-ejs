@@ -10,13 +10,13 @@
     "viewOlderPosts": "View older posts"
   },
   "title": {
-    "homePage": "",
-    "loginPage": "",
-    "registerPage": "",
-    "dashboardPage": "",
-    "adminPage": "",
-    "newPostPage": "",
-    "errorPage": ""
+    "homePage": "Home page",
+    "loginPage": "Login page",
+    "registerPage": "Register page",
+    "dashboardPage": "Dashboard page",
+    "adminPage": "Admin page",
+    "newPostPage": "New post page",
+    "errorPage": "Error page"
   },
   "form": {
     "search": "Search",

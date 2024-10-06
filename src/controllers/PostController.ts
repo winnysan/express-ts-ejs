@@ -154,7 +154,9 @@ class PostController {
   public editPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
     const post = await Post.findById(req.params.id)
     if (!post) {
-      return res.status(404).json({ errors: [{ message: 'Post not found' }] })
+      res.status(404)
+
+      throw new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
     }
 
     let { title, body } = req.body
@@ -238,6 +240,8 @@ class PostController {
     const post = await Post.findOne({ slug: req.params.slug })
 
     if (!post) {
+      res.status(404)
+
       throw new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
     } else {
       const isAuthor = req.session.user ? req.session.user._id.equals(post?.author) : false
