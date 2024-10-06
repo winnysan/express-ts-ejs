@@ -7,21 +7,23 @@ class Carousel {
   private el: HTMLDivElement | null = null
   private items: HTMLCollectionOf<HTMLElement> = {} as HTMLCollectionOf<HTMLElement>
   private nav: HTMLCollectionOf<HTMLElement> = {} as HTMLCollectionOf<HTMLElement>
-  private mobile: number = 640
+  private small: number = 640
+  private medium: number = 768
+  private large: number = 1280
   private size: number = 1
   private gap: number = 24
   private width: number = 0
   private startX: number = 0
   private endX: number = 0
+  private static isFirstLoad: boolean = true
 
   /**
    * Creates an instance of Carousel.
    * @param {string} carouselId - The ID of the carousel element.
-   * @param {number} [size=1] - The number of items to display in the carousel.
+   * @description Initializes the carousel by setting up its structure and event listeners.
    */
-  constructor(carouselId: string, size: number = 1) {
+  constructor(carouselId: string) {
     this.el = Helper.selectElement<HTMLDivElement>(carouselId)
-    this.size = size
     this.items = this.el?.getElementsByClassName('carousel-item') as HTMLCollectionOf<HTMLElement>
     this.nav = this.el?.parentElement?.getElementsByClassName('carousel-nav') as HTMLCollectionOf<HTMLElement>
 
@@ -31,28 +33,31 @@ class Carousel {
   }
 
   /**
-   * Initializes the carousel, setting the minimum number of items, width, and event listeners.
+   * Initializes the carousel, setting the number of items, width, and event listeners.
    * @private
    */
   private initialize() {
+    this.determineSize()
     this.setMinItems()
-
-    this.size = window.innerWidth > this.mobile ? this.size : 1
-
     this.width = this.getSize()
 
-    window.onload = () => {
-      this.el!.style.height = this.items[0].clientHeight + 'px'
-
-      const imgHeight = this.items[0].querySelector('img')?.height
-
-      if (imgHeight) {
-        for (let i = 0; i < this.nav.length; i++) {
-          const navHeight = this.nav[i].clientHeight
-          const topPosition = imgHeight / 2 - navHeight / 2
-
-          this.nav[i].style.top = `${topPosition}px`
+    if (Carousel.isFirstLoad) {
+      window.onload = () => {
+        this.setCarouselDimensions()
+      }
+      Carousel.isFirstLoad = false
+    } else {
+      const firstImage = this.items[0].querySelector('img')
+      if (firstImage) {
+        if (firstImage.complete) {
+          this.setCarouselDimensions()
+        } else {
+          firstImage.addEventListener('load', () => {
+            this.setCarouselDimensions()
+          })
         }
+      } else {
+        this.el!.style.height = this.items[0].clientHeight + 'px'
       }
     }
 
@@ -65,11 +70,59 @@ class Carousel {
 
     this.addTouchEvents()
 
+    window.addEventListener('resize', this.handleResize.bind(this))
+
     console.log('Carousel has been initialized')
   }
 
   /**
-   * Sets minimum items in the carousel by cloning existing items if necessary.
+   * Determines the number of items to display based on the window width.
+   * @private
+   */
+  private determineSize() {
+    const windowWidth = window.innerWidth
+    if (windowWidth <= this.small) {
+      this.size = 1
+    } else if (windowWidth > this.small && windowWidth <= this.medium) {
+      this.size = 2
+    } else if (windowWidth > this.medium && windowWidth <= this.large) {
+      this.size = 3
+    } else {
+      this.size = 4
+    }
+  }
+
+  /**
+   * Handles window resize events.
+   * @private
+   * @description Recalculates carousel dimensions and layout on window resize.
+   */
+  private handleResize() {
+    this.determineSize()
+    this.width = this.getSize()
+    this.build()
+    this.setCarouselDimensions()
+  }
+
+  /**
+   * Sets the height of the carousel and positions navigation buttons.
+   * @private
+   */
+  private setCarouselDimensions(): void {
+    this.el!.style.height = this.items[0].clientHeight + 'px'
+    const imgHeight = this.items[0].querySelector('img')?.height
+
+    if (imgHeight) {
+      for (let i = 0; i < this.nav.length; i++) {
+        const navHeight = this.nav[i].clientHeight
+        const topPosition = imgHeight / 2 - navHeight / 2
+        this.nav[i].style.top = `${topPosition}px`
+      }
+    }
+  }
+
+  /**
+   * Ensures a minimum number of items by cloning existing items if necessary.
    * @private
    */
   private setMinItems() {
@@ -77,10 +130,9 @@ class Carousel {
 
     if (this.items.length < minItems) {
       let itemLength = this.items.length
-
       for (let i: number = 0; i < itemLength; i++) {
         let clone = this.items[i].cloneNode(true)
-        this.el!.append(clone)
+        this.el!.append(clone as HTMLElement)
       }
     }
 
@@ -90,13 +142,12 @@ class Carousel {
   }
 
   /**
-   * Calculates the width of each item in the carousel based on the container size and number of items.
+   * Calculates the width of each item based on the container size and number of items.
    * @returns {number} - The calculated width of each item.
    * @private
    */
   private getSize(): number {
     let width = this.el!.clientWidth
-
     if (this.size > 1) {
       let diff = this.gap / (this.size / (this.size - 1))
       return width / this.size - diff
@@ -136,14 +187,12 @@ class Carousel {
     }
 
     if (item) {
-      let clone = item.cloneNode(true)
-
+      let clone = item.cloneNode(true) as HTMLElement
       if (direction === 'next') {
         this.el!.append(clone)
       } else if (direction === 'prev') {
         this.el!.prepend(clone)
       }
-
       item.remove()
     }
   }
@@ -155,7 +204,6 @@ class Carousel {
    */
   private move(element: HTMLElement) {
     let direction = element.getAttribute('data-dir')
-
     if (direction === 'next') {
       this.next()
     } else if (direction === 'prev') {

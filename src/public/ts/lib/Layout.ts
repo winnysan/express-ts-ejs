@@ -37,7 +37,7 @@ class Layout {
     /**
      * Initialize Carousel
      */
-    new Carousel('#carousel', 3)
+    new Carousel('#carousel')
 
     /**
      * Fetch example using API client
