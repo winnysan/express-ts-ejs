@@ -15,7 +15,6 @@ class Carousel {
   private width: number = 0
   private startX: number = 0
   private endX: number = 0
-  private static isFirstLoad: boolean = true
 
   /**
    * Creates an instance of Carousel.
@@ -40,26 +39,7 @@ class Carousel {
     this.determineSize()
     this.setMinItems()
     this.width = this.getSize()
-
-    if (Carousel.isFirstLoad) {
-      window.onload = () => {
-        this.setCarouselDimensions()
-      }
-      Carousel.isFirstLoad = false
-    } else {
-      const firstImage = this.items[0].querySelector('img')
-      if (firstImage) {
-        if (firstImage.complete) {
-          this.setCarouselDimensions()
-        } else {
-          firstImage.addEventListener('load', () => {
-            this.setCarouselDimensions()
-          })
-        }
-      } else {
-        this.el!.style.height = this.items[0].clientHeight + 'px'
-      }
-    }
+    this.setCarouselDimensions()
 
     this.clone('prev')
     this.build()
@@ -70,7 +50,7 @@ class Carousel {
 
     this.addTouchEvents()
 
-    window.addEventListener('resize', this.handleResize.bind(this))
+    window.addEventListener('resize', Helper.debounce(this.handleResize.bind(this), 500))
 
     console.log('Carousel has been initialized')
   }
@@ -109,15 +89,11 @@ class Carousel {
    * @private
    */
   private setCarouselDimensions(): void {
-    this.el!.style.height = this.items[0].clientHeight + 'px'
-    const imgHeight = this.items[0].querySelector('img')?.height
-
-    if (imgHeight) {
-      for (let i = 0; i < this.nav.length; i++) {
-        const navHeight = this.nav[i].clientHeight
-        const topPosition = imgHeight / 2 - navHeight / 2
-        this.nav[i].style.top = `${topPosition}px`
-      }
+    this.el!.style.height = this.width + 128 + 'px'
+    for (let i = 0; i < this.nav.length; i++) {
+      const navHeight = this.nav[i].clientHeight
+      const topPosition = this.width / 2 - navHeight / 2
+      this.nav[i].style.top = `${topPosition}px`
     }
   }
 
