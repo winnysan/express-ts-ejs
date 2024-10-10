@@ -13,6 +13,8 @@
     "gulp:dev-with-start": "npm-run-all gulp --env=development start",
     "gulp:style-compile": "gulp style-compile",
     "gulp:styling-with-start": "npm-run-all gulp:style-compile start",
+    "seed": "ts-node src/seeder/index.ts",
+    "seed:destroy": "ts-node src/seeder/index.ts -d",
     "dev": "nodemon --watch src -e ts,ejs,scss --exec npm run gulp:dev-with-start",
     "styling": "nodemon --watch src -e scss --exec npm run gulp:styling-with-start",
     "build": "gulp --env=production"
@@ -71,6 +73,7 @@
     "sass": "^1.77.8",
     "sass-loader": "^16.0.1",
     "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4",
