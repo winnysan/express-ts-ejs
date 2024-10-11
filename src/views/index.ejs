@@ -1,6 +1,7 @@
 <%- include('./partials/header.ejs') %>
 
 <main class="container" data-title="<%= title %>">
+  <% if (posts.length > 0) { %>
   <section class="section--full"><%- include('./partials/hero.ejs', { posts }) %></section>
 
   <section class="section--full">
@@ -34,12 +35,5 @@
       </div>
     </div>
   </section>
-</main>
-
-<!-- <section>
-  <% if (nextPage !== null) { %>
-  <a href="/?page=<%= nextPage %>"
-    data-link><%= global.dictionary.navigation.viewOlderPosts %></a
-  >
   <% } %>
-</section> -->
+</main>

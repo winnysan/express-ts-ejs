@@ -5,34 +5,7 @@
     <h2 class="title" data-name="<%= global.dictionary.navigation.login %>">
       <%= global.dictionary.navigation.login %>
     </h2>
-    <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
-    <div style="color: red"><%= error.msg %></div>
-    <% }) %> <% } %>
 
-    <form id="form" action="/auth/login" method="post" class="auth-form">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <div class="auth-form__group">
-        <label for="email" class="auth-form__label"
-          ><%- include('./partials/svg/mailIcon.ejs', {strokeWidth: 1}) %></label
-        >
-        <input type="email" name="email" class="auth-form__input" placeholder="<%= global.dictionary.form.email %>" />
-      </div>
-      <div class="auth-form__group">
-        <label for="password" class="auth-form__label"
-          ><%- include('./partials/svg/keyIcon.ejs', {strokeWidth: 1}) %></label
-        >
-        <input
-          type="password"
-          name="password"
-          class="auth-form__input"
-          placeholder="<%= global.dictionary.form.password %>"
-        />
-      </div>
-      <button type="submit" class="auth-form__button"><%= global.dictionary.form.login %></button>
-
-      <p class="auth-form__redirect">
-        Ešte nemáte účet? <a href="/auth/register" class="link" data-link>Zaregistrujte sa.</a>
-      </p>
-    </form>
+    <%- form %>
   </section>
 </main>

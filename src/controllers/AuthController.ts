@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
 import express from 'express'
 import AsyncHandler from '../lib/AsyncHandler'
+import Icon from '../lib/Icon'
+import RenderElement, { ElementData } from '../lib/RenderElement'
 import SessionManager from '../lib/SessionManager'
 import User from '../models/User'
 import { Role } from '../types/enums'
@@ -17,10 +19,152 @@ class AuthController {
    * @description Renders the registration page with user session and page title. Uses main layout unless the request is AJAX.
    */
   public registerPage(req: express.Request, res: express.Response): void {
+    const form: ElementData = {
+      element: 'form',
+      attr: {
+        id: 'form',
+        action: '/auth/register',
+        method: 'POST',
+        class: 'auth-form',
+      },
+      children: [
+        {
+          element: 'input',
+          attr: {
+            type: 'hidden',
+            name: '_csrf',
+            value: req.csrfToken?.() || '',
+          },
+        },
+        // Email group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'email',
+                class: 'auth-form__label',
+              },
+              content: new Icon('mail').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'email',
+                name: 'email',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.email,
+              },
+            },
+          ],
+        },
+        // Name group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'name',
+                class: 'auth-form__label',
+              },
+              content: new Icon('user').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'text',
+                name: 'name',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.name,
+              },
+            },
+          ],
+        },
+        // Password group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'password',
+                class: 'auth-form__label',
+              },
+              content: new Icon('key').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'password',
+                name: 'password',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.password,
+              },
+            },
+          ],
+        },
+        // Confirm password group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'confirmPassword',
+                class: 'auth-form__label',
+              },
+              content: new Icon('key').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'password',
+                name: 'confirmPassword',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.confirmPassword,
+              },
+            },
+          ],
+        },
+        // Submit button
+        {
+          element: 'button',
+          attr: {
+            type: 'submit',
+            class: 'auth-form__button',
+          },
+          content: global.dictionary.form.register,
+        },
+        // Login redirect
+        {
+          element: 'p',
+          attr: {
+            class: 'auth-form__redirect',
+          },
+          content: 'Máte už účet? <a href="/auth/login" class="link" data-link>Prihláste sa.</a>',
+        },
+      ],
+    }
+
     res.render('register', {
       user: req.session.user,
       title: global.dictionary.title.registerPage,
       layout: res.locals.isAjax ? false : 'layouts/main',
+      form: new RenderElement(form),
     })
   }
 
@@ -32,10 +176,100 @@ class AuthController {
    * @description Renders the login page with user session and page title. Uses main layout unless the request is AJAX.
    */
   public loginPage(req: express.Request, res: express.Response): void {
+    const form: ElementData = {
+      element: 'form',
+      attr: {
+        id: 'form',
+        action: '/auth/login',
+        method: 'POST',
+        class: 'auth-form',
+      },
+      children: [
+        {
+          element: 'input',
+          attr: {
+            type: 'hidden',
+            name: '_csrf',
+            value: req.csrfToken?.() || '',
+          },
+        },
+        // Email group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'email',
+                class: 'auth-form__label',
+              },
+              content: new Icon('mail').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'email',
+                name: 'email',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.email,
+              },
+            },
+          ],
+        },
+        // Password group
+        {
+          element: 'div',
+          attr: {
+            class: 'auth-form__group',
+          },
+          children: [
+            {
+              element: 'label',
+              attr: {
+                for: 'password',
+                class: 'auth-form__label',
+              },
+              content: new Icon('key').toSVG(),
+            },
+            {
+              element: 'input',
+              attr: {
+                type: 'password',
+                name: 'password',
+                class: 'auth-form__input',
+                placeholder: global.dictionary.form.password,
+              },
+            },
+          ],
+        },
+        // Submit button
+        {
+          element: 'button',
+          attr: {
+            type: 'submit',
+            class: 'auth-form__button',
+          },
+          content: global.dictionary.form.login,
+        },
+        // Register redirect
+        {
+          element: 'p',
+          attr: {
+            class: 'auth-form__redirect',
+          },
+          content: 'Ešte nemáte účet? <a href="/auth/register" class="link" data-link>Zaregistrujte sa.</a>',
+        },
+      ],
+    }
+
     res.render('login', {
       user: req.session.user,
       title: global.dictionary.title.loginPage,
       layout: res.locals.isAjax ? false : 'layouts/main',
+      form: new RenderElement(form),
     })
   }
 

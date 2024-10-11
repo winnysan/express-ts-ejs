@@ -5,49 +5,7 @@
     <h2 class="title" data-name="<%= global.dictionary.navigation.register %>">
       <%= global.dictionary.navigation.register %>
     </h2>
-    <% if (typeof alert !== 'undefined') { %> <% alert.forEach(error => { %>
-    <div style="color: red"><%= error.msg %></div>
-    <% }) %> <% } %>
 
-    <form id="form" action="/auth/register" method="post" class="auth-form">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <div class="auth-form__group">
-        <label for="email" class="auth-form__label">
-          <%- include('./partials/svg/mailIcon.ejs', {strokeWidth: 1}) %>
-        </label>
-        <input type="email" name="email" class="auth-form__input" placeholder="<%= global.dictionary.form.email %>" />
-      </div>
-      <div class="auth-form__group">
-        <label for="name" class="auth-form__label">
-          <%- include('./partials/svg/userIcon.ejs', {strokeWidth: 1}) %>
-        </label>
-        <input type="text" name="name" class="auth-form__input" placeholder="<%= global.dictionary.form.name %>" />
-      </div>
-      <div class="auth-form__group">
-        <label for="password" class="auth-form__label">
-          <%- include('./partials/svg/keyIcon.ejs', {strokeWidth: 1}) %>
-        </label>
-        <input
-          type="password"
-          name="password"
-          class="auth-form__input"
-          placeholder="<%= global.dictionary.form.password %>"
-        />
-      </div>
-      <div class="auth-form__group">
-        <label for="confirmPassword" class="auth-form__label">
-          <%- include('./partials/svg/keyIcon.ejs', {strokeWidth: 1}) %>
-        </label>
-        <input
-          type="password"
-          name="confirmPassword"
-          class="auth-form__input"
-          placeholder="<%= global.dictionary.form.confirmPassword %>"
-        />
-      </div>
-      <button type="submit" class="auth-form__button"><%= global.dictionary.form.register %></button>
-
-      <p class="auth-form__redirect">Máte už účet? <a href="/auth/login" class="link" data-link>Prihláste sa.</a></p>
-    </form>
+    <%- form %>
   </section>
 </main>
