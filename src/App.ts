@@ -12,6 +12,7 @@ import AjaxMiddleware from './middleware/AjaxMiddleware'
 import AuthMiddleware from './middleware/AuthMiddleware'
 import CsrfMiddleware from './middleware/CsrfMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
+import IconMiddleware from './middleware/IconMiddleware'
 import LocalizationMiddleware from './middleware/LocalizationMiddleware'
 import AdminRouter from './routes/AdminRouter'
 import ApiRouter from './routes/ApiRouter'
@@ -72,7 +73,7 @@ class App {
   /**
    * Configures middleware for body parsing, cookie parsing, session management, CSRF protection, and static files.
    * @private
-   * @description Sets up various middlewares like body parser, session, CSRF protection, and static file handling.
+   * @description Sets up various middlewares like body parser, session, CSRF protection, and static file handling, etc.
    */
   private setMiddlewares(): void {
     this.app.use(bodyParser.json())
@@ -100,6 +101,7 @@ class App {
     this.app.use(AjaxMiddleware.isAjax)
     this.app.use(flash())
     this.app.use(LocalizationMiddleware.use)
+    this.app.use(IconMiddleware.use)
     this.app.use(express.static(path.join(__dirname, './public')))
     this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
   }

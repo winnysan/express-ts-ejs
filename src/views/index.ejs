@@ -20,17 +20,19 @@
           </figure>
           <h2><%= post.title %></h2>
           <p>
-            <span><%- include('./partials/svg/userIcon.ejs') %> <%= post.author.name %></span>
+            <span><%- include('./partials/icon.ejs', { name: 'user' }) %> <%= post.author.name %></span>
             <span
-              ><%- include('./partials/svg/calendarIcon.ejs') %><%= new
+              ><%- include('./partials/icon.ejs', { name: 'calendar' }) %><%= new
               Date(post.createdAt).toLocaleDateString(global.locale) %></span
             >
           </p>
         </a>
         <% }) %>
-        <div class="carousel__nav-item carousel-nav" data-dir="prev"><%- include('./partials/svg/leftIcon.ejs') %></div>
+        <div class="carousel__nav-item carousel-nav" data-dir="prev">
+          <%- include('./partials/icon.ejs', { name: 'left' }) %>
+        </div>
         <div class="carousel__nav-item carousel-nav" data-dir="next">
-          <%- include('./partials/svg/rightIcon.ejs') %>
+          <%- include('./partials/icon.ejs', { name: 'right' }) %>
         </div>
       </div>
     </div>

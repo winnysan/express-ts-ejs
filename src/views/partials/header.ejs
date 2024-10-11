@@ -2,7 +2,7 @@
   <nav>
     <figure class="logo" data-name="<%= global.dictionary.logo %>"><%= global.dictionary.logo %></figure>
     <button id="search-open" class="search__button-open link">
-      <span><%- include('./svg/searchIcon.ejs') %></span>
+      <span><%- include('./icon.ejs', { name: 'search', stroke: 2 }) %></span>
     </button>
     <button id="hamburger" class="link">☰</button>
     <ul class="navigation">
@@ -49,7 +49,9 @@
 
   <div id="search-overlay" class="search__overlay">
     <div class="search__container">
-      <button id="search-close" class="search__button-close link"><%- include('./svg/closeIcon.ejs') %></button>
+      <button id="search-close" class="search__button-close link">
+        <%- include('./icon.ejs', { name: 'close', size: 1.5 }) %>
+      </button>
       <form action="/search" class="search__form" method="post">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <input
@@ -60,7 +62,7 @@
           placeholder="<%= global.dictionary.form.search %>"
         />
         <button id="search-button" class="search__form-button link" disabled>
-          <%- include('./svg/searchIcon.ejs') %>
+          <%- include('./icon.ejs', { name: 'search', stroke: 2 }) %>
         </button>
 
         <p class="search__escape">Stlač ESC pre zatvorenie</p>

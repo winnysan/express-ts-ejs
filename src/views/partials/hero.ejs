@@ -6,9 +6,9 @@
       <div class="article__data-group">
         <h3><%= post.title %></h3>
         <p>
-          <span><%- include('./svg/userIcon.ejs') %> <%= post.author.name %></span>
+          <span><%- include('./icon.ejs', { name: 'user' }) %> <%= post.author.name %></span>
           <span
-            ><%- include('./svg/calendarIcon.ejs') %><%= new
+            ><%- include('./icon.ejs', { name: 'calendar' }) %><%= new
             Date(post.createdAt).toLocaleDateString(global.locale)%></span
           >
         </p>
@@ -22,9 +22,10 @@
       <h3><%= post.title %></h3>
       <div class="news__data-group">
         <p>
-          <span><%- include('./svg/userIcon.ejs') %> <%= post.author.name %></span>
+          <span><%- include('./icon.ejs', { name: 'user' }) %> <%= post.author.name %></span>
           <span>
-            <%- include('./svg/calendarIcon.ejs') %><%= new Date(post.createdAt).toLocaleDateString(global.locale)%>
+            <%- include('./icon.ejs', { name: 'calendar' }) %><%= new
+            Date(post.createdAt).toLocaleDateString(global.locale)%>
           </span>
         </p>
       </div>
