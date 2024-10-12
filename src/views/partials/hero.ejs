@@ -2,7 +2,7 @@
   <div class="feature-articles__grid">
     <% posts.forEach((post, index) => { %>
     <a href="/post/<%= post.slug %>" class="article" data-link>
-      <%- include('./image.ejs', { post }) %>
+      <%- include('./image.ejs', { post, thumb: false }) %>
       <div class="article__data-group">
         <h3><%= post.title %></h3>
         <p>
@@ -29,7 +29,7 @@
           </span>
         </p>
       </div>
-      <figure><%- include('./image.ejs', { post }) %></figure>
+      <figure><%- include('./image.ejs', { post, thumb: true }) %></figure>
     </a>
     <% }) %>
   </aside>

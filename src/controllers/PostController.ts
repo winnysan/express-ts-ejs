@@ -104,19 +104,24 @@ class PostController {
       ? await Promise.all(
           (req.files as Express.Multer.File[]).map(async (file, index) => {
             const originalName = file.originalname
+            const uuid = uuidv4()
 
             file = await new ProcessImage(file)
               .resize({ width: 600, height: 600, fit: 'inside' })
               .convert({ format: 'avif', quality: 50 })
               .save()
 
-            const uuid = uuidv4()
-            const tempPath = file.path
             const extension = path.extname(file.originalname)
             const filename = `${uuid}${extension}`
             const targetPath = path.join('uploads/', filename)
+            const thumbPath = path.join('uploads/thumbs/', filename)
 
-            await fs.move(tempPath, targetPath)
+            await new ProcessImage(file)
+              .resize({ width: 100, height: 100, crop: true })
+              .convert({ quality: 60 })
+              .saveAs(thumbPath)
+
+            await fs.move(file.path, targetPath)
 
             const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${originalName}\\)`, 'g')
             const imageUrl = `/uploads/${filename}`
@@ -125,7 +130,6 @@ class PostController {
             return {
               uuid,
               name: file.originalname,
-              filename: filename,
               extension,
               mime: file.mimetype,
               size: file.size,
@@ -179,18 +183,22 @@ class PostController {
       ? await Promise.all(
           (req.files as Express.Multer.File[]).map(async (file, index) => {
             const originalName = file.originalname
+            const uuid = uuidv4()
 
             file = await new ProcessImage(file)
               .resize({ width: 600, height: 600, fit: 'inside' })
               .convert({ format: 'avif', quality: 50 })
               .save()
 
-            const uuid = uuidv4()
             const extension = path.extname(file.originalname)
             const filename = `${uuid}${extension}`
             const targetPath = path.join('uploads/', filename)
+            const thumbPath = path.join('uploads/thumbs/', filename)
 
-            console.log(path.join('uploads/', `thumb-${filename}`))
+            await new ProcessImage(file)
+              .resize({ width: 100, height: 100, crop: true })
+              .convert({ quality: 60 })
+              .saveAs(thumbPath)
 
             await fs.move(file.path, targetPath)
 
@@ -202,8 +210,7 @@ class PostController {
 
             return {
               uuid,
-              name: file.originalname,
-              filename: filename,
+              name: originalName,
               extension,
               mime: file.mimetype,
               size: file.size,
@@ -222,8 +229,11 @@ class PostController {
         updatedImages.push(image)
       } else {
         const filePath = path.join('uploads/', image.uuid + image.extension)
+        const filePathThumb = path.join('uploads/thumbs/', image.uuid + image.extension)
+
         try {
           await fs.unlink(filePath)
+          await fs.unlink(filePathThumb)
         } catch (err: unknown) {
           Logger.logToFile(err)
         }
