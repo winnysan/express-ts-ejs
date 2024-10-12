@@ -4,7 +4,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import AsyncHandler from '../lib/AsyncHandler'
 import Logger from '../lib/Logger'
-import { ProcessImages } from '../lib/ProcessImages'
+import { ProcessImage } from '../lib/ProcessImages'
 import StringHelper from '../lib/StringHelper'
 import Post, { IPost } from '../models/Post'
 
@@ -103,14 +103,24 @@ class PostController {
     const images = req.files
       ? await Promise.all(
           (req.files as Express.Multer.File[]).map(async (file, index) => {
+            const originalName = file.originalname
+
+            file = await new ProcessImage(file)
+              .resize({ width: 600, height: 600, fit: 'inside' })
+              .convert({ format: 'avif', quality: 50 })
+              .save()
+
             const uuid = uuidv4()
             const tempPath = file.path
             const extension = path.extname(file.originalname)
             const filename = `${uuid}${extension}`
             const targetPath = path.join('uploads/', filename)
 
-            await ProcessImages.resize(file)
             await fs.move(tempPath, targetPath)
+
+            const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${originalName}\\)`, 'g')
+            const imageUrl = `/uploads/${filename}`
+            body = body.replace(regex, `![$1](${imageUrl})`)
 
             return {
               uuid,
@@ -125,12 +135,6 @@ class PostController {
           })
         )
       : []
-
-    images.forEach(image => {
-      const imageMarkdownRegex = new RegExp(`!\\[([^\\]]*)\\]\\(${image.name}\\)`, 'g')
-      const imageUrl = `/uploads/${image.filename}`
-      body = body.replace(imageMarkdownRegex, `![$1](${imageUrl})`)
-    })
 
     const post = await Post.create({
       author: req.session.user!._id,
@@ -174,17 +178,26 @@ class PostController {
     const newImages = req.files
       ? await Promise.all(
           (req.files as Express.Multer.File[]).map(async (file, index) => {
+            const originalName = file.originalname
+
+            file = await new ProcessImage(file)
+              .resize({ width: 600, height: 600, fit: 'inside' })
+              .convert({ format: 'avif', quality: 50 })
+              .save()
+
             const uuid = uuidv4()
             const extension = path.extname(file.originalname)
             const filename = `${uuid}${extension}`
             const targetPath = path.join('uploads/', filename)
 
-            await ProcessImages.resize(file)
+            console.log(path.join('uploads/', `thumb-${filename}`))
+
             await fs.move(file.path, targetPath)
 
-            const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${file.originalname}\\)`, 'g')
+            const regex = new RegExp(`!\\[([^\\]]*)\\]\\(${originalName}\\)`, 'g')
             const imageUrl = `/uploads/${filename}`
             body = body.replace(regex, `![$1](${imageUrl})`)
+
             usedImageUrls.add(imageUrl)
 
             return {
