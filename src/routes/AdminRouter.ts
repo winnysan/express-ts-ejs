@@ -28,6 +28,7 @@ class AdminRouter {
    */
   private setRoutes(): void {
     this.router.get('/', AuthMiddleware.protect, AuthMiddleware.admin, AdminController.adminPage)
+    this.router.get('/categories', AuthMiddleware.protect, AuthMiddleware.admin, AdminController.categoriesPage)
   }
 }
 

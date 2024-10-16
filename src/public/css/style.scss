@@ -1100,3 +1100,15 @@ footer {
     }
   }
 }
+
+/* Categories */
+
+#categories {
+  & li {
+    margin-left: 1rem;
+    border: 1px solid red;
+    & button {
+      margin-left: auto;
+    }
+  }
+}
