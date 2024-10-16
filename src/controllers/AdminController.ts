@@ -45,6 +45,7 @@ class AdminController {
       categoryList.push({
         id: cat._id.toString(),
         name: cat.name,
+        order: cat.order,
         children: this.nestedCategories(categories, cat._id.toString()),
       })
     }

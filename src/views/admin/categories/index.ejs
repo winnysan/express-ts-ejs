@@ -1,48 +1,41 @@
 <%- include('../../partials/header.ejs') %>
 
 <main class="container" data-title="<%= title %>">
-  <section class="section--full">
-    <h2 class="title" data-name="Categories">Categories</h2>
-  </section>
-  
-  <section class="section--full">
-    <div id="categories">
-        <% function renderCategories(categories) { %>
-            <ul>
-                <% categories.forEach(function(category) { %>
-                    <li id="<%= category.id %>">
-                    <input type="text" value="<%= category.name %>">
-                    
-                    <button>Check</button>
-                    
-                    <% if (category.children && category.children.length > 0) { %>
-                        <% renderCategories(category.children) %>
-                        <% } %>
-                    </li>
-                <% }) %>
-            </ul>
-        <% } %>
-                
-        <% renderCategories(categories); %>
-    </div>
-  </section>
-</main>
-
-<script>
-    // Vyberieme všetky tlačidlá vo vnútri kontajnera s id 'categories'
-    const buttons = document.querySelectorAll('#categories button');
-
-    // Prejdeme každé tlačidlo a pridáme event listener
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Nájdeme najbližší rodičovský <li> element
-            const li = button.closest('li');
-            if (li) {
-                // Získame id z <li> elementu
-                console.log(li.id);
-            } else {
-                console.log('ID kategórie nebolo nájdené.');
-            }
-        });
-    });
-</script>
+    <section class="section--full">
+      <h2 class="title" data-name="Categories">Categories</h2>
+    </section>
+    
+    <section class="section--full">
+      <div id="categories">
+          <% if (categories.length > 0) { %>
+              <% function renderCategories(categories) { %>
+                  <% 
+                      // Zoradenie kategórií podľa 'order' a potom 'name'
+                      const sortedCategories = categories.slice().sort((a, b) => {
+                          if (a.order !== b.order) {
+                              return a.order - b.order; // Zoradenie podľa 'order' vzostupne
+                          }
+                          return a.name.localeCompare(b.name); // Zoradenie podľa 'name' abecedne
+                      });
+                  %>
+                  <ul>
+                      <% sortedCategories.forEach(function(category) { %>
+                          <li id="<%= category.id %>">
+                              <input type="text" value="<%= category.name %>">
+                              <div class="buttons-group"></div>
+                              
+                              <% if (category.children && category.children.length > 0) { %>
+                                  <% renderCategories(category.children); %>
+                              <% } %>
+                          </li>
+                      <% }) %>
+                  </ul>
+              <% } %>
+              
+              <% renderCategories(categories); %>
+          <% } else { %>
+              <button id="add-first">Add First</button>
+          <% } %>
+      </div>
+    </section>
+  </main>
