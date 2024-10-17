@@ -1,4 +1,43 @@
-// Funkcia na vytvorenie tlačidiel
+import ApiClient from './ApiCLient'
+import Helper from './Helper'
+
+// Inicializácia ApiClient s základným endpointom
+const apiClient = new ApiClient('http://localhost:7000/api')
+
+// Funkcia na odoslanie dát na API s možnosťou aktualizácie ID
+function sendData(data: object, tempId?: string): void {
+  apiClient
+    .fetch(data, 'categories')
+    .then(response => {
+      console.log('Server response:', response)
+      // @ts-ignore
+      if (response.newId && tempId) {
+        // Nahradíme dočasné ID skutočným _id z databázy
+        const liElement = document.getElementById(tempId)
+        if (liElement) {
+          // @ts-ignore
+          liElement.id = response.newId
+        }
+      }
+    })
+    .catch(error => console.error('Error:', error))
+}
+
+/**
+ * Funkcia na generovanie jedinečného 8-miestneho náhodného čísla.
+ * @returns Jedinečné 8-miestne číslo ako string.
+ */
+function generateUniqueId(): string {
+  return Math.floor(10000000 + Math.random() * 90000000).toString()
+}
+
+// Mapovanie vstupných polí na ich debounced funkcie
+const inputDebounceMap = new WeakMap<HTMLInputElement, (data: any) => void>()
+
+/**
+ * Funkcia na vytvorenie tlačidiel pre kategóriu.
+ * @returns HTMLDivElement obsahujúci tlačidlá.
+ */
 function createButtons(): HTMLDivElement {
   const buttonsGroup: HTMLDivElement = document.createElement('div')
   buttonsGroup.className = 'buttons-group'
@@ -32,7 +71,9 @@ function createButtons(): HTMLDivElement {
   return buttonsGroup
 }
 
-// Funkcia na aktualizáciu stavu tlačidiel Up a Down
+/**
+ * Funkcia na aktualizáciu stavu tlačidiel Up a Down.
+ */
 function updateButtonsState(): void {
   const categoriesContainer: HTMLElement | null = document.getElementById('categories')
   if (!categoriesContainer) return
@@ -56,7 +97,9 @@ function updateButtonsState(): void {
   })
 }
 
-// Funkcia na pridanie tlačidla "Add First" ak je potrebné
+/**
+ * Funkcia na pridanie tlačidla "Add First" ak je potrebné.
+ */
 function showOrHideAddFirstButton(): void {
   const categoriesContainer: HTMLElement | null = document.getElementById('categories')
   if (!categoriesContainer) return
@@ -102,29 +145,45 @@ document.addEventListener('DOMContentLoaded', () => {
   showOrHideAddFirstButton()
 })
 
-// Event delegácia pre zmenu hodnoty vstupných polí
+/**
+ * Event delegácia pre zmenu hodnoty vstupných polí s debounce efektom.
+ */
 document.getElementById('categories')?.addEventListener('input', (event: Event) => {
   const target = event.target as HTMLElement
   if (target.tagName.toLowerCase() === 'input') {
     const input: HTMLInputElement = target as HTMLInputElement
     const li: HTMLLIElement | null = input.closest('li')
     if (li) {
-      console.log({ id: li.id, value: input.value })
+      const data = { action: 'input', id: li.id, value: input.value }
+
+      // Získame alebo vytvoríme debounced funkciu pre toto vstupné pole
+      let debouncedSendData = inputDebounceMap.get(input)
+      if (!debouncedSendData) {
+        debouncedSendData = Helper.debounce((data: any) => sendData(data), 300)
+        inputDebounceMap.set(input, debouncedSendData)
+      }
+
+      // Zavoláme debounced funkciu s dátami
+      debouncedSendData(data)
     }
   }
 })
 
-// Event delegácia pre kliknutia na tlačidlá "Add First", "Add", "Add Nested", "Delete", "Up" a "Down"
+/**
+ * Event delegácia pre kliknutia na tlačidlá "Add First", "Add", "Add Nested", "Delete", "Up" a "Down".
+ */
 document.addEventListener('click', (event: MouseEvent) => {
   const target = event.target as HTMLElement
 
   // Pridávanie prvej kategórie
   if (target.id === 'add-first') {
-    console.log({ addFirst: 'add-first-button' })
+    const tempId = 'category-' + generateUniqueId() // Dočasné ID
+    const data = { action: 'addFirst', id: 'add-first-button' }
+    sendData(data, tempId)
 
     // Vytvoríme nový <li> s inputom a tlačidlami
     const newLi: HTMLLIElement = document.createElement('li')
-    newLi.id = 'category-' + Date.now() // Generujeme jedinečné ID
+    newLi.id = tempId // Priradíme dočasné ID
 
     const input: HTMLInputElement = document.createElement('input')
     input.type = 'text'
@@ -150,11 +209,13 @@ document.addEventListener('click', (event: MouseEvent) => {
   } else if (target.classList.contains('add')) {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
-      console.log({ after: li.id })
+      const tempId = 'category-' + generateUniqueId() // Dočasné ID
+      const data = { action: 'add', after: li.id }
+      sendData(data, tempId)
 
       // Vytvoríme nový <li> s inputom a tlačidlami
       const newLi: HTMLLIElement = document.createElement('li')
-      newLi.id = 'category-' + Date.now() // Generujeme jedinečné ID
+      newLi.id = tempId // Priradíme dočasné ID
 
       const input: HTMLInputElement = document.createElement('input')
       input.type = 'text'
@@ -175,7 +236,9 @@ document.addEventListener('click', (event: MouseEvent) => {
   } else if (target.classList.contains('add-nested')) {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
-      console.log({ nested: li.id })
+      const tempId = 'category-' + generateUniqueId() // Dočasné ID
+      const data = { action: 'addNested', nested: li.id }
+      sendData(data, tempId)
 
       // Nájdeme alebo vytvoríme vnorený <ul>
       let ul: HTMLUListElement | null = li.querySelector('ul')
@@ -186,7 +249,7 @@ document.addEventListener('click', (event: MouseEvent) => {
 
       // Vytvoríme nový vnorený <li> s inputom a tlačidlami
       const newLi: HTMLLIElement = document.createElement('li')
-      newLi.id = 'category-' + Date.now() // Generujeme jedinečné ID
+      newLi.id = tempId // Priradíme dočasné ID
 
       const input: HTMLInputElement = document.createElement('input')
       input.type = 'text'
@@ -209,7 +272,8 @@ document.addEventListener('click', (event: MouseEvent) => {
     if (li) {
       const confirmDelete: boolean = confirm('Are you sure you want to delete this category and all its subcategories?')
       if (confirmDelete) {
-        console.log({ delete: li.id })
+        const data = { action: 'delete', id: li.id }
+        sendData(data)
         li.remove()
 
         // Skontrolujeme, či už neexistujú žiadne kategórie
@@ -225,7 +289,8 @@ document.addEventListener('click', (event: MouseEvent) => {
       const prevLi: HTMLLIElement | null = li.previousElementSibling as HTMLLIElement | null
       if (prevLi) {
         li.parentNode?.insertBefore(li, prevLi)
-        console.log({ up: li.id })
+        const data = { action: 'up', id: li.id }
+        sendData(data)
 
         // Aktualizujeme stav tlačidiel
         updateButtonsState()
@@ -237,7 +302,8 @@ document.addEventListener('click', (event: MouseEvent) => {
       const nextLi: HTMLLIElement | null = li.nextElementSibling as HTMLLIElement | null
       if (nextLi) {
         li.parentNode?.insertBefore(nextLi, li)
-        console.log({ down: li.id })
+        const data = { action: 'down', id: li.id }
+        sendData(data)
 
         // Aktualizujeme stav tlačidiel
         updateButtonsState()
