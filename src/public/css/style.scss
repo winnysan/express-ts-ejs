@@ -1101,128 +1101,38 @@ footer {
   }
 }
 
-/* Categories AI */
+/* Categories */
 
-/* Základné štýly pre kontajner #categories */
 #categories {
-  max-width: 800px; /* Maximálna šírka kontajnera */
-  margin: 0 auto; /* Centrovanie kontajnera */
-  padding: 20px; /* Vnútorné okraje */
-  background-color: #f9f9f9; /* Svetlo sivé pozadie */
-  border: 1px solid #ddd; /* Jemný okraj */
-  border-radius: 8px; /* Zaoblené rohy */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Jemný tieň pre hĺbku */
-}
-
-/* Odstránenie predvolených štýlov zoznamov */
-#categories ul {
-  list-style-type: none; /* Odstránenie bodiek */
-  padding-left: 20px; /* Vnútorné odsadenie pre vnorené zoznamy */
-}
-
-/* Štýly pre jednotlivé položky zoznamu */
-#categories li {
-  margin-bottom: 10px; /* Medzera medzi položkami */
-  padding: 10px; /* Vnútorné okraje položky */
-  background-color: #fff; /* Biele pozadie položky */
-  border: 1px solid #ccc; /* Jemný okraj položky */
-  border-radius: 4px; /* Zaoblené rohy položky */
-  position: relative; /* Pre umiestnenie prvkov vo vnútri položky */
-}
-
-/* Štýly pre vstupné polia */
-#categories input[type='text'] {
-  width: 60%; /* Šírka vstupného poľa */
-  padding: 8px; /* Vnútorné okraje */
-  margin-right: 10px; /* Medzera vpravo od vstupu */
-  border: 1px solid #ccc; /* Jemný okraj vstupu */
-  border-radius: 4px; /* Zaoblené rohy vstupu */
-  font-size: 14px; /* Veľkosť písma */
-}
-
-/* Štýly pre skupinu tlačidiel */
-.buttons-group {
-  display: inline-block; /* Zobrazenie tlačidiel v jednom riadku */
-}
-
-/* Štýly pre jednotlivé tlačidlá */
-.buttons-group button {
-  padding: 6px 12px; /* Vnútorné okraje tlačidla */
-  margin-right: 5px; /* Medzera medzi tlačidlami */
-  border: none; /* Odstránenie predvolených okrajov */
-  border-radius: 4px; /* Zaoblené rohy tlačidiel */
-  background-color: #007bff; /* Modré pozadie tlačidiel */
-  color: #fff; /* Biele písmo */
-  cursor: pointer; /* Zmena kurzora na ruky */
-  font-size: 14px; /* Veľkosť písma */
-  transition: background-color 0.3s ease; /* Plynulý prechod farby */
-}
-
-/* Odstránenie medzery za posledným tlačidlom */
-.buttons-group button:last-child {
-  margin-right: 0;
-}
-
-/* Štýly pre tlačidlá pri prechode kurzorom */
-.buttons-group button:hover:not(:disabled) {
-  background-color: #0056b3; /* Tmavšie modré pri hover */
-}
-
-/* Štýly pre zakázané tlačidlá */
-.buttons-group button:disabled {
-  background-color: #cccccc; /* Svetlo sivé pozadie */
-  cursor: not-allowed; /* Zmena kurzora na "zakázané" */
-}
-
-/* Štýly pre tlačidlo "Add First" */
-#add-first {
-  padding: 10px 20px; /* Vnútorné okraje tlačidla */
-  background-color: #28a745; /* Zelené pozadie */
-  color: #fff; /* Biele písmo */
-  border: none; /* Odstránenie okrajov */
-  border-radius: 4px; /* Zaoblené rohy tlačidla */
-  cursor: pointer; /* Zmena kurzora na ruky */
-  font-size: 16px; /* Veľkosť písma */
-  transition: background-color 0.3s ease; /* Plynulý prechod farby */
-  display: block; /* Zobrazenie ako blok */
-  margin: 20px auto; /* Centrovanie tlačidla */
-}
-
-/* Štýly pre tlačidlo "Add First" pri prechode kurzorom */
-#add-first:hover {
-  background-color: #218838; /* Tmavšie zelené pri hover */
-}
-
-/* Indentácia vnorených zoznamov */
-#categories ul ul {
-  margin-left: 20px; /* Medzera naľavo pre vnorené zoznamy */
-}
-
-/* Štýly pre hlavičky sekcie (ak existujú) */
-#categories .section--full h2.title {
-  text-align: center; /* Centrovanie textu */
-  margin-bottom: 20px; /* Medzera pod hlavičkou */
-  color: #333; /* Tmavá farba písma */
-}
-
-/* Responsívne štýly pre menšie obrazovky */
-@media (max-width: 600px) {
-  #categories input[type='text'] {
-    width: 100%; /* Šírka vstupného poľa na 100% */
-    margin-bottom: 10px; /* Medzera pod vstupom */
-  }
-
-  .buttons-group {
-    display: flex; /* Flexbox pre tlačidlá */
-    flex-wrap: wrap; /* Tlačidlá môžu prechádzať do nového riadku */
-  }
-
-  .buttons-group button {
-    flex: 1 1 45%; /* Flexibilná šírka tlačidiel */
-    margin-bottom: 5px; /* Medzera pod tlačidlami */
-  }
-
-  #add-first {
-    width: 100%; /* Šírka tlačidla na 100% */
+  & ul {
+    background-color: rgba(255, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.2rem 0;
+    &:not(#categories > ul) {
+      padding-left: 1rem;
+    }
+    & li {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0.2rem 0;
+      align-items: center;
+      & input[type='text'] {
+        padding: 0.2rem;
+        border: 1px solid var(--dark);
+      }
+      & .buttons-group {
+        margin-left: auto;
+        display: flex;
+        column-gap: 0.2rem;
+        & button {
+          padding: 0.2rem 0.5rem;
+          background-color: var(--dark);
+          color: #fff;
+          white-space: nowrap;
+        }
+      }
+    }
   }
 }
