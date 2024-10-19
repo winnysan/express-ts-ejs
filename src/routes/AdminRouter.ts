@@ -1,5 +1,6 @@
 import express from 'express'
 import AdminController from '../controllers/AdminController'
+import CategoryController from '../controllers/CategoryController'
 import AuthMiddleware from '../middleware/AuthMiddleware'
 
 /**
@@ -28,7 +29,7 @@ class AdminRouter {
    */
   private setRoutes(): void {
     this.router.get('/', AuthMiddleware.protect, AuthMiddleware.admin, AdminController.adminPage)
-    this.router.get('/categories', AuthMiddleware.protect, AuthMiddleware.admin, AdminController.categoriesPage)
+    this.router.get('/categories', AuthMiddleware.protect, AuthMiddleware.admin, CategoryController.categoriesPage)
   }
 }
 
