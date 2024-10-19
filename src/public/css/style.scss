@@ -1104,33 +1104,76 @@ footer {
 /* Categories */
 
 #categories {
+  overflow-x: auto;
   & ul {
-    background-color: rgba(255, 0, 0, 0.1);
-    width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0.2rem 0;
+    row-gap: 0.5rem;
+    width: 100%;
+    background-color: var(--white);
     &:not(#categories > ul) {
-      padding-left: 1rem;
+      padding-top: 0.5rem;
+      padding-left: 2rem;
     }
     & li {
       display: flex;
       flex-wrap: wrap;
-      padding: 0.2rem 0;
       align-items: center;
+      width: 100%;
+      background-color: var(--transparent-light);
       & input[type='text'] {
-        padding: 0.2rem;
-        border: 1px solid var(--dark);
+        box-shadow: 0 0.3rem 0.5rem var(--transparent-light);
+        margin: 0.3rem 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: var(--white);
+        border: 2px solid var(--dark);
+        &:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: -4px;
+        }
       }
       & .buttons-group {
-        margin-left: auto;
         display: flex;
-        column-gap: 0.2rem;
+        column-gap: 0.3rem;
+        margin-left: auto;
+        padding: 0.3rem;
         & button {
+          min-width: 3rem;
           padding: 0.2rem 0.5rem;
-          background-color: var(--dark);
-          color: #fff;
+          transition: background-color 0.3s ease-in-out;
+          background-color: var(--transparent-dark);
+          color: white;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.05rem;
           white-space: nowrap;
+          &:hover {
+            background-color: var(--primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+:root[data-color-mode='dark'] {
+  #categories {
+    color: var(--white);
+    & ul {
+      background-color: var(--black);
+      & li {
+        background-color: var(--dark);
+        & input[type='text'] {
+          background-color: var(--black);
+          border-color: var(--gray);
+        }
+        & .buttons-group {
+          & button {
+            background-color: var(--gray);
+            &:hover {
+              background-color: var(--primary);
+            }
+          }
         }
       }
     }
