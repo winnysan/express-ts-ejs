@@ -1,6 +1,5 @@
 import Layout from './lib/Layout'
 import SpaRouter from './lib/SpaRouter'
-import './lib/categories'
 
 /**
  * Main entry point of the application.

@@ -1,5 +1,6 @@
 import ApiClient from './ApiCLient'
 import Carousel from './Carousel'
+import CategoryHandler from './CategoryHandler'
 import Editor from './Editor'
 import FormHandler from './FormHandler'
 import Helper from './Helper'
@@ -33,6 +34,9 @@ class Layout {
     new ImagePreviewHandler('#input-images', '#preview-images', '#drop-area')
 
     new FormHandler('#form-logout', 'input[name="_csrf"]')
+
+    const categoryHandler = CategoryHandler.getInstance('#categories')
+    categoryHandler.refresh()
 
     /**
      * Initialize Carousel
