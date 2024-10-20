@@ -1,12 +1,13 @@
 import Layout from './lib/Layout'
 import SpaRouter from './lib/SpaRouter'
+import './localization'
 
 /**
  * Main entry point of the application.
  * @description Initializes the SPA router and the layout components when the script is loaded.
  */
 console.log(
-  '%cScript loaded successfully',
+  `%c${window.localization.getLocalizedText('scriptLoadedSuccessfully')}`,
   'color: white; background-color: green; font-weight: bold; padding: 2px 4px; border-radius: 3px;'
 )
 
