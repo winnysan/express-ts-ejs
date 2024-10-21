@@ -1,10 +1,15 @@
-import ApiClient from './ApiCLient'
+import ApiClient, { ApiResponse } from './ApiCLient'
 import Helper from './Helper'
+
+type ApiCategoryResponse = ApiResponse & {
+  status?: number
+  newId?: string
+}
 
 class CategoryHandler {
   private static instance: CategoryHandler | null = null
   private categoriesEl: HTMLDivElement | null = null
-  private apiClient: ApiClient
+  private apiClient: ApiClient<ApiCategoryResponse>
   private inputDebounceMap: WeakMap<HTMLInputElement, (data: any) => void> = new WeakMap()
   private listenersAttached: boolean = false
 
@@ -17,7 +22,7 @@ class CategoryHandler {
   // Private constructor to prevent direct instantiation
   private constructor(categoriesId: string) {
     this.categoriesId = categoriesId
-    this.apiClient = new ApiClient('http://localhost:7000/api')
+    this.apiClient = new ApiClient<ApiCategoryResponse>('http://localhost:7000/api')
 
     this.handleClickBound = this.handleClick.bind(this)
     this.handleInputBound = this.handleInput.bind(this)
@@ -171,12 +176,10 @@ class CategoryHandler {
     this.apiClient
       .fetch(data, 'categories')
       .then(response => {
-        // @ts-ignore
         if (response.newId && tempId) {
           // Replace temporary ID with the actual _id from the database
           const liElement = document.getElementById(tempId)
           if (liElement) {
-            // @ts-ignore
             liElement.id = response.newId
           }
         }
