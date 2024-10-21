@@ -37,7 +37,7 @@ class FormHandler {
       await this.handleSubmit()
     })
 
-    console.log('The form handler has been initialized')
+    console.log(window.localization.getLocalizedText('formHandlerHasBeenInitialized'))
   }
 
   /**
@@ -98,7 +98,7 @@ class FormHandler {
           // Handle non-OK responses with a failure message
           const result = await response.json()
 
-          let message: string = 'Form submission failed'
+          let message: string = window.localization.getLocalizedText('formSubmissionFailed')
 
           if (result.errors && result.errors[0].message) message = result.errors[0].message
 
@@ -128,13 +128,13 @@ class FormHandler {
             // Handle redirect or log JSON response
             if (result.redirect) SpaRouter.navigateTo(result.redirect)
             else if (result.json) console.log(result.json)
-            else Helper.addToastMessage(toastEl, 'No action is required', 'warning')
+            else Helper.addToastMessage(toastEl, window.localization.getLocalizedText('noActionIsRequired'), 'warning')
           }
         }
       } catch (err) {
         // Log any unexpected errors and show a failure message
-        console.error('Something went wrong:', err)
-        Helper.addToastMessage(toastEl, 'Something went wrong', 'danger')
+        console.error(`${window.localization.getLocalizedText('somethingWentWrong')}:`, err)
+        Helper.addToastMessage(toastEl, window.localization.getLocalizedText('somethingWentWrong'), 'danger')
       }
     }
   }

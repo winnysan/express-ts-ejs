@@ -46,7 +46,7 @@ class ApiClient {
 
       const data = await response.json()
       if (!data.csrfToken) {
-        throw new Error('CSRF token not found in the response')
+        throw new Error(window.localization.getLocalizedText('csrfTokenNotFoundInTheResponse'))
       }
 
       return data.csrfToken
@@ -78,7 +78,7 @@ class ApiClient {
       })
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`)
+        throw new Error(`${window.localization.getLocalizedText('error')}: ${response.statusText}`)
       }
 
       return response.json() as Promise<ApiResponse>

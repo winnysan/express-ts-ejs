@@ -41,7 +41,7 @@ class ImagePreviewHandler {
       this.dropAreaEl.addEventListener('click', () => this.inputEl?.click())
     }
 
-    console.log('The image preview handler with drag-and-drop support has been initialized')
+    console.log(window.localization.getLocalizedText('imagePreviewHandlerHasBeenInitialized'))
   }
 
   /**

@@ -28,7 +28,7 @@ class SpaRouter {
     }
 
     SpaRouter.loadPage(url, true)
-      .catch((err: Error) => console.error('Error loading page:', err))
+      .catch((err: Error) => console.error(console.error(`${window.localization.getLocalizedText('error')}:`, err)))
       .finally(() => {
         if (loadingIndicator) {
           loadingIndicator.style.display = 'none'
@@ -52,7 +52,7 @@ class SpaRouter {
         if (!response.ok) {
           if (response.status === 404) return response.text()
 
-          throw new Error(`HTTP error! status: ${response.status}`)
+          throw new Error(`${window.localization.getLocalizedText('error')}: ${response.status}`)
         }
         return response.text() // Fetches the response as HTML text
       })
@@ -70,7 +70,7 @@ class SpaRouter {
             document.title = ''
           }
         } else {
-          console.error("Element with id 'app' not found.")
+          console.error(window.localization.getLocalizedText('appElementNotFound'))
           return
         }
 
@@ -114,13 +114,17 @@ class SpaRouter {
      */
     window.addEventListener('popstate', () => {
       const url = location.pathname + location.search
-      SpaRouter.loadPage(url, false).catch((err: Error) => console.error('Error loading page:', err))
+      SpaRouter.loadPage(url, false).catch((err: Error) =>
+        console.error(console.error(`${window.localization.getLocalizedText('error')}:`, err))
+      )
     })
 
     // Initialize the page on first load
     if (SpaRouter.initializePage) {
       SpaRouter.initializePage()
     }
+
+    console.log(window.localization.getLocalizedText('spaRouterHasBeenInitialized'))
   }
 }
 

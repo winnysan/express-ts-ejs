@@ -133,7 +133,7 @@ class Layout {
 
     if (dateEl) dateEl.innerText = new Date().toLocaleDateString()
 
-    console.log('Layout listeners have been initialized')
+    console.log(window.localization.getLocalizedText('layoutListenersHaveBeenInitialized'))
   }
 }
 

@@ -43,7 +43,7 @@ class Reactivity {
       }
     })
 
-    console.log('Reactivity has been initialized')
+    console.log(window.localization.getLocalizedText('reactivityHasBeenInitialized'))
   }
 }
 

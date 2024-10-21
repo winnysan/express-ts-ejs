@@ -76,7 +76,7 @@ class Editor {
       this.inputEl.value = this.contentEl.value
     })
 
-    console.log('Markdown editor has been initialized')
+    console.log(window.localization.getLocalizedText('markdownEditorHasBeenInitialized'))
   }
 
   /**

@@ -24,7 +24,11 @@ class CategoryHandler {
     this.initialize()
   }
 
-  // Static method to get the singleton instance
+  /**
+   * Static method to get the singleton instance
+   * @param categoriesId - The ID of the categories element
+   * @returns {CategoryHandler} - The singleton instance of CategoryHandler
+   */
   public static getInstance(categoriesId: string): CategoryHandler {
     if (!CategoryHandler.instance) {
       CategoryHandler.instance = new CategoryHandler(categoriesId)
@@ -32,13 +36,19 @@ class CategoryHandler {
     return CategoryHandler.instance
   }
 
-  // Initialize the handler: attach event listeners once and process the DOM
+  /**
+   * Initialize the handler: attach event listeners once and process the DOM
+   */
   private initialize(): void {
     this.attachEventListeners()
     this.processDOM()
+
+    console.log(window.localization.getLocalizedText('categoryHandlerHasBeenInitialized'))
   }
 
-  // Method to attach event listeners
+  /**
+   * Method to attach event listeners
+   */
   private attachEventListeners(): void {
     this.categoriesEl = document.querySelector(this.categoriesId) as HTMLDivElement | null
     if (this.categoriesEl) {
@@ -46,14 +56,13 @@ class CategoryHandler {
         this.categoriesEl.addEventListener('input', this.handleInputBound)
         this.categoriesEl.addEventListener('click', this.handleClickBound)
         this.listenersAttached = true
-        console.log('Event listeners attached.')
       }
-    } else {
-      console.error(`Element s ID "${this.categoriesId}" nebol nájdený počas inicializácie.`)
     }
   }
 
-  // Public method to refresh the handler, e.g., when navigating back to the page
+  /**
+   * Public method to refresh the handler, e.g., when navigating back to the page
+   */
   public refresh(): void {
     const newCategoriesEl = document.querySelector(this.categoriesId) as HTMLDivElement | null
     if (newCategoriesEl && newCategoriesEl !== this.categoriesEl) {
@@ -61,7 +70,6 @@ class CategoryHandler {
       if (this.categoriesEl && this.listenersAttached) {
         this.categoriesEl.removeEventListener('input', this.handleInputBound)
         this.categoriesEl.removeEventListener('click', this.handleClickBound)
-        console.log('Old event listeners removed.')
       }
 
       // Update categoriesEl to the new element
@@ -71,7 +79,6 @@ class CategoryHandler {
       if (this.categoriesEl) {
         this.categoriesEl.addEventListener('input', this.handleInputBound)
         this.categoriesEl.addEventListener('click', this.handleClickBound)
-        console.log('New event listeners attached.')
       }
 
       // Reprocess the DOM
@@ -86,12 +93,11 @@ class CategoryHandler {
     }
   }
 
-  // Method to process the current DOM: add buttons to <li> elements and update states
+  /**
+   * Method to process the current DOM: add buttons to <li> elements and update states
+   */
   private processDOM(): void {
-    if (!this.categoriesEl) {
-      console.error(`Element s ID "${this.categoriesId}" nebol nájdený počas processDOM().`)
-      return
-    }
+    if (!this.categoriesEl) return
 
     const existingLis: NodeListOf<HTMLLIElement> = this.categoriesEl.querySelectorAll('li')
 
@@ -99,18 +105,20 @@ class CategoryHandler {
       const buttonsGroup: HTMLDivElement | null = li.querySelector('.buttons-group')
       if (buttonsGroup && buttonsGroup.children.length === 0) {
         buttonsGroup.appendChild(this.createButtons())
-        console.log(`Buttons added to li with ID: ${li.id}`)
       }
     })
 
-    // Aktualizácia stavu tlačidiel Up a Down
+    // Update the state of the Up and Down buttons
     this.updateButtonsState()
 
-    // Skryjeme alebo zobrazíme tlačidlo "Add First" podľa potreby
+    // Show or hide the "Add First" button as needed
     this.showOrHideAddFirstButton()
   }
 
-  // Event handler pre input udalosti s debounce efektom
+  /**
+   * Event handler for input events with debounce effect
+   * @param event - The input event
+   */
   private handleInput(event: Event): void {
     const target = event.target as HTMLElement
     if (target.tagName.toLowerCase() === 'input') {
@@ -118,26 +126,26 @@ class CategoryHandler {
       const li: HTMLLIElement | null = input.closest('li')
       if (li) {
         const data = { action: 'input', id: li.id, value: input.value }
-        console.log(`Input event: ${JSON.stringify(data)}`)
 
-        // Získame alebo vytvoríme debounced funkciu pre toto vstupné pole
+        // Get or create a debounced function for this input
         let debouncedSendData = this.inputDebounceMap.get(input)
         if (!debouncedSendData) {
           debouncedSendData = Helper.debounce((data: any) => this.sendData(data), 300)
           this.inputDebounceMap.set(input, debouncedSendData)
-          console.log(`Debounced function created for input with ID: ${input.id}`)
         }
 
-        // Zavoláme debounced funkciu s dátami
+        // Call the debounced function with the data
         debouncedSendData(data)
       }
     }
   }
 
-  // Event handler pre click udalosti
+  /**
+   * Event handler for click events
+   * @param event - The click event
+   */
   private handleClick(event: MouseEvent): void {
     const target = event.target as HTMLElement
-    console.log(`Click event on: ${target.tagName}, ID: ${target.id}, Classes: ${target.className}`)
 
     if (target.id === 'add-first') {
       this.addFirstCategory()
@@ -154,16 +162,18 @@ class CategoryHandler {
     }
   }
 
-  // Metóda na odoslanie dát na API
+  /**
+   * Method to send data to the API
+   * @param data - The data to be sent
+   * @param tempId - Optional temporary ID
+   */
   private sendData(data: object, tempId?: string): void {
-    console.log(`Sending data to API: ${JSON.stringify(data)}, tempId: ${tempId}`)
     this.apiClient
       .fetch(data, 'categories')
       .then(response => {
-        console.log('Server response:', response)
         // @ts-ignore
         if (response.newId && tempId) {
-          // Nahradíme dočasné ID skutočným _id z databázy
+          // Replace temporary ID with the actual _id from the database
           const liElement = document.getElementById(tempId)
           if (liElement) {
             // @ts-ignore
@@ -171,15 +181,21 @@ class CategoryHandler {
           }
         }
       })
-      .catch(error => console.error('Error:', error))
+      .catch(err => console.error(`${window.localization.getLocalizedText('error')}:`, err))
   }
 
-  // Generovanie jedinečného 8-miestneho ID
+  /**
+   * Generate a unique 8-digit ID
+   * @returns {string} - The unique ID
+   */
   private generateUniqueId(): string {
     return Math.floor(10000000 + Math.random() * 90000000).toString()
   }
 
-  // Vytvorenie skupiny tlačidiel pre kategóriu
+  /**
+   * Create a group of buttons for a category
+   * @returns {HTMLDivElement} - The buttons group
+   */
   private createButtons(): HTMLDivElement {
     const buttonsGroup: HTMLDivElement = document.createElement('div')
     buttonsGroup.className = 'buttons-group'
@@ -213,7 +229,9 @@ class CategoryHandler {
     return buttonsGroup
   }
 
-  // Aktualizácia stavu tlačidiel "Up" a "Down"
+  /**
+   * Update the state of the "Up" and "Down" buttons
+   */
   private updateButtonsState(): void {
     if (!this.categoriesEl) return
 
@@ -236,7 +254,9 @@ class CategoryHandler {
     })
   }
 
-  // Zobrazenie alebo skrytie tlačidla "Add First" podľa toho, či existujú kategórie
+  /**
+   * Show or hide the "Add First" button based on whether categories exist
+   */
   private showOrHideAddFirstButton(): void {
     if (!this.categoriesEl) return
 
@@ -246,32 +266,31 @@ class CategoryHandler {
     if (existingUl && existingUl.querySelectorAll('li').length > 0) {
       if (addFirstButton) {
         addFirstButton.style.display = 'none'
-        console.log('Hide "Add First" button.')
       }
     } else {
       if (addFirstButton) {
         addFirstButton.style.display = 'block'
-        console.log('Show "Add First" button.')
       } else {
-        // Vytvoríme tlačidlo "Add First" ak neexistuje
+        // Create the "Add First" button if it does not exist
         addFirstButton = document.createElement('button')
         addFirstButton.id = 'add-first'
         addFirstButton.textContent = 'Add First'
         this.categoriesEl.appendChild(addFirstButton)
-        console.log('"Add First" button created and shown.')
       }
     }
   }
 
-  // Pridanie prvej kategórie
+  /**
+   * Add the first category
+   */
   private addFirstCategory(): void {
-    const tempId = 'category-' + this.generateUniqueId() // Dočasné ID
+    const tempId = 'category-' + this.generateUniqueId() // Temporary ID
     const data = { action: 'addFirst', id: 'add-first-button' }
     this.sendData(data, tempId)
 
-    // Vytvoríme nový <li> s inputom a tlačidlami
+    // Create a new <li> with input and buttons
     const newLi: HTMLLIElement = document.createElement('li')
-    newLi.id = tempId // Priradíme dočasné ID
+    newLi.id = tempId // Assign temporary ID
 
     const input: HTMLInputElement = document.createElement('input')
     input.type = 'text'
@@ -282,31 +301,33 @@ class CategoryHandler {
     newLi.appendChild(input)
     newLi.appendChild(buttonsGroup)
 
-    // Vytvoríme <ul> a pridáme nový <li>
+    // Create <ul> and add the new <li>
     const ul: HTMLUListElement = document.createElement('ul')
     ul.appendChild(newLi)
 
     if (this.categoriesEl) {
-      this.categoriesEl.innerHTML = '' // Vymažeme tlačidlo "Add First"
+      this.categoriesEl.innerHTML = '' // Clear the "Add First" button
       this.categoriesEl.appendChild(ul)
-      console.log('Added first category.')
     }
 
-    // Aktualizujeme stav tlačidiel
+    // Update the state of the buttons
     this.updateButtonsState()
   }
 
-  // Pridanie kategórie po vybranej položke
+  /**
+   * Add a category after the selected item
+   * @param target - The target element that triggered the action
+   */
   private addCategory(target: HTMLElement): void {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
-      const tempId = 'category-' + this.generateUniqueId() // Dočasné ID
+      const tempId = 'category-' + this.generateUniqueId() // Temporary ID
       const data = { action: 'add', after: li.id }
       this.sendData(data, tempId)
 
-      // Vytvoríme nový <li> s inputom a tlačidlami
+      // Create a new <li> with input and buttons
       const newLi: HTMLLIElement = document.createElement('li')
-      newLi.id = tempId // Priradíme dočasné ID
+      newLi.id = tempId // Assign temporary ID
 
       const input: HTMLInputElement = document.createElement('input')
       input.type = 'text'
@@ -317,34 +338,36 @@ class CategoryHandler {
       newLi.appendChild(input)
       newLi.appendChild(buttonsGroup)
 
-      // Vložíme nový <li> za aktuálny <li>
+      // Insert the new <li> after the current <li>
       li.parentNode?.insertBefore(newLi, li.nextSibling)
-      console.log(`Added category after ${li.id}`)
 
-      // Aktualizujeme stav tlačidiel
+      // Update the state of the buttons
       this.updateButtonsState()
       this.showOrHideAddFirstButton()
     }
   }
 
-  // Pridanie vnorené kategórie
+  /**
+   * Add a nested category
+   * @param target - The target element that triggered the action
+   */
   private addNestedCategory(target: HTMLElement): void {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
-      const tempId = 'category-' + this.generateUniqueId() // Dočasné ID
+      const tempId = 'category-' + this.generateUniqueId() // Temporary ID
       const data = { action: 'addNested', nested: li.id }
       this.sendData(data, tempId)
 
-      // Nájdeme alebo vytvoríme vnorený <ul>
+      // Find or create a nested <ul>
       let ul: HTMLUListElement | null = li.querySelector('ul')
       if (!ul) {
         ul = document.createElement('ul')
         li.appendChild(ul)
       }
 
-      // Vytvoríme nový vnorený <li> s inputom a tlačidlami
+      // Create a new nested <li> with input and buttons
       const newLi: HTMLLIElement = document.createElement('li')
-      newLi.id = tempId // Priradíme dočasné ID
+      newLi.id = tempId // Assign temporary ID
 
       const input: HTMLInputElement = document.createElement('input')
       input.type = 'text'
@@ -355,37 +378,41 @@ class CategoryHandler {
       newLi.appendChild(input)
       newLi.appendChild(buttonsGroup)
 
-      // Pridáme nový <li> do vnoreného <ul>
+      // Append the new <li> to the nested <ul>
       ul.appendChild(newLi)
-      console.log(`Added nested category under ${li.id}`)
 
-      // Aktualizujeme stav tlačidiel
+      // Update the state of the buttons
       this.updateButtonsState()
       this.showOrHideAddFirstButton()
     }
   }
 
-  // Odstránenie kategórie a jej podkategórií
+  /**
+   * Remove a category and its subcategories
+   * @param target - The target element that triggered the action
+   */
   private deleteCategory(target: HTMLElement): void {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
-      const confirmDelete: boolean = confirm('Are you sure you want to delete this category and all its subcategories?')
+      const confirmDelete: boolean = confirm(window.localization.getLocalizedText('categoryDeleteConfirm'))
       if (confirmDelete) {
         const data = { action: 'delete', id: li.id }
         this.sendData(data)
         li.remove()
-        console.log(`Deleted category with ID: ${li.id}`)
 
-        // Skontrolujeme, či už neexistujú žiadne kategórie
+        // Check if there are no categories left
         this.showOrHideAddFirstButton()
 
-        // Aktualizujeme stav tlačidiel
+        // Update the state of the buttons
         this.updateButtonsState()
       }
     }
   }
 
-  // Posunutie kategórie hore v zozname
+  /**
+   * Move a category up in the list
+   * @param target - The target element that triggered the action
+   */
   private moveCategoryUp(target: HTMLElement): void {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
@@ -394,15 +421,17 @@ class CategoryHandler {
         li.parentNode?.insertBefore(li, prevLi)
         const data = { action: 'up', id: li.id }
         this.sendData(data)
-        console.log(`Moved category up: ${li.id}`)
 
-        // Aktualizujeme stav tlačidiel
+        // Update the state of the buttons
         this.updateButtonsState()
       }
     }
   }
 
-  // Posunutie kategórie dole v zozname
+  /**
+   * Move a category down in the list
+   * @param target - The target element that triggered the action
+   */
   private moveCategoryDown(target: HTMLElement): void {
     const li: HTMLLIElement | null = target.closest('li') as HTMLLIElement | null
     if (li) {
@@ -411,22 +440,22 @@ class CategoryHandler {
         li.parentNode?.insertBefore(nextLi, li)
         const data = { action: 'down', id: li.id }
         this.sendData(data)
-        console.log(`Moved category down: ${li.id}`)
 
-        // Aktualizujeme stav tlačidiel
+        // Update the state of the buttons
         this.updateButtonsState()
       }
     }
   }
 
-  // Metóda na odstránenie event listenerov a čistotu
+  /**
+   * Method to remove event listeners and clean up
+   */
   public destroy(): void {
     if (!this.listenersAttached) return
 
     if (this.categoriesEl) {
       this.categoriesEl.removeEventListener('input', this.handleInputBound)
       this.categoriesEl.removeEventListener('click', this.handleClickBound)
-      console.log('Event listeners detached.')
     }
 
     this.listenersAttached = false

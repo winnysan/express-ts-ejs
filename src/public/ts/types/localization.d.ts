@@ -1,5 +1,20 @@
 interface Dictionary {
   scriptLoadedSuccessfully: string
+  csrfTokenNotFoundInTheResponse: string
+  carouselHasBeenInitialized: string
+  markdownEditorHasBeenInitialized: string
+  formHandlerHasBeenInitialized: string
+  imagePreviewHandlerHasBeenInitialized: string
+  layoutListenersHaveBeenInitialized: string
+  reactivityHasBeenInitialized: string
+  spaRouterHasBeenInitialized: string
+  categoryHandlerHasBeenInitialized: string
+  categoryDeleteConfirm: string
+  error: string
+  formSubmissionFailed: string
+  noActionIsRequired: string
+  somethingWentWrong: string
+  appElementNotFound: string
 }
 
 interface Localization {
