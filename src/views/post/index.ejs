@@ -26,7 +26,7 @@
         <label for="categories">Categories</label>
 
         <!-- multi-select categories -->
-        <div class="multi-select">
+        <div id="categories-multi-select">
           <div class="selected-categories" id="selected-categories">
             <% if (post.categories && post.categories.length > 0) { %>
               <% post.categories.forEach(catId => { %>
@@ -108,7 +108,7 @@
 
     // Skryť dropdown pri kliknutí mimo
     document.addEventListener('click', (e) => {
-      if (!document.querySelector('.multi-select').contains(e.target)) {
+      if (!document.querySelector('#categories-multi-select').contains(e.target)) {
         dropdown.style.display = 'none';
       }
     });
