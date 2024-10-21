@@ -43,7 +43,7 @@ class Reactivity {
       }
     })
 
-    console.log(window.localization.getLocalizedText('reactivityHasBeenInitialized'))
+    if (window.env === 'development') console.log(window.localization.getLocalizedText('reactivityHasBeenInitialized'))
   }
 }
 

@@ -9,6 +9,7 @@ import session from 'express-session'
 import path from 'path'
 import Database from './lib/Database'
 import AjaxMiddleware from './middleware/AjaxMiddleware'
+import AppEnvMiddleware from './middleware/AppEnvMiddleware'
 import AuthMiddleware from './middleware/AuthMiddleware'
 import CsrfMiddleware from './middleware/CsrfMiddleware'
 import ErrorMiddleware from './middleware/ErrorMiddleware'
@@ -100,6 +101,7 @@ class App {
     this.app.use(CsrfMiddleware.init())
     this.app.use(AjaxMiddleware.isAjax)
     this.app.use(flash())
+    this.app.use(AppEnvMiddleware.use)
     this.app.use(LocalizationMiddleware.use)
     this.app.use(IconMiddleware.use)
     this.app.use(express.static(path.join(__dirname, './public')))

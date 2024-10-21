@@ -48,7 +48,8 @@ class CategoryHandler {
     this.attachEventListeners()
     this.processDOM()
 
-    console.log(window.localization.getLocalizedText('categoryHandlerHasBeenInitialized'))
+    if (window.env === 'development')
+      console.log(window.localization.getLocalizedText('categoryHandlerHasBeenInitialized'))
   }
 
   /**

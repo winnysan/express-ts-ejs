@@ -41,7 +41,8 @@ class ImagePreviewHandler {
       this.dropAreaEl.addEventListener('click', () => this.inputEl?.click())
     }
 
-    console.log(window.localization.getLocalizedText('imagePreviewHandlerHasBeenInitialized'))
+    if (window.env === 'development')
+      console.log(window.localization.getLocalizedText('imagePreviewHandlerHasBeenInitialized'))
   }
 
   /**

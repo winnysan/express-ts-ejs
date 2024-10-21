@@ -37,7 +37,7 @@ class FormHandler {
       await this.handleSubmit()
     })
 
-    console.log(window.localization.getLocalizedText('formHandlerHasBeenInitialized'))
+    if (window.env === 'development') console.log(window.localization.getLocalizedText('formHandlerHasBeenInitialized'))
   }
 
   /**

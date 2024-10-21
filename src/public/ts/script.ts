@@ -1,3 +1,4 @@
+import './environment'
 import Layout from './lib/Layout'
 import SpaRouter from './lib/SpaRouter'
 import './localization'

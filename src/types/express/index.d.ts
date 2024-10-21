@@ -23,6 +23,7 @@ declare global {
   }
   var locale: Locale
   var dictionary: Dictionary
+  var env: string | undefined
 }
 
 declare module 'express-session' {

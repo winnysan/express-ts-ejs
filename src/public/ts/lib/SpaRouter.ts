@@ -124,7 +124,7 @@ class SpaRouter {
       SpaRouter.initializePage()
     }
 
-    console.log(window.localization.getLocalizedText('spaRouterHasBeenInitialized'))
+    if (window.env === 'development') console.log(window.localization.getLocalizedText('spaRouterHasBeenInitialized'))
   }
 }
 

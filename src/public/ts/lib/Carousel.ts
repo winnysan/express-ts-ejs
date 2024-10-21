@@ -52,7 +52,7 @@ class Carousel {
 
     window.addEventListener('resize', Helper.debounce(this.handleResize.bind(this), 500))
 
-    console.log(window.localization.getLocalizedText('carouselHasBeenInitialized'))
+    if (window.env === 'development') console.log(window.localization.getLocalizedText('carouselHasBeenInitialized'))
   }
 
   /**
