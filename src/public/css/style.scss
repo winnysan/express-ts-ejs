@@ -1179,3 +1179,62 @@ footer {
     }
   }
 }
+
+/* Štýly pre multi-select */
+.multi-select {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+
+  & #category-input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  & .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    background: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+  }
+
+  & .dropdown-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  & .dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+
+  & .selected-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  & .selected-category {
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  & .selected-category .remove-category {
+    background: none;
+    border: none;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+  }
+}

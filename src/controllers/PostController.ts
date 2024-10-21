@@ -6,6 +6,7 @@ import AsyncHandler from '../lib/AsyncHandler'
 import Logger from '../lib/Logger'
 import { ProcessImage } from '../lib/ProcessImages'
 import StringHelper from '../lib/StringHelper'
+import Category from '../models/Category'
 import Post, { IPost } from '../models/Post'
 
 /**
@@ -82,10 +83,13 @@ class PostController {
    * @description Renders the page for users to create a new post.
    */
   public newPostPage = async (req: express.Request, res: express.Response) => {
+    const categories = await Category.find()
+
     res.render('post/new', {
       user: req.session.user,
       title: global.dictionary.title.newPostPage,
       layout: res.locals.isAjax ? false : 'layouts/main',
+      categories,
     })
   }
 
@@ -269,6 +273,8 @@ class PostController {
     } else {
       const isAuthor = req.session.user ? req.session.user._id.equals(post?.author) : false
 
+      const categories = await Category.find()
+
       res.render('post', {
         parsedBody: StringHelper.parseBody(post.body),
         post,
@@ -276,6 +282,7 @@ class PostController {
         isAuthor,
         title: post.title,
         layout: res.locals.isAjax ? false : 'layouts/main',
+        categories,
       })
     }
   })

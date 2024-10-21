@@ -16,6 +16,7 @@ export interface IPost extends mongoose.Document {
   body: string
   slug: string
   images: Images[]
+  categories?: mongoose.Types.ObjectId[]
   createdAt: Date
   updatedAt: Date
 }
@@ -32,15 +33,12 @@ const imageSchema = new mongoose.Schema<Images>({
 
 const postSchema = new mongoose.Schema<IPost>(
   {
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
+    author: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     title: { type: String, required: true },
     body: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     images: [imageSchema],
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: undefined }],
   },
   { timestamps: true }
 )
