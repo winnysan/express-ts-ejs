@@ -102,7 +102,7 @@ class PostController {
    * @description Handles post creation with image processing and database storage.
    */
   public newPost = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
-    let { title, body } = req.body
+    let { title, body, categories } = req.body
 
     const images = req.files
       ? await Promise.all(
@@ -150,6 +150,7 @@ class PostController {
       body: body,
       slug: `${StringHelper.slugify(title)}-${Date.now()}`,
       images,
+      categories,
     })
 
     res.json({ redirect: `/post/${post.slug}` })
@@ -171,7 +172,7 @@ class PostController {
       throw new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
     }
 
-    let { title, body } = req.body
+    let { title, body, categories } = req.body
 
     const usedImageUrls = new Set<string>()
     const imageMarkdownRegex = /!\[[^\]]*\]\(([^)]+)\)/g
@@ -249,6 +250,7 @@ class PostController {
     post.title = title
     post.body = body
     post.images = updatedImages
+    post.categories = categories
 
     await post.save()
 

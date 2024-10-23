@@ -1,6 +1,7 @@
 import ApiClient from './ApiCLient'
 import Carousel from './Carousel'
 import CategoryHandler from './CategoryHandler'
+import CategoryMultiSelectHandler from './CategoryMultiSelectHandler'
 import Editor from './Editor'
 import FormHandler from './FormHandler'
 import Helper from './Helper'
@@ -27,7 +28,7 @@ class Layout {
     Helper.colorModeSwitcher()
 
     /**
-     * Initialize Editor, FormHandler, ImagePreviewHandler
+     * Initialize Editor, FormHandler, ImagePreviewHandler, CategoryHandlers
      */
     const editor = Editor.create('#form')
     new FormHandler('#form', 'input[name="_csrf"]', editor)
@@ -37,6 +38,8 @@ class Layout {
 
     const categoryHandler = CategoryHandler.getInstance('#categories')
     categoryHandler.refresh()
+
+    new CategoryMultiSelectHandler('#categories-multi-select')
 
     /**
      * Initialize Carousel

@@ -9,6 +9,7 @@ interface Dictionary {
   reactivityHasBeenInitialized: string
   spaRouterHasBeenInitialized: string
   categoryHandlerHasBeenInitialized: string
+  categoryMultiselectHandlerHasBeenInitialized: string
   categoryDeleteConfirm: string
   error: string
   formSubmissionFailed: string

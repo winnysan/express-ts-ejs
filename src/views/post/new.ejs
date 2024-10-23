@@ -16,7 +16,20 @@
         <label for="body"><%= global.dictionary.form.body %></label>
         <textarea name="body"></textarea>
       </div>
+      <div>
+        <label for="categories">Categories</label>
+        <div id="categories-multi-select">
+          <div class="selected-categories" id="selected-categories"></div>
+          <input type="text" id="category-input" placeholder="Vyberte kategórie..." autocomplete="off" />
+          <div class="dropdown" id="category-dropdown">
+            <% categories.forEach(category => { %>
+              <div class="dropdown-item" data-id="<%= category._id %>"><%= category.name %></div>
+            <% }) %>
+          </div>
+        </div>
+      </div>      
       <button type="submit"><%= global.dictionary.form.addNewPost %></button>
     </form>
   </section>
 </main>
+

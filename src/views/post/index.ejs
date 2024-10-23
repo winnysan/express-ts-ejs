@@ -24,15 +24,13 @@
       </div>
       <div>
         <label for="categories">Categories</label>
-
-        <!-- multi-select categories -->
         <div id="categories-multi-select">
           <div class="selected-categories" id="selected-categories">
             <% if (post.categories && post.categories.length > 0) { %>
               <% post.categories.forEach(catId => { %>
                 <% const category = categories.find(c => c._id.toString() === catId.toString()); %>
                 <% if (category) { %>
-                  <span class="selected-category">
+                  <span class="selected-category" data-id="<%= category.id %>">
                     <%= category.name %>
                     <input type="hidden" name="categories[]" value="<%= category._id %>" />
                     <button type="button" class="remove-category" data-id="<%= category._id %>">&times;</button>
@@ -50,8 +48,6 @@
             <% }) %>
           </div>
         </div>
-        <!-- multi-select categories end -->
-
       </div>
       <button type="submit">Edit</button>
     </form>
@@ -60,94 +56,3 @@
     <% } %>
   </section>
 </main>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const categoryInput = document.getElementById('category-input');
-    const dropdown = document.getElementById('category-dropdown');
-    const selectedCategoriesContainer = document.getElementById('selected-categories');
-
-    // Funkcia na pridanie kategórie do vybraných
-    function addCategory(catId, catName) {
-      // Vytvorenie značky pre vybranú kategóriu
-      const span = document.createElement('span');
-      span.classList.add('selected-category');
-      span.setAttribute('data-id', catId);
-      span.innerHTML = `
-        ${catName}
-        <input type="hidden" name="categories[]" value="${catId}" />
-        <button type="button" class="remove-category" data-id="${catId}">&times;</button>
-      `;
-      selectedCategoriesContainer.appendChild(span);
-
-      // Skrytie položky v dropdown
-      const dropdownItem = dropdown.querySelector(`.dropdown-item[data-id="${catId}"]`);
-      if (dropdownItem) {
-        dropdownItem.style.display = 'none';
-      }
-    }
-
-    // Funkcia na odstránenie kategórie z vybraných
-    function removeCategory(catId) {
-      const categorySpan = selectedCategoriesContainer.querySelector(`.selected-category[data-id="${catId}"]`);
-      if (categorySpan) {
-        categorySpan.remove();
-      }
-
-      // Zobrazenie položky v dropdown
-      const dropdownItem = dropdown.querySelector(`.dropdown-item[data-id="${catId}"]`);
-      if (dropdownItem) {
-        dropdownItem.style.display = 'block';
-      }
-    }
-
-    // Zobraziť dropdown pri focus
-    categoryInput.addEventListener('focus', () => {
-      dropdown.style.display = 'block';
-    });
-
-    // Skryť dropdown pri kliknutí mimo
-    document.addEventListener('click', (e) => {
-      if (!document.querySelector('#categories-multi-select').contains(e.target)) {
-        dropdown.style.display = 'none';
-      }
-    });
-
-    // Filtrovanie kategórií na základe vstupu
-    categoryInput.addEventListener('input', () => {
-      const filter = categoryInput.value.toLowerCase();
-      const items = dropdown.querySelectorAll('.dropdown-item');
-      items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(filter)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    });
-
-    // Pridanie kategórie do vybraných pri kliknutí na dropdown
-    dropdown.addEventListener('click', (e) => {
-      if (e.target.classList.contains('dropdown-item')) {
-        const catId = e.target.getAttribute('data-id');
-        const catName = e.target.textContent.trim();
-
-        // Pridať kategóriu do vybraných
-        addCategory(catId, catName);
-
-        // Vyčistenie vstupného poľa
-        categoryInput.value = '';
-        dropdown.style.display = 'none';
-      }
-    });
-
-    // Odstránenie kategórie zo zoznamu vybraných
-    selectedCategoriesContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('remove-category')) {
-        const catId = e.target.getAttribute('data-id');
-        removeCategory(catId);
-      }
-    });
-  });
-</script>
