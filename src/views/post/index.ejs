@@ -27,8 +27,8 @@
         <div id="categories-multi-select">
           <div class="selected-categories" id="selected-categories">
             <% if (post.categories && post.categories.length > 0) { %>
-              <% post.categories.forEach(catId => { %>
-                <% const category = categories.find(c => c._id.toString() === catId.toString()); %>
+              <% post.categories.forEach(cat => { %>
+                <% const category = categories.find(c => c._id.toString() === cat._id.toString()); %>
                 <% if (category) { %>
                   <span class="selected-category" data-id="<%= category.id %>">
                     <%= category.name %>

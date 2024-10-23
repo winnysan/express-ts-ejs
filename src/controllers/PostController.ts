@@ -26,6 +26,7 @@ class PostController {
 
     const posts: IPost[] = await Post.find()
       .populate('author', 'name')
+      .populate('categories', 'name')
       .sort({ updatedAt: -1 })
       .skip(page * limit - limit)
       .limit(limit)
@@ -266,14 +267,14 @@ class PostController {
    * @description Fetches a post by slug and renders it with parsed markdown content.
    */
   public getPostBySlug = AsyncHandler.wrap(async (req: express.Request, res: express.Response) => {
-    const post = await Post.findOne({ slug: req.params.slug })
+    const post = await Post.findOne({ slug: req.params.slug }).populate('author', 'name').populate('categories', 'name')
 
     if (!post) {
       res.status(404)
 
       throw new Error(`${req.originalUrl} ${global.dictionary.messages.notFound}`)
     } else {
-      const isAuthor = req.session.user ? req.session.user._id.equals(post?.author) : false
+      const isAuthor = req.session.user ? req.session.user._id.equals(post?.author._id) : false
 
       const categories = await Category.find()
 
